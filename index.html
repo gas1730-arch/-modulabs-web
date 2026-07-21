@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ModuLabs | 모두랩스 — 생각을 앱으로, 아이디어를 서비스로</title>
+  <meta name="description" content="모두랩스는 실제 세상의 문제를 앱으로 풀어내는 1인 소프트웨어 스튜디오입니다. 오이플레이스, 모두의견적서를 만들고 운영합니다." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Palette — deep space + prism gradient */
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+
+      /* Prism accents — cyan → violet → lime */
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --coral: #FF7E62;
+
+      /* Type */
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+      /* Motion */
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.55;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.35;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    /* ═══════════════════ NAV ═══════════════════ */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: rgba(10, 10, 21, 0.6);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
+        #0A0A15;
+      box-shadow: 0 0 24px rgba(124, 92, 255, 0.35);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--text-2);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-links a:hover { color: var(--text); }
+
+    .nav-cta {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 18px;
+      color: var(--bg);
+      background: var(--text);
+      border-radius: 999px;
+      text-decoration: none;
+      transition: transform 0.2s var(--ease);
+    }
+
+    .nav-cta:hover { transform: translateY(-1px); }
+
+    /* ═══════════════════ HERO ═══════════════════ */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      padding: 160px 48px 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 2;
+    }
+
+    /* Signature: prism orb — the one thing this page will be remembered by */
+    .orb {
+      position: absolute;
+      top: 45%;
+      right: -8%;
+      transform: translateY(-50%);
+      width: 780px;
+      height: 780px;
+      pointer-events: none;
+      z-index: -1;
+      filter: blur(60px);
+      opacity: 0.7;
+    }
+
+    .orb::before,
+    .orb::after,
+    .orb span {
+      content: '';
+      position: absolute;
+      border-radius: 50%;
+      mix-blend-mode: screen;
+    }
+
+    .orb::before {
+      width: 500px;
+      height: 500px;
+      background: var(--cyan);
+      top: 10%;
+      left: 20%;
+      animation: drift-a 14s var(--ease) infinite alternate;
+    }
+
+    .orb::after {
+      width: 480px;
+      height: 480px;
+      background: var(--violet);
+      top: 25%;
+      right: 10%;
+      animation: drift-b 16s var(--ease) infinite alternate;
+    }
+
+    .orb span {
+      width: 400px;
+      height: 400px;
+      background: var(--lime);
+      bottom: 5%;
+      left: 30%;
+      animation: drift-c 18s var(--ease) infinite alternate;
+    }
+
+    @keyframes drift-a { to { transform: translate(-60px, 40px) scale(1.1); } }
+    @keyframes drift-b { to { transform: translate(50px, -50px) scale(1.05); } }
+    @keyframes drift-c { to { transform: translate(30px, -30px) scale(0.95); } }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      width: fit-content;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(48px, 8vw, 108px);
+      font-weight: 500;
+      line-height: 0.98;
+      letter-spacing: -0.035em;
+      max-width: 1000px;
+      margin-bottom: 32px;
+    }
+
+    .hero-title .accent {
+      background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 55%, var(--lime) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .hero-sub {
+      font-size: 18px;
+      color: var(--text-2);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 48px;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary,
+    .btn-secondary {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      padding: 14px 26px;
+      border-radius: 999px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform 0.2s var(--ease), background 0.2s var(--ease);
+      border: 1px solid transparent;
+    }
+
+    .btn-primary {
+      color: var(--bg);
+      background: var(--text);
+    }
+
+    .btn-primary:hover { transform: translateY(-2px); }
+
+    .btn-secondary {
+      color: var(--text);
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border-strong);
+    }
+
+    .btn-secondary:hover { background: rgba(255, 255, 255, 0.08); }
+
+    .arrow { transition: transform 0.2s var(--ease); }
+    .btn-primary:hover .arrow,
+    .btn-secondary:hover .arrow { transform: translateX(3px); }
+
+    /* Hero footer stats */
+    .hero-meta {
+      position: absolute;
+      bottom: 48px;
+      left: 48px;
+      right: 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .hero-meta .stat b {
+      display: block;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: 4px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-meta-row {
+      display: flex;
+      gap: 48px;
+    }
+
+    /* ═══════════════════ SECTION SHARED ═══════════════════ */
+    section {
+      position: relative;
+      padding: 140px 48px;
+      z-index: 2;
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .section-label::before {
+      content: '';
+      width: 24px;
+      height: 1px;
+      background: var(--text-2);
+    }
+
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 24px;
+      max-width: 900px;
+    }
+
+    .section-lead {
+      font-size: 18px;
+      color: var(--text-2);
+      max-width: 640px;
+      line-height: 1.65;
+    }
+
+    /* ═══════════════════ ABOUT ═══════════════════ */
+    .about {
+      border-top: 1px solid var(--border);
+    }
+
+    .about-grid {
+      margin-top: 80px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .about-card {
+      padding: 32px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+
+    .about-card:hover {
+      border-color: var(--border-strong);
+      transform: translateY(-2px);
+    }
+
+    .about-card .num {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 40px;
+      display: block;
+    }
+
+    .about-card h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    .about-card p {
+      color: var(--text-2);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════ PRODUCTS ═══════════════════ */
+    .products {
+      border-top: 1px solid var(--border);
+    }
+
+    .product-list {
+      margin-top: 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .product {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 48px;
+      align-items: center;
+      padding: 48px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      transition: border-color 0.3s var(--ease);
+    }
+
+    .product:hover { border-color: var(--border-strong); }
+
+    .product-visual {
+      aspect-ratio: 4 / 3;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 96px;
+      font-weight: 500;
+      letter-spacing: -0.04em;
+      position: relative;
+      overflow: hidden;
+      color: var(--text);
+    }
+
+    .product-oiplace .product-visual {
+      background:
+        radial-gradient(circle at 20% 30%, rgba(199, 248, 104, 0.4), transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(6, 227, 212, 0.3), transparent 55%),
+        #0F1A15;
+    }
+
+    .product-quote .product-visual {
+      background:
+        radial-gradient(circle at 30% 20%, rgba(124, 92, 255, 0.4), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(255, 126, 98, 0.3), transparent 55%),
+        #14121F;
+    }
+
+    .product-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-2);
+      padding: 5px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 16px;
+      background: rgba(255, 255, 255, 0.03);
+    }
+
+    .product h3 {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.025em;
+      margin-bottom: 16px;
+    }
+
+    .product .en {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 400;
+      margin-top: 6px;
+    }
+
+    .product p {
+      color: var(--text-2);
+      font-size: 16px;
+      margin-bottom: 28px;
+      line-height: 1.65;
+    }
+
+    .product-meta {
+      display: flex;
+      gap: 24px;
+      margin-bottom: 32px;
+      padding: 16px 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .product-meta div {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .product-meta div b {
+      display: block;
+      font-family: var(--font-body);
+      color: var(--text);
+      font-size: 14px;
+      font-weight: 500;
+      margin-top: 4px;
+    }
+
+    .product-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .product-link {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      text-decoration: none;
+      padding: 10px 18px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      transition: background 0.2s var(--ease);
+    }
+
+    .product-link:hover { background: rgba(255, 255, 255, 0.06); }
+
+    /* ═══════════════════ TEAM ═══════════════════ */
+    .team {
+      border-top: 1px solid var(--border);
+    }
+
+    .team-card {
+      margin-top: 80px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 40px;
+      align-items: center;
+      padding: 40px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      max-width: 800px;
+    }
+
+    .avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan), transparent 60%),
+        radial-gradient(circle at 70% 70%, var(--violet), transparent 60%),
+        var(--bg-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .team-card h4 {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      letter-spacing: -0.01em;
+    }
+
+    .team-card .role {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 16px;
+    }
+
+    .team-card p {
+      color: var(--text-2);
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════ CONTACT ═══════════════════ */
+    .contact {
+      border-top: 1px solid var(--border);
+      text-align: left;
+    }
+
+    .contact-cta {
+      margin-top: 60px;
+      padding: 60px 48px;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(6, 227, 212, 0.15), transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(124, 92, 255, 0.15), transparent 50%),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 32px;
+      align-items: center;
+    }
+
+    .contact-cta h3 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 36px);
+      font-weight: 500;
+      letter-spacing: -0.025em;
+      line-height: 1.15;
+      margin-bottom: 12px;
+    }
+
+    .contact-cta p {
+      color: var(--text-2);
+      font-size: 15px;
+    }
+
+    .contact-cta a {
+      font-family: var(--font-mono);
+      font-size: 15px;
+      padding: 16px 28px;
+      background: var(--text);
+      color: var(--bg);
+      border-radius: 999px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: transform 0.2s var(--ease);
+      white-space: nowrap;
+    }
+
+    .contact-cta a:hover { transform: translateY(-2px); }
+
+    /* ═══════════════════ FOOTER ═══════════════════ */
+    footer {
+      padding: 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+    }
+
+    footer .brand {
+      opacity: 0.7;
+    }
+
+    /* ═══════════════════ RESPONSIVE ═══════════════════ */
+    @media (max-width: 900px) {
+      nav { padding: 16px 24px; }
+      .nav-links { display: none; }
+
+      .hero { padding: 120px 24px 60px; }
+      .hero-meta {
+        position: static;
+        margin-top: 60px;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
+      }
+      .hero-meta-row { gap: 32px; }
+
+      .orb { right: -40%; width: 500px; height: 500px; }
+
+      section { padding: 80px 24px; }
+
+      .about-grid { grid-template-columns: 1fr; }
+
+      .product {
+        grid-template-columns: 1fr;
+        padding: 28px;
+        gap: 28px;
+      }
+      .product h3 { font-size: 30px; }
+
+      .team-card {
+        grid-template-columns: 1fr;
+        text-align: left;
+        padding: 28px;
+      }
+
+      .contact-cta {
+        grid-template-columns: 1fr;
+        padding: 40px 28px;
+      }
+
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .orb::before, .orb::after, .orb span { animation: none; }
+      html { scroll-behavior: auto; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#top" class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModuLabs</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#about">Studio</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#team">Team</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <a href="mailto:gas1730@gmail.com" class="nav-cta">문의하기</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="top">
+    <div class="orb"><span></span></div>
+
+    <div class="eyebrow">Independent Software Studio · Suwon, KR</div>
+
+    <h1 class="hero-title">
+      생각을 앱으로,<br>
+      아이디어를 <span class="accent">서비스로.</span>
+    </h1>
+
+    <p class="hero-sub">
+      모두랩스는 실제 세상의 작은 불편함을 소프트웨어로 풀어내는 1인 스튜디오입니다.
+      기획부터 개발, 운영까지 — 우리 손으로 처음부터 끝까지 만듭니다.
+    </p>
+
+    <div class="hero-actions">
+      <a href="#products" class="btn-primary">
+        만든 서비스 보기 <span class="arrow">→</span>
+      </a>
+      <a href="#contact" class="btn-secondary">
+        협업 문의 <span class="arrow">→</span>
+      </a>
+    </div>
+
+    <div class="hero-meta">
+      <div class="hero-meta-row">
+        <div class="stat"><b>2</b>Products in market</div>
+        <div class="stat"><b>2</b>Platforms — iOS / Android</div>
+        <div class="stat"><b>1</b>Studio, end to end</div>
+      </div>
+      <div>SCROLL ↓</div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <div class="section-label">01 — Studio</div>
+    <h2 class="section-title">
+      템플릿으로 만든 앱은<br>
+      템플릿의 문제만 풉니다.
+    </h2>
+    <p class="section-lead">
+      우리는 필요한 걸 필요한 만큼 만듭니다. 실제 사용자를 관찰하고,
+      직접 코드를 쓰고, 매일 운영합니다. 소규모이기 때문에 빠르고, 스스로 만들기 때문에 정직합니다.
+    </p>
+
+    <div class="about-grid">
+      <div class="about-card">
+        <span class="num">A · 01</span>
+        <h3>End-to-end</h3>
+        <p>기획, 디자인, 앱 개발, 서버, 배포, CS까지 — 한 사람의 손끝에서 서비스가 완성됩니다. 그래서 결정이 빠르고, 사용자 피드백이 다음 업데이트에 바로 반영됩니다.</p>
+      </div>
+      <div class="about-card">
+        <span class="num">A · 02</span>
+        <h3>Real problems</h3>
+        <p>우리 동네에서, 우리 일상에서 실제로 겪은 불편을 소재로 삼습니다. 트렌드가 아니라 필요에서 출발한 앱이 오래갑니다.</p>
+      </div>
+      <div class="about-card">
+        <span class="num">A · 03</span>
+        <h3>AI-native workflow</h3>
+        <p>Claude, Gemini 같은 AI 도구를 페어 프로그래머로 두고 개발합니다. 1인 스튜디오지만 팀의 속도로 움직입니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRODUCTS -->
+  <section class="products" id="products">
+    <div class="section-label">02 — Products</div>
+    <h2 class="section-title">시장에서 살아 움직이는 서비스</h2>
+    <p class="section-lead">
+      각 서비스는 실제 사용자를 대상으로 운영되고 있으며,
+      매주 업데이트되고 있습니다.
+    </p>
+
+    <div class="product-list">
+
+      <!-- OiPlace -->
+      <article class="product product-oiplace">
+        <div class="product-visual">Oi.</div>
+        <div>
+          <span class="product-tag">C2C · Auction · Local</span>
+          <h3>
+            오이플레이스
+            <span class="en">OiPlace — 우리 동네 경매 마켓</span>
+          </h3>
+          <p>
+            중고 거래에 경매를 얹었습니다. 파는 사람은 원하는 가격을 발견하고,
+            사는 사람은 즐겁게 참여합니다. 위치 기반으로 우리 동네 안에서만 거래됩니다.
+          </p>
+          <div class="product-meta">
+            <div>Platform<b>iOS · Android</b></div>
+            <div>Stack<b>React Native · Firebase</b></div>
+            <div>Status<b>Live</b></div>
+          </div>
+          <div class="product-links">
+            <a href="#" class="product-link">App Store →</a>
+            <a href="#" class="product-link">Google Play →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Modu Quote -->
+      <article class="product product-quote">
+        <div class="product-visual">見.</div>
+        <div>
+          <span class="product-tag">B2B · Productivity</span>
+          <h3>
+            모두의 견적서
+            <span class="en">Everyone's Quote — 자영업자를 위한 견적 관리</span>
+          </h3>
+          <p>
+            엑셀도, 종이도 없이 폰 하나로 견적서를 만들고 보내고 관리합니다.
+            반복되는 항목은 저장해서 다시 쓰고, 고객별로 이력을 남깁니다.
+          </p>
+          <div class="product-meta">
+            <div>Platform<b>Android</b></div>
+            <div>Stack<b>Native Android</b></div>
+            <div>Status<b>Live</b></div>
+          </div>
+          <div class="product-links">
+            <a href="#" class="product-link">Google Play →</a>
+          </div>
+        </div>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <section class="team" id="team">
+    <div class="section-label">03 — Team</div>
+    <h2 class="section-title">한 사람이 만듭니다.</h2>
+    <p class="section-lead">
+      회사의 크기가 아니라 만드는 사람의 결이 서비스의 인상을 결정합니다.
+    </p>
+
+    <div class="team-card">
+      <div class="avatar">JC</div>
+      <div>
+        <h4>김진춘</h4>
+        <div class="role">Founder · Developer</div>
+        <p>
+          경기 수원 기반의 1인 개발자. 모두랩스를 이끌며 오이플레이스와 모두의견적서를
+          직접 만들고 운영하고 있습니다. AI와 함께 코드를 짜는 새로운 개발 방식을 실험합니다.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="contact" id="contact">
+    <div class="section-label">04 — Contact</div>
+    <h2 class="section-title">같이 만들고 싶은 게 있다면.</h2>
+    <p class="section-lead">
+      협업, 제휴, 서비스 문의, 그 밖의 어떤 이야기라도 환영합니다.
+    </p>
+
+    <div class="contact-cta">
+      <div>
+        <h3>이메일로 편하게 보내주세요.</h3>
+        <p>영업일 기준 24시간 내에 답장드리겠습니다.</p>
+      </div>
+      <a href="mailto:gas1730@gmail.com">gas1730@gmail.com →</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModuLabs</span>
+    </div>
+    <div>© 2026 ModuLabs. All rights reserved. · modooscoin.com</div>
+  </footer>
+
+</body>
+</html>
