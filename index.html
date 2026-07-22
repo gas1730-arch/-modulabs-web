@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ModuLabs | 모두랩스 — 생각을 앱으로, 아이디어를 서비스로</title>
+  <title>ModooLabs | 모두랩스 — 생각을 앱으로, 아이디어를 서비스로</title>
   <meta name="description" content="모두랩스는 실제 세상의 문제를 앱으로 풀어내는 1인 소프트웨어 스튜디오입니다. 오이플레이스, 모두의견적서를 만들고 운영합니다." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -12,8 +12,39 @@
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      /* Palette — deep space + prism gradient */
+    :root, html[data-theme="mid"] {
+      /* Mid — 기본 테마 (딥 그레이) */
+      --bg: #252530;
+      --bg-2: #2E2E3D;
+      --surface: #383848;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #E8E8ED;
+      --text-2: #A5A5B5;
+      --muted: #7A7A88;
+      --cyan: #22D4C4;
+      --violet: #8067FF;
+      --lime: #C0EB60;
+      --coral: #FF8E75;
+
+      --nav-bg: rgba(37, 37, 48, 0.7);
+      --mark-bg: #252530;
+      --oiplace-visual-bg: #2A3038;
+      --quote-visual-bg: #2E2A3A;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --hover-4: rgba(255, 255, 255, 0.04);
+      --hover-6: rgba(255, 255, 255, 0.06);
+      --hover-8: rgba(255, 255, 255, 0.08);
+      --orb-opacity: var(--orb-opacity);
+
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      /* Dark — 딥 다크 (원본) */
       --bg: #0A0A15;
       --bg-2: #12121F;
       --surface: #191927;
@@ -22,20 +53,46 @@
       --text: #F5F5F7;
       --text-2: #B8B8C8;
       --muted: #6E6E82;
-
-      /* Prism accents — cyan → violet → lime */
       --cyan: #06E3D4;
       --violet: #7C5CFF;
       --lime: #C7F868;
       --coral: #FF7E62;
 
-      /* Type */
-      --font-display: 'Space Grotesk', system-ui, sans-serif;
-      --font-body: 'Noto Sans KR', system-ui, sans-serif;
-      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --nav-bg: rgba(10, 10, 21, 0.6);
+      --mark-bg: #0A0A15;
+      --oiplace-visual-bg: #0F1A15;
+      --quote-visual-bg: #14121F;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --hover-4: rgba(255, 255, 255, 0.04);
+      --hover-6: rgba(255, 255, 255, 0.06);
+      --hover-8: rgba(255, 255, 255, 0.08);
+      --orb-opacity: 0.7;
+    }
 
-      /* Motion */
-      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    html[data-theme="light"] {
+      /* Light — 오프화이트 */
+      --bg: #FAFAF7;
+      --bg-2: #F2F2EC;
+      --surface: #E8E8E1;
+      --border: rgba(10, 10, 21, 0.08);
+      --border-strong: rgba(10, 10, 21, 0.16);
+      --text: #0A0A15;
+      --text-2: #4A4A5C;
+      --muted: #8B8B9F;
+      --cyan: #06B8AB;
+      --violet: #6B4CE6;
+      --lime: #7EB026;
+      --coral: #EA6142;
+
+      --nav-bg: rgba(250, 250, 247, 0.7);
+      --mark-bg: #FAFAF7;
+      --oiplace-visual-bg: #F0F5EA;
+      --quote-visual-bg: #F0EDF7;
+      --hover-3: rgba(10, 10, 21, 0.03);
+      --hover-4: rgba(10, 10, 21, 0.04);
+      --hover-6: rgba(10, 10, 21, 0.06);
+      --hover-8: rgba(10, 10, 21, 0.08);
+      --orb-opacity: 0.5;
     }
 
     html { scroll-behavior: smooth; }
@@ -57,7 +114,7 @@
       inset: 0;
       pointer-events: none;
       z-index: 1;
-      opacity: 0.35;
+      opacity: 0.3;
       mix-blend-mode: overlay;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
     }
@@ -71,7 +128,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 20px 48px;
-      background: rgba(10, 10, 21, 0.6);
+      background: var(--nav-bg);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
       border-bottom: 1px solid var(--border);
@@ -93,8 +150,8 @@
         radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
         radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
         radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
-        #0A0A15;
-      box-shadow: 0 0 24px rgba(124, 92, 255, 0.35);
+        var(--mark-bg);
+      box-shadow: 0 0 24px rgba(128, 103, 255, 0.3);
     }
 
     .brand-name {
@@ -135,6 +192,45 @@
 
     .nav-cta:hover { transform: translateY(-1px); }
 
+    /* Theme Switcher */
+    .theme-switcher {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      background: var(--hover-3);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-switcher button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-switcher button[data-set-theme="dark"] { background: #0A0A15; }
+    .theme-switcher button[data-set-theme="mid"] { background: #252530; }
+    .theme-switcher button[data-set-theme="light"] {
+      background: #FAFAF7;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-switcher button:hover { transform: scale(1.15); }
+
+    /* 현재 활성화된 테마 표시 */
+    html[data-theme="dark"] .theme-switcher button[data-set-theme="dark"],
+    html[data-theme="mid"] .theme-switcher button[data-set-theme="mid"],
+    html:not([data-theme]) .theme-switcher button[data-set-theme="mid"],
+    html[data-theme="light"] .theme-switcher button[data-set-theme="light"] {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
     /* ═══════════════════ HERO ═══════════════════ */
     .hero {
       position: relative;
@@ -158,7 +254,7 @@
       pointer-events: none;
       z-index: -1;
       filter: blur(60px);
-      opacity: 0.7;
+      opacity: var(--orb-opacity);
     }
 
     .orb::before,
@@ -213,7 +309,7 @@
       border-radius: 999px;
       margin-bottom: 32px;
       width: fit-content;
-      background: rgba(255, 255, 255, 0.02);
+      background: var(--hover-3);
     }
 
     .eyebrow::before {
@@ -282,11 +378,11 @@
 
     .btn-secondary {
       color: var(--text);
-      background: rgba(255, 255, 255, 0.04);
+      background: var(--hover-4);
       border-color: var(--border-strong);
     }
 
-    .btn-secondary:hover { background: rgba(255, 255, 255, 0.08); }
+    .btn-secondary:hover { background: var(--hover-8); }
 
     .arrow { transition: transform 0.2s var(--ease); }
     .btn-primary:hover .arrow,
@@ -456,16 +552,16 @@
 
     .product-oiplace .product-visual {
       background:
-        radial-gradient(circle at 20% 30%, rgba(199, 248, 104, 0.4), transparent 55%),
-        radial-gradient(circle at 80% 70%, rgba(6, 227, 212, 0.3), transparent 55%),
-        #0F1A15;
+        radial-gradient(circle at 20% 30%, rgba(192, 235, 96, 0.35), transparent 55%),
+        radial-gradient(circle at 80% 70%, rgba(34, 212, 196, 0.28), transparent 55%),
+        var(--oiplace-visual-bg);
     }
 
     .product-quote .product-visual {
       background:
-        radial-gradient(circle at 30% 20%, rgba(124, 92, 255, 0.4), transparent 55%),
-        radial-gradient(circle at 70% 80%, rgba(255, 126, 98, 0.3), transparent 55%),
-        #14121F;
+        radial-gradient(circle at 30% 20%, rgba(128, 103, 255, 0.35), transparent 55%),
+        radial-gradient(circle at 70% 80%, rgba(255, 142, 117, 0.25), transparent 55%),
+        var(--quote-visual-bg);
     }
 
     .product-tag {
@@ -477,7 +573,7 @@
       border-radius: 999px;
       display: inline-block;
       margin-bottom: 16px;
-      background: rgba(255, 255, 255, 0.03);
+      background: var(--hover-3);
     }
 
     .product h3 {
@@ -547,7 +643,7 @@
       transition: background 0.2s var(--ease);
     }
 
-    .product-link:hover { background: rgba(255, 255, 255, 0.06); }
+    .product-link:hover { background: var(--hover-6); }
 
     /* ═══════════════════ TEAM ═══════════════════ */
     .team {
@@ -618,8 +714,8 @@
       margin-top: 60px;
       padding: 60px 48px;
       background:
-        radial-gradient(circle at 15% 20%, rgba(6, 227, 212, 0.15), transparent 50%),
-        radial-gradient(circle at 85% 80%, rgba(124, 92, 255, 0.15), transparent 50%),
+        radial-gradient(circle at 15% 20%, rgba(34, 212, 196, 0.15), transparent 50%),
+        radial-gradient(circle at 85% 80%, rgba(128, 103, 255, 0.15), transparent 50%),
         var(--bg-2);
       border: 1px solid var(--border);
       border-radius: 24px;
@@ -676,6 +772,25 @@
       opacity: 0.7;
     }
 
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 6px;
+      text-align: right;
+    }
+
+    .footer-right a {
+      color: var(--text-2);
+      text-decoration: none;
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 500;
+      transition: color 0.2s var(--ease);
+    }
+
+    .footer-right a:hover { color: var(--text); }
+
     /* ═══════════════════ RESPONSIVE ═══════════════════ */
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
@@ -721,6 +836,11 @@
         gap: 16px;
         text-align: center;
       }
+
+      .footer-right {
+        align-items: center;
+        text-align: center;
+      }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -735,7 +855,7 @@
   <nav>
     <a href="#top" class="brand">
       <div class="brand-mark"></div>
-      <span class="brand-name">ModuLabs</span>
+      <span class="brand-name">ModooLabs</span>
     </a>
     <ul class="nav-links">
       <li><a href="#about">Studio</a></li>
@@ -743,7 +863,14 @@
       <li><a href="#team">Team</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <a href="mailto:gas1730@gmail.com" class="nav-cta">문의하기</a>
+    <div class="nav-right">
+      <div class="theme-switcher" role="group" aria-label="테마 선택">
+        <button type="button" data-set-theme="dark" aria-label="다크 테마" title="다크"></button>
+        <button type="button" data-set-theme="mid" aria-label="미드 테마" title="미드"></button>
+        <button type="button" data-set-theme="light" aria-label="라이트 테마" title="라이트"></button>
+      </div>
+      <a href="mailto:gas1730@gmail.com" class="nav-cta">문의하기</a>
+    </div>
   </nav>
 
   <!-- HERO -->
@@ -823,7 +950,32 @@
 
     <div class="product-list">
 
-      <!-- OiPlace -->
+      <!-- Modu Quote (모두의 견적서 먼저) -->
+      <article class="product product-quote">
+        <div class="product-visual">見.</div>
+        <div>
+          <span class="product-tag">B2B · Productivity</span>
+          <h3>
+            모두의 견적서
+            <span class="en">Everyone's Quote — 자영업자를 위한 견적 관리</span>
+          </h3>
+          <p>
+            엑셀도, 종이도 없이 폰 하나로 견적서를 만들고 보내고 관리합니다.
+            반복되는 항목은 저장해서 다시 쓰고, 고객별로 이력을 남깁니다.
+          </p>
+          <div class="product-meta">
+            <div>Platform<b>Android</b></div>
+            <div>Stack<b>Native Android</b></div>
+            <div>Status<b>Live</b></div>
+          </div>
+          <div class="product-links">
+            <a href="#" class="product-link">Google Play →</a>
+            <a href="/privacy-quote.html" class="product-link">개인정보처리방침 →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- OiPlace (오이플레이스 뒤) -->
       <article class="product product-oiplace">
         <div class="product-visual">Oi.</div>
         <div>
@@ -843,30 +995,6 @@
           </div>
           <div class="product-links">
             <a href="#" class="product-link">App Store →</a>
-            <a href="#" class="product-link">Google Play →</a>
-          </div>
-        </div>
-      </article>
-
-      <!-- Modu Quote -->
-      <article class="product product-quote">
-        <div class="product-visual">見.</div>
-        <div>
-          <span class="product-tag">B2B · Productivity</span>
-          <h3>
-            모두의 견적서
-            <span class="en">Everyone's Quote — 자영업자를 위한 견적 관리</span>
-          </h3>
-          <p>
-            엑셀도, 종이도 없이 폰 하나로 견적서를 만들고 보내고 관리합니다.
-            반복되는 항목은 저장해서 다시 쓰고, 고객별로 이력을 남깁니다.
-          </p>
-          <div class="product-meta">
-            <div>Platform<b>Android</b></div>
-            <div>Stack<b>Native Android</b></div>
-            <div>Status<b>Live</b></div>
-          </div>
-          <div class="product-links">
             <a href="#" class="product-link">Google Play →</a>
           </div>
         </div>
@@ -917,9 +1045,9 @@
   <footer>
     <div class="brand">
       <div class="brand-mark"></div>
-      <span class="brand-name">ModuLabs</span>
+      <span class="brand-name">ModooLabs</span>
     </div>
-    <div>© 2026 ModuLabs. All rights reserved. · modooscoin.com</div>
+    <div>© 2026 ModooLabs · modooscoin.com</div>
   </footer>
 
 </body>
