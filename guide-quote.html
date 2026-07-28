@@ -293,13 +293,32 @@
       letter-spacing: 0;
     }
 
-    /* TOC (Table of Contents) */
+    /* TOC (Table of Contents) — collapsible */
     .toc {
-      padding: 24px 28px;
       background: var(--bg-2);
       border: 1px solid var(--border);
       border-radius: 16px;
       margin-bottom: 60px;
+      overflow: hidden;
+    }
+
+    .toc summary {
+      padding: 18px 28px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      list-style: none;
+      user-select: none;
+    }
+
+    .toc summary::-webkit-details-marker { display: none; }
+    .toc summary::marker { display: none; content: ''; }
+
+    .toc summary:hover .toc-title { color: var(--text-2); }
+
+    .toc[open] summary {
+      border-bottom: 1px solid var(--border);
     }
 
     .toc-title {
@@ -308,15 +327,26 @@
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: 0.1em;
-      margin-bottom: 16px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .toc-arrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      transition: transform 0.25s var(--ease);
+    }
+
+    .toc[open] .toc-arrow {
+      transform: rotate(180deg);
     }
 
     .toc ul {
       list-style: none;
-      padding: 0;
+      padding: 16px 28px 24px;
       margin: 0;
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
       gap: 2px 20px;
     }
 
@@ -630,9 +660,12 @@
       <div class="meta-item">문의<b>gas1730@gmail.com</b></div>
     </div>
 
-    <!-- TOC -->
-    <nav class="toc" aria-label="목차">
-      <div class="toc-title">Contents · 목차</div>
+    <!-- TOC (접이식) -->
+    <details class="toc">
+      <summary>
+        <span class="toc-title">Contents · 목차 (클릭하여 펼치기)</span>
+        <span class="toc-arrow">▼</span>
+      </summary>
       <ul>
         <li><a href="#s01"><span class="toc-num">01</span>📋 시작하기</a></li>
         <li><a href="#s02"><span class="toc-num">02</span>🗓️ 홈 화면 (달력)</a></li>
@@ -650,7 +683,7 @@
         <li><a href="#s14"><span class="toc-num">14</span>⭐ 무료 이용 &amp; 프리미엄</a></li>
         <li><a href="#s15"><span class="toc-num">15</span>💬 자주 묻는 질문</a></li>
       </ul>
-    </nav>
+    </details>
 
     <!-- 01 -->
     <h2 id="s01"><span class="num">01</span>📋 시작하기 (앱 실행 → 로그인)</h2>
