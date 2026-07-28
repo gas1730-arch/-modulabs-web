@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>모두의견적서 사용설명서 | ModooLabs</title>
+  <meta name="description" content="모두의 견적서 앱의 사용설명서 — 견적서 작성부터 방문예약, 문서 발급, 매출 관리까지 화면별로 정리한 안내" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('modoolabs-theme');
+        if (saved && ['dark', 'mid', 'light'].indexOf(saved) !== -1) {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, html[data-theme="mid"] {
+      --bg: #252530;
+      --bg-2: #2E2E3D;
+      --surface: #383848;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #E8E8ED;
+      --text-2: #A5A5B5;
+      --muted: #7A7A88;
+      --cyan: #22D4C4;
+      --violet: #8067FF;
+      --lime: #C0EB60;
+      --nav-bg: rgba(37, 37, 48, 0.75);
+      --mark-bg: #252530;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --callout-tint: rgba(128, 103, 255, 0.12);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --nav-bg: rgba(10, 10, 21, 0.75);
+      --mark-bg: #0A0A15;
+      --hover-3: rgba(255, 255, 255, 0.02);
+      --callout-tint: rgba(124, 92, 255, 0.08);
+    }
+
+    html[data-theme="light"] {
+      --bg: #FAFAF7;
+      --bg-2: #F2F2EC;
+      --surface: #E8E8E1;
+      --border: rgba(10, 10, 21, 0.08);
+      --border-strong: rgba(10, 10, 21, 0.16);
+      --text: #0A0A15;
+      --text-2: #4A4A5C;
+      --muted: #8B8B9F;
+      --cyan: #06B8AB;
+      --violet: #6B4CE6;
+      --lime: #7EB026;
+      --nav-bg: rgba(250, 250, 247, 0.75);
+      --mark-bg: #FAFAF7;
+      --hover-3: rgba(10, 10, 21, 0.03);
+      --callout-tint: rgba(107, 76, 230, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.28;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
+        var(--mark-bg);
+      box-shadow: 0 0 24px rgba(128, 103, 255, 0.3);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-back {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-back:hover { color: var(--text); }
+
+    /* Nav right — theme switcher + back link */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      background: var(--hover-3);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-switcher button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-switcher button[data-set-theme="dark"] { background: #0A0A15; }
+    .theme-switcher button[data-set-theme="mid"] { background: #252530; }
+    .theme-switcher button[data-set-theme="light"] {
+      background: #FAFAF7;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-switcher button:hover { transform: scale(1.15); }
+
+    html[data-theme="dark"] .theme-switcher button[data-set-theme="dark"],
+    html[data-theme="mid"] .theme-switcher button[data-set-theme="mid"],
+    html:not([data-theme]) .theme-switcher button[data-set-theme="mid"],
+    html[data-theme="light"] .theme-switcher button[data-set-theme="light"] {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+    }
+
+    /* HEADER */
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      background: var(--hover-3);
+    }
+
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent {
+      background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 55%, var(--lime) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .doc-lead {
+      color: var(--text-2);
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* META BOX */
+    .meta-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 40px;
+    }
+
+    .meta-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-item b {
+      display: block;
+      font-family: var(--font-body);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* TOC (Table of Contents) */
+    .toc {
+      padding: 24px 28px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 60px;
+    }
+
+    .toc-title {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
+    }
+
+    .toc ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 2px 20px;
+    }
+
+    .toc li {
+      margin: 0;
+    }
+
+    .toc a {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      padding: 8px 0;
+      color: var(--text-2);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .toc a:hover { color: var(--cyan); }
+
+    .toc .toc-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--muted);
+      min-width: 22px;
+    }
+
+    /* SECTIONS */
+    h2 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      line-height: 1.3;
+      scroll-margin-top: 90px;
+    }
+
+    h2 .num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 20px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    li::marker {
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    a.inline-link {
+      color: var(--cyan);
+      text-decoration: none;
+    }
+
+    a.inline-link:hover { opacity: 0.8; }
+
+    /* NOTE / CALLOUT */
+    .callout {
+      padding: 20px 24px;
+      background:
+        radial-gradient(circle at 20% 30%, var(--callout-tint), transparent 60%),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 12px;
+      margin: 20px 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    /* DATA TABLE (기능 비교표) */
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-2);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 560px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table thead th {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--hover-3);
+      white-space: nowrap;
+    }
+
+    .data-table tbody th {
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--text);
+      width: 34%;
+    }
+
+    .data-table tbody td {
+      color: var(--text-2);
+    }
+
+    .data-table tr:last-child th,
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* FAQ */
+    .faq-item {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .faq-item:last-child { border-bottom: none; }
+
+    .faq-q {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 8px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .faq-q::before {
+      content: 'Q.';
+      color: var(--cyan);
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+
+    .faq-a {
+      color: var(--text-2);
+      font-size: 14px;
+      padding-left: 24px;
+    }
+
+    /* CONTACT TABLE */
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .contact-table th,
+    .contact-table td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-table th {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--hover-3);
+      width: 30%;
+    }
+
+    .contact-table td {
+      color: var(--text);
+    }
+
+    .contact-table tr:last-child th,
+    .contact-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .contact-table a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: opacity 0.2s var(--ease);
+    }
+
+    .contact-table a:hover { opacity: 0.8; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    footer .brand { opacity: 0.7; }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      nav { padding: 16px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      h2 { font-size: 22px; }
+      .contact-table th { width: 35%; }
+      .toc ul { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </a>
+    <div class="nav-right">
+      <div class="theme-switcher" role="group" aria-label="테마 선택">
+        <button type="button" data-set-theme="dark" aria-label="다크 테마" title="다크"></button>
+        <button type="button" data-set-theme="mid" aria-label="미드 테마" title="미드"></button>
+        <button type="button" data-set-theme="light" aria-label="라이트 테마" title="라이트"></button>
+      </div>
+      <a href="/" class="nav-back">← 홈으로</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="doc-eyebrow">Guide · User Manual</div>
+
+    <h1>
+      모두의 견적서<br>
+      <span class="accent">사용설명서</span>
+    </h1>
+
+    <p class="doc-lead">
+      견적서 작성부터 방문예약, 문서 발급, 매출 관리까지 화면별로 순서대로 정리했습니다.
+    </p>
+
+    <div class="meta-box">
+      <div class="meta-item">앱명<b>모두의 견적서</b></div>
+      <div class="meta-item">버전<b>1.5.2</b></div>
+      <div class="meta-item">기준일<b>2026년 7월</b></div>
+      <div class="meta-item">문의<b>gas1730@gmail.com</b></div>
+    </div>
+
+    <!-- TOC -->
+    <nav class="toc" aria-label="목차">
+      <div class="toc-title">Contents · 목차</div>
+      <ul>
+        <li><a href="#s01"><span class="toc-num">01</span>📋 시작하기</a></li>
+        <li><a href="#s02"><span class="toc-num">02</span>🗓️ 홈 화면 (달력)</a></li>
+        <li><a href="#s03"><span class="toc-num">03</span>📝 견적서 작성</a></li>
+        <li><a href="#s04"><span class="toc-num">04</span>📦 이사·운송 전용 기능</a></li>
+        <li><a href="#s05"><span class="toc-num">05</span>🏠 방문예약</a></li>
+        <li><a href="#s06"><span class="toc-num">06</span>📌 일정</a></li>
+        <li><a href="#s07"><span class="toc-num">07</span>🔎 상세보기 화면</a></li>
+        <li><a href="#s08"><span class="toc-num">08</span>🖨️ 문서 출력 &amp; 저장함</a></li>
+        <li><a href="#s09"><span class="toc-num">09</span>📊 엑셀로 내보내기</a></li>
+        <li><a href="#s10"><span class="toc-num">10</span>👥 고객 명부</a></li>
+        <li><a href="#s11"><span class="toc-num">11</span>📈 매출 통계</a></li>
+        <li><a href="#s12"><span class="toc-num">12</span>🔍 통합 검색</a></li>
+        <li><a href="#s13"><span class="toc-num">13</span>⚙️ 설정</a></li>
+        <li><a href="#s14"><span class="toc-num">14</span>⭐ 무료 이용 &amp; 프리미엄</a></li>
+        <li><a href="#s15"><span class="toc-num">15</span>💬 자주 묻는 질문</a></li>
+      </ul>
+    </nav>
+
+    <!-- 01 -->
+    <h2 id="s01"><span class="num">01</span>📋 시작하기 (앱 실행 → 로그인)</h2>
+
+    <h3>가입 &amp; 로그인</h3>
+    <ul>
+      <li>이메일+비밀번호로 가입하거나, 구글 계정으로 바로 로그인할 수 있습니다.</li>
+      <li>처음 로그인하면 개인정보처리방침 동의 화면이 한 번 나옵니다. 체크하고 <strong>"동의하고 시작하기"</strong>를 눌러야 앱을 쓸 수 있습니다.</li>
+      <li>가입 후에는 사업자 정보(상호, 대표자, 사업자번호, 주소, 전화, 계좌)를 <strong>설정</strong> 화면에서 채워두면, 견적서/문서에 자동으로 들어갑니다.</li>
+    </ul>
+
+    <!-- 02 -->
+    <h2 id="s02"><span class="num">02</span>🗓️ 홈 화면 (달력)</h2>
+    <ul>
+      <li>달력에서 날짜를 탭하면 그날의 견적서·방문예약·일정이 아래 목록에 나타납니다.</li>
+      <li>날짜 밑의 작은 점 색깔로 구분됩니다 — <strong>파랑 = 견적서</strong> / <strong>초록 = 방문예약</strong> / <strong>주황 = 일정</strong></li>
+      <li>화면 맨 위 오른쪽엔 🔍(통합 검색), 📁(저장된 문서함), ⚙️(설정) 아이콘이 있습니다.</li>
+      <li>맨 위 왼쪽엔 지금 상태가 뜹니다 — 프리미엄이면 "⭐ 며칠 남음", 아니면 "‹ 뒤로" 등.</li>
+      <li>화면 하단 3개 버튼: <strong>📝 견적서 작성</strong> / <strong>🏠 방문예약</strong> / <strong>📌 일정 추가</strong></li>
+    </ul>
+
+    <!-- 03 -->
+    <h2 id="s03"><span class="num">03</span>📝 견적서 작성 (홈 → 📝 견적서 작성)</h2>
+
+    <h3>입력 순서</h3>
+    <ol>
+      <li><strong>작업 날짜</strong> / <strong>고객명(필수)</strong> / 주소 / 전화번호를 입력합니다. 주소는 "검색" 버튼으로 실제 주소를 찾아 넣을 수 있습니다.</li>
+      <li><strong>작업 항목</strong> — 설정에서 정해둔 업종의 기본 항목을 탭해서 고르거나, 직접 입력해서 추가할 수 있습니다.</li>
+      <li><strong>견적 금액</strong>을 숫자만 입력하고, 부가세 포함/별도 중 선택하면 공급가액·부가세·합계가 자동으로 계산되어 보여집니다.</li>
+      <li>필요하면 <strong>약속 시간과 알림</strong>(약속 전 5분~1일 전 중 선택)을 설정합니다.</li>
+      <li><strong>사진 첨부</strong> — 무료는 1장, 프리미엄은 5장까지 가능합니다. 카메라 촬영 또는 사진첩에서 선택.</li>
+      <li>맨 아래 <strong>저장하기</strong>를 눌러야 실제로 저장됩니다.</li>
+    </ol>
+
+    <div class="callout">
+      ✋ 저장하기 전에 뒤로가기를 누르면 <strong>"입력한 내용이 사라져요"</strong> 확인창이 뜹니다. 실수로 나가서 작성한 내용을 잃어버리는 걸 막아줍니다.
+    </div>
+
+    <!-- 04 -->
+    <h2 id="s04"><span class="num">04</span>📦 이사·운송 업종 전용 기능</h2>
+    <p>업종을 <strong>"이사·운송"</strong>으로 설정한 경우에만 나타나는 기능입니다.</p>
+
+    <h3>📦 이사 물품 체크리스트</h3>
+    <p>업종이 "이사·운송"이면 견적서 작성 화면에 이 버튼이 따로 생깁니다. 실제 이삿짐센터 견적서 양식을 본떠서 만들었습니다.</p>
+    <ul>
+      <li><strong>탭 구성:</strong> 안방 / (+건너방 추가, 여러 개 가능) / 거실 / 주방 / 베란다·기타 / 옵션</li>
+      <li>각 방마다 품목(장농, 침대, TV, 냉장고 등)을 <strong>+/−</strong> 로 개수만 체크하면 됩니다. 목록에 없는 품목은 "+ 품목 추가"로 이름을 직접 넣어서 추가할 수 있습니다.</li>
+      <li>품목 이름을 탭하면 그 아래로 메모와, 필요하면 별도 금액(예: 에어컨 이전설치비)도 넣을 수 있습니다.</li>
+      <li><strong>옵션 탭:</strong> 사다리차·엘리베이터·계단작업·스카이·에어컨 이전설치 등을 켜면 금액/메모를 넣을 수 있고, 목록에 없으면 직접 옵션을 추가할 수도 있습니다.</li>
+      <li><strong>완료</strong>를 누르면 체크한 내용이 자동으로 작업 항목에 정리되어 들어가고, 옵션 금액은 견적 금액과 별도로 합산됩니다.</li>
+    </ul>
+
+    <div class="callout">
+      ✋ 체크리스트 작성 중 취소하거나 뒤로가면 <strong>"지금 취소하면 사라져요"</strong> 확인창이 떠서 실수로 날리는 일이 없게 되어 있습니다.
+    </div>
+
+    <h3>계약금 / 잔금</h3>
+    <p>견적 금액 아래 <strong>"계약금 (원, 선택)"</strong> 입력란이 있습니다. 나중에 고객이 계약하겠다고 연락 오면, 그 견적서를 수정으로 열어서 계약금만 입력하고 저장하면 잔금이 자동으로 계산됩니다.</p>
+
+    <!-- 05 -->
+    <h2 id="s05"><span class="num">05</span>🏠 방문예약 (홈 → 🏠 방문예약)</h2>
+    <p>정식 견적서를 쓰기 전, <strong>"일단 방문 약속만 잡아둔"</strong> 가벼운 기록입니다. 고객명·연락처·주소·예상 작업·예상 금액 정도만 간단히 남겨둡니다.</p>
+    <p>방문해서 실제 견적이 나오면, 상세보기에서 <strong>"📄 견적서로 전환"</strong>을 눌러 입력했던 내용을 그대로 견적서로 옮길 수 있습니다 (원래 방문예약은 삭제할지 물어봅니다).</p>
+
+    <!-- 06 -->
+    <h2 id="s06"><span class="num">06</span>📌 일정 (홈 → 📌 일정 추가)</h2>
+    <p>제목과 메모만 남기는 단순 메모 기능입니다. 견적/금액과 상관없는 개인 일정이나 참고사항 남길 때 씁니다.</p>
+
+    <!-- 07 -->
+    <h2 id="s07"><span class="num">07</span>🔎 상세보기 화면 (달력에서 견적서·예약·일정 탭)</h2>
+
+    <h3>할 수 있는 것들</h3>
+    <ul>
+      <li>제목 옆 <strong>"수정"</strong> / <strong>"삭제"</strong> 링크</li>
+      <li><strong>📞 전화</strong> — 바로 전화 연결</li>
+      <li><strong>📩 안내 문자 발송</strong> — 상황별 문구 7종(견적발송/방문확정/작업확정/전날 리마인더/당일 출발/완료/입금 안내) 중 골라 채우거나 직접 작성해서 문자 앱으로 보냅니다.</li>
+      <li><strong>👷 직원에게 작업 내용 공유</strong> — 작업 정보(+대표 사진 1장)를 카카오톡 등으로 바로 공유합니다.</li>
+      <li><strong>🗺️ 카카오맵 길안내</strong> — 주소로 바로 길찾기</li>
+      <li><strong>📄 견적서 PDF로 보기</strong> (견적서인 경우) / <strong>📄 견적서로 전환</strong> (방문예약인 경우)</li>
+    </ul>
+
+    <!-- 08 -->
+    <h2 id="s08"><span class="num">08</span>🖨️ 문서 출력 &amp; 저장함 (설정 → 🖨️ 문서 출력)</h2>
+
+    <h3>4가지 서류 양식</h3>
+    <ul>
+      <li><strong>견적서</strong> — 항상 무료·무제한. 이사·운송 업종은 물품 체크리스트를 썼다면 방/구역별 박스로 정리된 전용 양식이 자동 적용됩니다.</li>
+      <li><strong>세금계산서 / 간이영수증 / 거래명세서</strong> — 무료 10건 소진 후에는 하루 1회까지 저장·공유 가능 (미리보기는 항상 무료).</li>
+    </ul>
+    <p>이사 옵션(사다리차 등)이 있는 견적서는 네 양식 모두 <strong>"이사비용/사다리차/옵션명"</strong> 이런 식으로 항목별 금액이 나눠서 나옵니다. 거래명세서는 미리보기에서 <strong>"📦 이사 물품 내역 표시"</strong> 토글로 상세 내역을 켜고 끌 수 있습니다.</p>
+
+    <h3>저장된 문서함 (📁)</h3>
+    <p>미리보기에서 <strong>"💾 앱에 저장"</strong>한 문서들을 다시 볼 수 있는 곳입니다. 미리보기/공유/삭제가 가능합니다.</p>
+
+    <!-- 09 -->
+    <h2 id="s09"><span class="num">09</span>📊 엑셀로 내보내기 (매출 통계 화면 · PDF 미리보기 화면)</h2>
+    <ul>
+      <li><strong>기간별 장부</strong> (매출 통계 → 📊 엑셀로 내보내기): 이번 주 / 이번 달 / 올해 / 기간 직접 선택 중 골라서, 그 기간 견적서를 표 하나로 모아 엑셀 파일로 받습니다.</li>
+      <li><strong>개별 문서 내보내기</strong> (PDF 미리보기 → 📊 엑셀로 내보내기): 방금 보고 있는 문서 하나를 엑셀로도 받을 수 있습니다.</li>
+      <li>내보낸 파일은 <strong>"공유"</strong> 창이 뜨는데, 거기서 엑셀 앱(초록 아이콘)을 고르면 바로 열립니다. 카카오톡 등으로 바로 전송도 가능합니다.</li>
+    </ul>
+
+    <!-- 10 -->
+    <h2 id="s10"><span class="num">10</span>👥 고객 명부 (설정 → 👥 고객 명부)</h2>
+    <p>지금까지 견적서를 작성한 고객들이 자동으로 목록에 모입니다. 고객을 탭하면 그 고객과의 견적 이력, 누적 금액, 전화·문자·길안내 버튼이 나옵니다.</p>
+
+    <!-- 11 -->
+    <h2 id="s11"><span class="num">11</span>📈 매출 통계 (설정 → 📊 매출 통계)</h2>
+    <p>월별 / 주별 / 연도별로 매출을 그래프와 함께 확인할 수 있습니다. 항목을 탭하면 해당 기간의 달력으로 바로 이동합니다.</p>
+
+    <!-- 12 -->
+    <h2 id="s12"><span class="num">12</span>🔍 통합 검색 (홈 화면 상단 🔍)</h2>
+    <p>고객명·전화번호·주소·작업내용으로 견적서와 일정을 한 번에 검색할 수 있습니다.</p>
+
+    <!-- 13 -->
+    <h2 id="s13"><span class="num">13</span>⚙️ 설정 (홈 화면 상단 ⚙️)</h2>
+
+    <h3>이 화면에서 할 수 있는 것</h3>
+    <ul>
+      <li><strong>🏢 사업자 정보</strong> — 상호/대표자/사업자번호/주소/전화/계좌. 문서에 자동으로 반영됩니다.</li>
+      <li><strong>🔧 대표 업종 설정</strong> — 업종을 고르면 견적서 작성 시 그 업종에 맞는 기본 작업 항목 칩이 뜹니다. 종목을 직접 입력해서 등록해야 세금계산서 등에 찍히는 "종목"란에 반영됩니다.</li>
+      <li><strong>🖨️ 문서 출력</strong> / <strong>📁 저장된 문서</strong> / <strong>📊 매출 통계</strong> 바로가기</li>
+      <li><strong>데이터 현황</strong> — 저장된 견적서 수, 고객 수, 전체 합계</li>
+      <li><strong>앱 정보</strong> — 버전 확인, 🔄 최신 버전 확인 버튼, 개인정보처리방침·홈페이지 링크</li>
+      <li><strong>⭐ 구독</strong> — 지금 상태 확인 및 프리미엄 구독/관리</li>
+      <li><strong>🚪 로그아웃</strong> / <strong>❌ 회원 탈퇴</strong></li>
+    </ul>
+
+    <!-- 14 -->
+    <h2 id="s14"><span class="num">14</span>⭐ 무료 이용 &amp; 프리미엄</h2>
+
+    <h3>기본 원칙</h3>
+    <ul>
+      <li>가입 후 <strong>견적서+방문예약 합쳐서 평생 10건</strong>은 기간 제한 없이 프리미엄과 동일하게 전부 무제한 이용 가능합니다.</li>
+      <li>10건을 다 쓰면, <strong>광고를 보고 받는 포인트</strong>로 계속 견적서/방문예약을 만들 수 있습니다 — 하루 최대 10회 시청, 포인트는 그날 자정에 사라집니다.</li>
+      <li>프리미엄 구독은 <strong>월 6,900원</strong>이고, 구독 중엔 모든 제한 없이 자유롭게 이용할 수 있습니다.</li>
+    </ul>
+
+    <h3>기능별 비교표</h3>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>기능</th>
+            <th>무료체험 10건 이내</th>
+            <th>10건 소진 후 (광고 포인트)</th>
+            <th>프리미엄</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>견적서/방문예약 작성</th>
+            <td>무제한</td>
+            <td>포인트 1개당 1건</td>
+            <td>무제한</td>
+          </tr>
+          <tr>
+            <th>견적서 PDF</th>
+            <td>무제한</td>
+            <td>무제한</td>
+            <td>무제한</td>
+          </tr>
+          <tr>
+            <th>세금계산서·간이·거래명세서 저장/공유</th>
+            <td>무제한</td>
+            <td>하루 1회</td>
+            <td>무제한</td>
+          </tr>
+          <tr>
+            <th>직원 공유</th>
+            <td>무제한</td>
+            <td>하루 1회</td>
+            <td>무제한</td>
+          </tr>
+          <tr>
+            <th>문자 문구 템플릿 선택</th>
+            <td>가능</td>
+            <td>불가 (직접 입력은 항상 가능)</td>
+            <td>가능</td>
+          </tr>
+          <tr>
+            <th>엑셀 내보내기</th>
+            <td>기간 제한 없음</td>
+            <td>오늘 날짜만, 하루 1회</td>
+            <td>기간 제한 없음</td>
+          </tr>
+          <tr>
+            <th>사진 첨부</th>
+            <td>1장</td>
+            <td>1장</td>
+            <td>5장</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout">
+      💳 구독은 Google Play 정기결제로 진행됩니다. 해지는 <strong>Play 스토어의 구독 관리 화면</strong>에서 해야 하고, 앱을 지우는 것만으로는 결제가 멈추지 않습니다.
+    </div>
+
+    <!-- 15 -->
+    <h2 id="s15"><span class="num">15</span>💬 자주 묻는 질문</h2>
+
+    <div class="faq-item">
+      <div class="faq-q">사업자 정보를 안 채우면 어떻게 되나요?</div>
+      <div class="faq-a">견적서 작성이나 무료 이용에는 지장 없습니다. 다만 PDF 문서(공급자란)에 빈칸으로 나오니, 실제로 문서를 발급하시기 전에 설정에서 미리 채워두시는 걸 추천합니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">이사·운송 업종을 골랐는데 체크리스트 버튼이 안 보여요.</div>
+      <div class="faq-a">설정 → 업종 선택 화면에서 드롭다운으로 "이사·운송"을 한 번 다시 탭해서 선택해주세요. 목록에서 고르기만 하고 저장 버튼을 따로 안 눌러도 탭하는 즉시 저장됩니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">포인트가 갑자기 사라졌어요.</div>
+      <div class="faq-a">광고를 보고 받은 포인트는 그날 하루만 유효합니다. 자정이 지나면 그날 안 쓴 포인트는 소멸됩니다. 무료체험 10건(평생)과는 별개입니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">계약금은 어디서 입력하나요?</div>
+      <div class="faq-a">이사·운송 견적서 작성 화면에서 견적 금액 아래에 "계약금 (원, 선택)"란이 있습니다. 나중에 다시 "수정"으로 들어와서 채워도 됩니다.</div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q">프리미엄 결제하면 광고가 안 뜨나요?</div>
+      <div class="faq-a">네. 광고는 프리미엄 전용 화면의 "광고 보고 포인트 받기" 버튼 하나뿐이라, 프리미엄 이용 중에는 그 버튼 자체가 아예 보이지 않습니다.</div>
+    </div>
+
+    <!-- 관련 문서 -->
+    <h2><span class="num">부록</span>관련 문서 및 문의</h2>
+    <table class="contact-table">
+      <tr>
+        <th>이용약관</th>
+        <td><a href="/terms-quote.html">terms-quote.html</a></td>
+      </tr>
+      <tr>
+        <th>개인정보처리방침</th>
+        <td><a href="/privacy-quote.html">privacy-quote.html</a></td>
+      </tr>
+      <tr>
+        <th>문의</th>
+        <td><a href="mailto:gas1730@gmail.com">gas1730@gmail.com</a></td>
+      </tr>
+    </table>
+    <p>사용설명서와 관련한 문의사항, 앱 오류 신고, 기능 요청 등은 위 이메일로 접수해 주시기 바랍니다.</p>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </div>
+    <div>© 2026 ModooLabs · <a href="/">modooscoin.com</a></div>
+  </footer>
+
+  <!-- Theme Switcher Script -->
+  <script>
+    (function() {
+      var buttons = document.querySelectorAll('.theme-switcher button[data-set-theme]');
+      buttons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var theme = btn.getAttribute('data-set-theme');
+          document.documentElement.setAttribute('data-theme', theme);
+          try {
+            localStorage.setItem('modoolabs-theme', theme);
+          } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
