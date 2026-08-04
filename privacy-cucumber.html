@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>오이밭 수호대 개인정보처리방침 | ModooLabs</title>
+  <meta name="description" content="오이밭 수호대 (Cucumber Defense Force) 앱의 개인정보처리방침 — 시행 2026년 8월 4일" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('modoolabs-theme');
+        if (saved && ['dark', 'mid', 'light'].indexOf(saved) !== -1) {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, html[data-theme="mid"] {
+      --bg: #252530;
+      --bg-2: #2E2E3D;
+      --surface: #383848;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #E8E8ED;
+      --text-2: #A5A5B5;
+      --muted: #7A7A88;
+      --cyan: #22D4C4;
+      --violet: #8067FF;
+      --lime: #C0EB60;
+      --nav-bg: rgba(37, 37, 48, 0.75);
+      --mark-bg: #252530;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --callout-tint: rgba(128, 103, 255, 0.12);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --nav-bg: rgba(10, 10, 21, 0.75);
+      --mark-bg: #0A0A15;
+      --hover-3: rgba(255, 255, 255, 0.02);
+      --callout-tint: rgba(124, 92, 255, 0.08);
+    }
+
+    html[data-theme="light"] {
+      --bg: #FAFAF7;
+      --bg-2: #F2F2EC;
+      --surface: #E8E8E1;
+      --border: rgba(10, 10, 21, 0.08);
+      --border-strong: rgba(10, 10, 21, 0.16);
+      --text: #0A0A15;
+      --text-2: #4A4A5C;
+      --muted: #8B8B9F;
+      --cyan: #06B8AB;
+      --violet: #6B4CE6;
+      --lime: #7EB026;
+      --nav-bg: rgba(250, 250, 247, 0.75);
+      --mark-bg: #FAFAF7;
+      --hover-3: rgba(10, 10, 21, 0.03);
+      --callout-tint: rgba(107, 76, 230, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.28;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
+        var(--mark-bg);
+      box-shadow: 0 0 24px rgba(128, 103, 255, 0.3);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-back {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-back:hover { color: var(--text); }
+
+    /* Nav right — theme switcher + back link */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      background: var(--hover-3);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-switcher button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-switcher button[data-set-theme="dark"] { background: #0A0A15; }
+    .theme-switcher button[data-set-theme="mid"] { background: #252530; }
+    .theme-switcher button[data-set-theme="light"] {
+      background: #FAFAF7;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-switcher button:hover { transform: scale(1.15); }
+
+    html[data-theme="dark"] .theme-switcher button[data-set-theme="dark"],
+    html[data-theme="mid"] .theme-switcher button[data-set-theme="mid"],
+    html:not([data-theme]) .theme-switcher button[data-set-theme="mid"],
+    html[data-theme="light"] .theme-switcher button[data-set-theme="light"] {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+    }
+
+    /* HEADER */
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      background: var(--hover-3);
+    }
+
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent {
+      background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 55%, var(--lime) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .doc-lead {
+      color: var(--text-2);
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* META BOX */
+    .meta-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 60px;
+    }
+
+    .meta-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-item b {
+      display: block;
+      font-family: var(--font-body);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* SECTIONS */
+    h2 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      line-height: 1.3;
+    }
+
+    h2 .num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 20px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    li::marker {
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* NOTE / CALLOUT */
+    .callout {
+      padding: 20px 24px;
+      background:
+        radial-gradient(circle at 20% 30%, var(--callout-tint), transparent 60%),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 12px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    /* CONTACT TABLE */
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .contact-table th,
+    .contact-table td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-table th {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--hover-3);
+      width: 30%;
+    }
+
+    .contact-table td {
+      color: var(--text);
+    }
+
+    .contact-table tr:last-child th,
+    .contact-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .contact-table a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: opacity 0.2s var(--ease);
+    }
+
+    .contact-table a:hover { opacity: 0.8; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    footer .brand {
+      opacity: 0.7;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      nav { padding: 16px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      h2 { font-size: 22px; }
+      .contact-table th { width: 35%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </a>
+    <div class="nav-right">
+      <div class="theme-switcher" role="group" aria-label="테마 선택">
+        <button type="button" data-set-theme="dark" aria-label="다크 테마" title="다크"></button>
+        <button type="button" data-set-theme="mid" aria-label="미드 테마" title="미드"></button>
+        <button type="button" data-set-theme="light" aria-label="라이트 테마" title="라이트"></button>
+      </div>
+      <a href="/" class="nav-back">← 홈으로</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="doc-eyebrow">Legal · Privacy Policy</div>
+
+    <h1>
+      오이밭 수호대<br>
+      <span class="accent">개인정보처리방침</span>
+    </h1>
+
+    <p class="doc-lead">
+      오이밭 수호대(Cucumber Defense Force)는 이용자의 개인정보를 수집하지 않는 것을 원칙으로 합니다. 본 방침은 앱이 어떤 데이터를 어떻게 다루는지 투명하게 안내드립니다.
+    </p>
+
+    <div class="meta-box">
+      <div class="meta-item">앱명<b>오이밭 수호대 (Cucumber Defense Force)</b></div>
+      <div class="meta-item">플랫폼<b>Android (Google Play)</b></div>
+      <div class="meta-item">시행일<b>2026년 8월 4일</b></div>
+      <div class="meta-item">문의<b>gas1730@gmail.com</b></div>
+    </div>
+
+    <!-- 1 -->
+    <h2><span class="num">01</span>수집하는 정보</h2>
+    <p>
+      오이밭 수호대는 별도의 회원가입 또는 로그인 절차 없이 이용할 수 있으며, 이용자로부터 이름·이메일·전화번호·계정정보 등 어떠한 개인정보도 수집하지 않습니다.
+    </p>
+    <p>
+      게임 진행 과정에서 생성되는 데이터(레벨, 재화, 스테이지 클리어 기록 등)는 오직 이용자의 기기 내부 로컬 저장소(AsyncStorage)에만 저장되며, 외부 서버로 전송되거나 개발자가 열람할 수 없습니다.
+    </p>
+
+    <div class="callout">
+      💡 현재 앱에는 광고 SDK, 인앱 결제, 분석 도구(애널리틱스) 등이 연동되어 있지 않습니다. 향후 광고 네트워크(예: Google AdMob)나 인앱 결제, 분석 도구 등이 추가될 경우 본 방침을 갱신하며, 갱신 시 이 페이지에 반드시 공지합니다.
+    </div>
+
+    <!-- 2 -->
+    <h2><span class="num">02</span>정보의 이용 목적</h2>
+    <p>
+      현재 수집하는 개인정보가 없으므로 이용 목적이 발생하지 않습니다.
+    </p>
+    <p>
+      향후 기능 추가에 따라 개인정보를 수집하게 되는 경우, 본 방침을 갱신하여 수집 항목과 이용 목적을 이 페이지에 명시합니다.
+    </p>
+
+    <!-- 3 -->
+    <h2><span class="num">03</span>정보의 보관 및 제3자 제공</h2>
+    <ul>
+      <li>수집하는 개인정보가 없으므로, 개발자가 별도로 보관하는 이용자 정보 또한 없습니다.</li>
+      <li>게임 진행 데이터(레벨, 재화, 스테이지 클리어 기록 등)는 오직 이용자 본인의 기기에만 저장되며, 앱을 삭제하는 즉시 해당 데이터도 함께 삭제됩니다.</li>
+      <li>제3자에게 제공되는 이용자 정보는 없습니다.</li>
+    </ul>
+
+    <!-- 4 -->
+    <h2><span class="num">04</span>아동의 개인정보 보호</h2>
+    <p>
+      오이밭 수호대는 만 14세 미만 아동으로부터 고의로 개인정보를 수집하지 않습니다.
+    </p>
+    <p>
+      만약 만 14세 미만 아동의 개인정보가 수집된 사실이 확인되는 경우, 개발자는 즉시 해당 정보를 삭제하는 등 필요한 조치를 취합니다. 아동의 법정대리인은 아래 문의처를 통해 관련 사항을 요청할 수 있습니다.
+    </p>
+
+    <!-- 5 -->
+    <h2><span class="num">05</span>방침 변경 및 고지 방법</h2>
+    <p>
+      본 개인정보처리방침은 관련 법령, 서비스 내용, 앱 기능 추가 등에 따라 수정될 수 있습니다.
+    </p>
+    <p>
+      특히 앞으로 광고 네트워크, 인앱 결제, 분석 도구 등이 앱에 추가되는 경우, 개발자는 그 사실을 본 방침에 반영하고 이 페이지를 통해 공지합니다. 중요한 변경 사항이 있을 경우에는 앱 내 공지 또는 별도의 안내를 함께 제공할 수 있습니다.
+    </p>
+
+    <!-- 6 -->
+    <h2><span class="num">06</span>문의처</h2>
+    <p>
+      개인정보 처리와 관련한 문의, 데이터 삭제 요청, 아동 개인정보 관련 문의 등은 아래 연락처로 접수해 주시기 바랍니다.
+    </p>
+    <table class="contact-table">
+      <tr>
+        <th>개발자</th>
+        <td>ModooLabs</td>
+      </tr>
+      <tr>
+        <th>앱 패키지명</th>
+        <td>com.defensegame.cucumber</td>
+      </tr>
+      <tr>
+        <th>이메일</th>
+        <td><a href="mailto:gas1730@gmail.com">gas1730@gmail.com</a></td>
+      </tr>
+    </table>
+
+    <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
+      최종 수정일: 2026-08-04
+    </p>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </div>
+    <div>© 2026 ModooLabs · <a href="/">modooscoin.com</a></div>
+  </footer>
+  <!-- Theme Switcher Script -->
+  <script>
+    (function() {
+      var buttons = document.querySelectorAll('.theme-switcher button[data-set-theme]');
+      buttons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var theme = btn.getAttribute('data-set-theme');
+          document.documentElement.setAttribute('data-theme', theme);
+          try {
+            localStorage.setItem('modoolabs-theme', theme);
+          } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
