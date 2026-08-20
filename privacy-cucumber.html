@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>오이밭 수호대 개인정보처리방침 | ModooLabs</title>
-  <meta name="description" content="오이밭 수호대 (Cucumber Defense Force) 앱의 개인정보처리방침 — 시행 2026년 8월 4일" />
+  <meta name="description" content="오이밭 수호대 (Cucumber Defense Force) 앱의 개인정보처리방침 — 시행 2026년 8월 20일" />
   <meta name="robots" content="index, follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -367,6 +367,55 @@
       color: var(--text-2);
     }
 
+    /* DATA TABLE */
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-2);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 560px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table thead th {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--hover-3);
+      white-space: nowrap;
+    }
+
+    .data-table tbody th {
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--text);
+      width: 30%;
+    }
+
+    .data-table tbody td {
+      color: var(--text-2);
+    }
+
+    .data-table tr:last-child th,
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
     /* CONTACT TABLE */
     .contact-table {
       width: 100%;
@@ -482,76 +531,252 @@
     </h1>
 
     <p class="doc-lead">
-      오이밭 수호대(Cucumber Defense Force)는 이용자의 개인정보를 수집하지 않는 것을 원칙으로 합니다. 본 방침은 앱이 어떤 데이터를 어떻게 다루는지 투명하게 안내드립니다.
+      오이밭 수호대(Cucumber Defense Force)를 운영하는 ModooLabs는 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 앱에서 어떤 정보가 수집·처리되고, 해당 정보가 어떤 목적으로 이용되는지 안내합니다.
     </p>
 
     <div class="meta-box">
       <div class="meta-item">앱명<b>오이밭 수호대 (Cucumber Defense Force)</b></div>
       <div class="meta-item">플랫폼<b>Android (Google Play)</b></div>
-      <div class="meta-item">시행일<b>2026년 8월 4일</b></div>
+      <div class="meta-item">패키지명<b>com.defensegame.cucumber</b></div>
+      <div class="meta-item">개발자<b>ModooLabs</b></div>
+      <div class="meta-item">시행일<b>2026년 8월 20일</b></div>
       <div class="meta-item">문의<b>gas1730@gmail.com</b></div>
     </div>
 
     <!-- 1 -->
-    <h2><span class="num">01</span>수집하는 정보</h2>
+    <h2><span class="num">01</span>수집·처리하는 정보</h2>
     <p>
-      오이밭 수호대는 별도의 회원가입 또는 로그인 절차 없이 이용할 수 있으며, 이용자로부터 이름·이메일·전화번호·계정정보 등 어떠한 개인정보도 수집하지 않습니다.
-    </p>
-    <p>
-      게임 진행 과정에서 생성되는 데이터(레벨, 재화, 스테이지 클리어 기록 등)는 오직 이용자의 기기 내부 로컬 저장소(AsyncStorage)에만 저장되며, 외부 서버로 전송되거나 개발자가 열람할 수 없습니다.
+      오이밭 수호대는 별도의 자체 회원가입 없이 이용할 수 있습니다. 다만 Google Play Games 로그인, 광고 및 인앱 구매 기능을 제공하기 위해 다음 정보가 처리될 수 있습니다.
     </p>
 
-    <div class="callout">
-      💡 현재 앱에는 광고 SDK, 인앱 결제, 분석 도구(애널리틱스) 등이 연동되어 있지 않습니다. 향후 광고 네트워크(예: Google AdMob)나 인앱 결제, 분석 도구 등이 추가될 경우 본 방침을 갱신하며, 갱신 시 이 페이지에 반드시 공지합니다.
-    </div>
+    <h3>1) Google Play Games Services</h3>
+    <p>이용자는 선택적으로 Google Play 계정으로 로그인할 수 있습니다. 로그인하거나 Play Games 기능을 이용하는 경우 다음 정보가 처리될 수 있습니다.</p>
+    <ul>
+      <li>Google Play Games 플레이어 ID</li>
+      <li>Google 계정의 표시 이름 또는 게임 닉네임</li>
+      <li>플레이어 프로필 및 프로필 이미지</li>
+      <li>업적, 순위표 등 Play Games 이용정보</li>
+      <li>게임 레벨, 게임 내 재화, 스테이지 클리어 기록, 설정 및 그 밖의 게임 진행 데이터</li>
+    </ul>
+    <p>게임 진행 데이터는 기기 내부 로컬 저장소와 Google Play Games 클라우드 저장소에 함께 저장될 수 있으며, 기기 변경 또는 앱 재설치 시 진행 데이터를 백업·동기화·복원하는 데 이용됩니다.</p>
+    <p>Google Play Games 로그인은 선택사항입니다. 로그인하지 않더라도 일부 온라인 기능, 클라우드 저장, 업적 및 기기 간 동기화 기능을 제외한 게임의 기본 기능을 이용할 수 있습니다.</p>
+    <p>Google Play Games Services에서 처리하는 개인정보에는 Google의 개인정보처리방침이 별도로 적용됩니다.</p>
+    <ul>
+      <li><a href="https://policies.google.com/privacy?hl=ko" style="color: var(--cyan); text-decoration: none;">Google 개인정보처리방침</a></li>
+      <li><a href="https://support.google.com/googleplay/answer/9130646?hl=ko" style="color: var(--cyan); text-decoration: none;">Google Play 게임즈 데이터 및 프로필 삭제 안내</a></li>
+    </ul>
+
+    <h3>2) Google AdMob 광고</h3>
+    <p>앱은 Google AdMob을 이용하여 배너광고, 전면광고 및 보상형 광고를 제공할 수 있습니다. 광고 제공 과정에서 Google 및 Google과 제휴한 광고 네트워크는 다음 정보를 자동으로 수집하거나 처리할 수 있습니다.</p>
+    <ul>
+      <li>광고 식별자(Advertising ID)</li>
+      <li>IP 주소 및 IP 주소를 기반으로 한 대략적인 위치정보</li>
+      <li>기기 종류, 모델, 운영체제 및 언어 설정</li>
+      <li>앱 버전 및 광고 SDK 정보</li>
+      <li>광고 노출, 클릭, 시청 완료 및 보상 지급 여부</li>
+      <li>앱 실행 및 광고와의 상호작용 정보</li>
+      <li>광고 부정행위 방지 및 보안에 필요한 기술정보</li>
+      <li>오류·진단·성능 관련 정보</li>
+    </ul>
+    <p>이러한 정보는 광고 제공, 광고 빈도 조절, 맞춤형 광고 또는 비개인 맞춤형 광고 제공, 광고 성과 측정, 부정광고 방지 및 서비스 개선 목적으로 처리될 수 있습니다.</p>
+    <p>이용자의 연령, 지역, 동의 상태 및 기기 설정에 따라 개인 맞춤형 광고가 제공될 수 있습니다. 이용자는 Google 내 광고 센터 또는 Android 기기의 광고 관련 설정에서 개인 맞춤 광고를 사용 중지하거나 광고 식별자를 재설정·삭제할 수 있습니다.</p>
+    <p>기기 및 Android 버전에 따라 메뉴 명칭은 달라질 수 있으며, 일반적으로 다음 경로에서 설정할 수 있습니다.</p>
+    <ul>
+      <li>Android 설정 → Google → 광고 또는 광고 개인 정보 보호</li>
+      <li>광고 개인 최적화 선택 해제</li>
+      <li>광고 ID 재설정 또는 삭제</li>
+      <li><a href="https://myadcenter.google.com/" style="color: var(--cyan); text-decoration: none;">Google 내 광고 센터</a></li>
+      <li><a href="https://policies.google.com/privacy?hl=ko" style="color: var(--cyan); text-decoration: none;">Google 개인정보처리방침</a></li>
+    </ul>
+    <p>광고 개인 최적화를 해제하더라도 광고 자체는 계속 표시될 수 있으나, 이용자의 관심사에 기반하지 않은 비개인 맞춤형 광고가 표시될 수 있습니다.</p>
+
+    <h3>3) Google Play 인앱 구매</h3>
+    <p>앱에서는 Google Play 결제 시스템을 통해 다이아몬드, 게임 아이템, 패키지 등 디지털 상품을 구매할 수 있습니다.</p>
+    <p>결제와 결제수단 관리는 Google Play가 직접 처리합니다. 개발자는 이용자의 신용카드번호, 계좌번호, 결제 비밀번호 등 결제수단 정보에 접근하거나 이를 저장하지 않습니다.</p>
+    <p>구매 확인, 상품 지급, 구매 복원, 중복 지급 방지, 환불 처리 및 부정거래 방지를 위해 다음과 같은 최소한의 결제정보가 처리될 수 있습니다.</p>
+    <ul>
+      <li>구매 상품 ID</li>
+      <li>주문번호 또는 거래 ID</li>
+      <li>구매 토큰</li>
+      <li>구매일시</li>
+      <li>결제 및 구매 상태</li>
+      <li>구매 취소·환불·철회 상태</li>
+      <li>상품 지급 및 소비 처리 여부</li>
+    </ul>
+
+    <h3>4) 게임 진행 데이터</h3>
+    <p>게임 진행 과정에서 다음 데이터가 생성될 수 있습니다.</p>
+    <ul>
+      <li>레벨 및 경험치</li>
+      <li>게임 내 재화와 보유 아이템</li>
+      <li>무기 강화 및 업그레이드 정보</li>
+      <li>스테이지·웨이브 클리어 기록</li>
+      <li>별 획득 및 업적 기록</li>
+      <li>게임 설정정보</li>
+      <li>출석 및 보상 수령 기록</li>
+    </ul>
+    <p>게임 진행 데이터는 기기의 로컬 저장소에 저장되며, 이용자가 Google Play Games에 로그인한 경우 클라우드 백업과 기기 간 동기화를 위해 Google Play Games 저장소에도 저장될 수 있습니다.</p>
+
+    <h3>5) 정보의 수집방법</h3>
+    <p>개인정보 및 이용정보는 다음 방법으로 수집·처리될 수 있습니다.</p>
+    <ul>
+      <li>이용자가 Google Play Games 로그인을 선택하는 과정</li>
+      <li>게임 실행 및 플레이 과정</li>
+      <li>Google Play 인앱 구매 과정</li>
+      <li>Google AdMob 광고 요청·노출·클릭·시청 과정</li>
+      <li>앱과 Google 서비스 간의 자동 통신</li>
+      <li>고객문의 또는 오류·환불 문의 과정</li>
+    </ul>
 
     <!-- 2 -->
     <h2><span class="num">02</span>정보의 이용 목적</h2>
-    <p>
-      현재 수집하는 개인정보가 없으므로 이용 목적이 발생하지 않습니다.
-    </p>
-    <p>
-      향후 기능 추가에 따라 개인정보를 수집하게 되는 경우, 본 방침을 갱신하여 수집 항목과 이용 목적을 이 페이지에 명시합니다.
-    </p>
+    <p>개발자 및 앱에 적용된 외부 서비스는 수집된 정보를 다음 목적으로 처리합니다.</p>
+    <ul>
+      <li>Google Play Games 로그인 및 플레이어 식별</li>
+      <li>게임 진행 데이터의 저장, 백업, 동기화 및 복원</li>
+      <li>업적 및 순위표 등 Play Games 기능 제공</li>
+      <li>배너·전면·보상형 광고 제공</li>
+      <li>개인 맞춤형 또는 비개인 맞춤형 광고 제공</li>
+      <li>광고 성과 측정 및 광고 빈도 조절</li>
+      <li>광고 부정행위 및 비정상적인 이용 방지</li>
+      <li>인앱 구매 확인, 상품 지급 및 구매 복원</li>
+      <li>중복결제·부정결제 방지와 환불 처리</li>
+      <li>게임 오류 확인, 서비스 안정성 확보 및 이용환경 개선</li>
+      <li>이용자 문의와 분쟁 처리</li>
+      <li>관련 법령상 의무 이행</li>
+    </ul>
+    <p>개발자는 수집된 정보를 위 목적과 무관한 용도로 이용하지 않습니다. 이용 목적이 변경되는 경우 관련 법령에 따라 별도의 동의를 받거나 필요한 사항을 고지합니다.</p>
 
     <!-- 3 -->
-    <h2><span class="num">03</span>정보의 보관 및 제3자 제공</h2>
+    <h2><span class="num">03</span>보관, 제3자 제공 및 처리위탁</h2>
+
+    <h3>1) 개인정보 및 게임 데이터의 보유기간</h3>
+    <p>개발자는 개인정보 처리 목적이 달성되거나 정보가 더 이상 필요하지 않게 된 경우 해당 정보를 지체 없이 삭제합니다. 다만 관계 법령에서 일정 기간 보관하도록 정한 경우에는 해당 기간 동안 별도로 보관할 수 있습니다.</p>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>구분</th><th>보유기간</th></tr></thead>
+        <tbody>
+          <tr><th>기기 내부 게임 진행 데이터</th><td>앱 삭제 또는 앱 데이터 초기화 시까지</td></tr>
+          <tr><th>Google Play Games 프로필 및 클라우드 게임 데이터</th><td>Play Games 계정 연동 유지 또는 이용자의 삭제 요청 시까지</td></tr>
+          <tr><th>구매 상품 ID, 거래 ID, 구매 토큰 및 구매 상태</th><td>구매일로부터 5년 또는 관계 법령상 보존기간</td></tr>
+          <tr><th>구매 지급·복원 및 부정거래 방지 기록</th><td>처리 목적 달성 시 또는 관계 법령상 보존기간까지</td></tr>
+          <tr><th>고객문의 및 분쟁처리 기록</th><td>처리 완료일부터 3년</td></tr>
+          <tr><th>AdMob 광고 관련 정보</th><td>Google의 개인정보처리방침 및 광고 데이터 보관정책에 따른 기간</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>앱 삭제만으로 Google Play Games 클라우드에 저장된 게임 데이터가 반드시 삭제되는 것은 아닙니다.</p>
+    <p>이용자는 Play Games 계정 연동을 해제한 후 Google Play의 'Play 게임즈 데이터 또는 Play 게임즈 프로필 삭제' 기능을 이용하거나 개발자에게 요청하여 해당 앱의 클라우드 데이터 삭제를 요청할 수 있습니다.</p>
     <ul>
-      <li>수집하는 개인정보가 없으므로, 개발자가 별도로 보관하는 이용자 정보 또한 없습니다.</li>
-      <li>게임 진행 데이터(레벨, 재화, 스테이지 클리어 기록 등)는 오직 이용자 본인의 기기에만 저장되며, 앱을 삭제하는 즉시 해당 데이터도 함께 삭제됩니다.</li>
-      <li>제3자에게 제공되는 이용자 정보는 없습니다.</li>
+      <li><a href="https://support.google.com/googleplay/answer/9130646?hl=ko" style="color: var(--cyan); text-decoration: none;">Play 게임즈 데이터 삭제 방법</a></li>
     </ul>
+
+    <h3>2) 제3자 제공 및 처리위탁</h3>
+    <p>앱은 서비스 제공을 위해 다음 Google 서비스를 이용합니다. 각 서비스 제공자는 해당 기능을 수행하는 과정에서 개인정보를 처리할 수 있으며, 일부 정보는 Google이 자신의 개인정보처리방침과 이용약관에 따라 독립적으로 처리할 수 있습니다.</p>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>제공·처리 사업자</th><th>이용 서비스</th><th>처리되는 정보</th><th>처리 목적</th><th>보유기간</th></tr></thead>
+        <tbody>
+          <tr><th>Google LLC 및 그 계열사</th><td>Google Play Games Services</td><td>플레이어 ID, 표시 이름, 프로필 정보, 게임 진행 데이터, 업적·순위정보</td><td>로그인, 플레이어 식별, 클라우드 저장·동기화, 업적 및 순위표 제공</td><td>계정 연동 유지 또는 이용자 삭제 시까지</td></tr>
+          <tr><th>Google LLC 및 광고 파트너</th><td>Google AdMob</td><td>광고 식별자, IP 주소, 대략적 위치, 기기정보, 광고 노출·클릭·시청 및 앱 사용정보</td><td>광고 제공, 맞춤형 광고, 성과 측정, 부정행위 방지</td><td>Google 및 광고 파트너의 정책에 따른 기간</td></tr>
+          <tr><th>Google LLC 및 Google Play 결제 관련 법인</th><td>Google Play Billing</td><td>상품 ID, 주문·거래 ID, 구매 토큰, 구매일시 및 구매·환불 상태</td><td>결제 처리, 구매 확인, 상품 지급, 구매 복원, 환불 및 부정거래 방지</td><td>Google 정책 및 관계 법령에 따른 기간</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>개발자는 이용자의 카드번호, 은행계좌번호 또는 결제 비밀번호를 Google로부터 제공받지 않습니다.</p>
+    <p>Google이 직접 수집·처리하는 정보에는 다음 정책이 적용됩니다.</p>
+    <ul>
+      <li><a href="https://policies.google.com/privacy?hl=ko" style="color: var(--cyan); text-decoration: none;">Google 개인정보처리방침</a></li>
+      <li><a href="https://policies.google.com/terms?hl=ko" style="color: var(--cyan); text-decoration: none;">Google 서비스 이용약관</a></li>
+    </ul>
+
+    <h3>3) 개인정보의 국외 처리 및 이전</h3>
+    <p>Google Play Games Services, Google AdMob 및 Google Play Billing은 전 세계에 분산된 Google의 시스템을 통해 제공됩니다. 이에 따라 개인정보가 대한민국 외 국가에 위치한 Google 서버에서 처리·보관될 수 있습니다.</p>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>이전받는 자</th><th>이전되는 국가</th><th>이전 항목</th><th>이전 목적</th><th>이전 시기·방법</th></tr></thead>
+        <tbody>
+          <tr><th>Google LLC 및 그 계열사</th><td>미국 및 Google의 데이터센터가 위치한 국가</td><td>Play Games 프로필, 플레이어 ID, 게임 진행 데이터, 광고 식별자, IP 주소, 기기정보, 광고 이용정보, 상품 ID, 거래 ID, 구매 토큰 및 구매상태</td><td>Play Games, 광고, 결제, 보안, 백업·동기화 서비스 제공</td><td>관련 기능 이용 시 암호화된 네트워크를 통한 전송</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>개인정보의 국외 처리와 관련된 자세한 사항은 Google 개인정보처리방침에서 확인할 수 있습니다.</p>
+    <p>이용자는 선택 기능인 Google Play Games 로그인을 사용하지 않거나 계정 연동을 해제하여 Play Games 정보의 국외 처리를 제한할 수 있습니다.</p>
+    <p>다만 Google AdMob 광고 또는 Google Play 결제와 같이 앱의 기본 운영이나 이용자가 선택한 구매를 처리하는 데 필요한 정보의 이전을 거부하는 경우 해당 광고·구매 기능 이용이 제한될 수 있습니다.</p>
+
+    <h3>4) 이용자의 권리와 행사방법</h3>
+    <p>이용자는 자신의 개인정보에 대해 다음 권리를 행사할 수 있습니다.</p>
+    <ul>
+      <li>개인정보 열람 요구</li>
+      <li>개인정보 정정 요구</li>
+      <li>개인정보 삭제 요구</li>
+      <li>개인정보 처리정지 요구</li>
+      <li>Google Play Games 계정 연동 해제</li>
+      <li>Play Games 프로필 및 게임 데이터 삭제 요청</li>
+      <li>광고 개인 최적화 거부</li>
+      <li>광고 식별자 재설정 또는 삭제</li>
+      <li>인앱 구매 내역 확인 및 구매 복원</li>
+      <li>관련 법령과 Google Play 정책에 따른 환불 요청</li>
+    </ul>
+    <p>개발자가 보유한 정보에 대한 요청은 gas1730@gmail.com으로 접수할 수 있습니다.</p>
+    <p>Google이 직접 관리하는 계정, 광고 및 결제정보는 Google 계정, Google Play 또는 Android 기기 설정에서 직접 열람·수정·삭제할 수 있습니다.</p>
+    <p>개발자는 이용자의 요청을 받은 경우 본인확인 후 관계 법령에서 정한 기간 내에 처리합니다. 법령에서 정보의 보존을 요구하거나 다른 사람의 권리 또는 안전을 침해할 우려가 있는 경우에는 요청이 제한될 수 있으며, 이 경우 그 사유를 안내합니다.</p>
+
+    <h3>5) 개인정보의 파기</h3>
+    <p>개발자는 개인정보의 보유기간이 지나거나 처리 목적이 달성되면 해당 정보를 지체 없이 파기합니다.</p>
+    <p>전자적 파일은 복구하거나 재생할 수 없는 방법으로 삭제하며, 관계 법령에 따라 보관하여야 하는 정보는 다른 정보와 분리하여 보관하고 법정 보존 목적 외에는 이용하지 않습니다.</p>
+    <p>기기 내부에 저장된 게임 진행 데이터는 이용자가 앱을 삭제하거나 앱 데이터를 초기화하여 직접 삭제할 수 있습니다.</p>
 
     <!-- 4 -->
     <h2><span class="num">04</span>아동의 개인정보 보호</h2>
     <p>
-      오이밭 수호대는 만 14세 미만 아동으로부터 고의로 개인정보를 수집하지 않습니다.
+      오이밭 수호대는 만 14세 미만 아동의 개인정보를 고의로 수집하지 않으며, 아동의 개인정보를 처리하게 되는 경우 관계 법령에 따라 법정대리인의 동의를 받는 등 필요한 보호조치를 시행합니다.
     </p>
     <p>
-      만약 만 14세 미만 아동의 개인정보가 수집된 사실이 확인되는 경우, 개발자는 즉시 해당 정보를 삭제하는 등 필요한 조치를 취합니다. 아동의 법정대리인은 아래 문의처를 통해 관련 사항을 요청할 수 있습니다.
+      만 14세 미만 아동이 이용할 가능성이 있는 경우 Google AdMob의 아동·가족 관련 정책을 적용하고, 아동으로 확인된 이용자에게 개인 맞춤형 광고가 표시되지 않도록 비개인 맞춤형 광고 방식으로 처리합니다.
+    </p>
+    <p>
+      아동에게는 관심사 기반 광고나 리마케팅 광고를 제공하지 않으며, 광고 콘텐츠가 아동에게 적합하도록 필요한 설정과 제한을 적용합니다.
+    </p>
+    <p>
+      만 14세 미만 아동의 개인정보가 동의 없이 처리된 사실이 확인되는 경우 개발자는 해당 정보를 지체 없이 삭제하는 등 필요한 조치를 실시합니다.
+    </p>
+    <p>
+      아동의 법정대리인은 gas1730@gmail.com을 통해 개인정보 열람·정정·삭제 및 처리정지를 요청할 수 있습니다.
     </p>
 
     <!-- 5 -->
-    <h2><span class="num">05</span>방침 변경 및 고지 방법</h2>
+    <h2><span class="num">05</span>방침 변경 및 고지방법</h2>
     <p>
-      본 개인정보처리방침은 관련 법령, 서비스 내용, 앱 기능 추가 등에 따라 수정될 수 있습니다.
+      본 개인정보처리방침은 관련 법령, Google 정책, 앱 기능 또는 사용되는 외부 서비스의 변경에 따라 수정될 수 있습니다.
     </p>
     <p>
-      특히 앞으로 광고 네트워크, 인앱 결제, 분석 도구 등이 앱에 추가되는 경우, 개발자는 그 사실을 본 방침에 반영하고 이 페이지를 통해 공지합니다. 중요한 변경 사항이 있을 경우에는 앱 내 공지 또는 별도의 안내를 함께 제공할 수 있습니다.
+      방침이 변경되는 경우 변경된 내용을 본 페이지에 게시하며, 이용자의 권리에 중대한 영향을 미치는 변경이 있을 경우 앱 내 공지 또는 그 밖의 적절한 방법으로 사전에 안내합니다.
     </p>
+    <p>
+      광고 네트워크, 인앱 결제, 분석도구, 클라우드 저장 또는 계정 기능이 추가·변경되는 경우 실제 처리되는 정보와 목적을 본 방침에 반영합니다.
+    </p>
+    <div class="callout">
+      공고일: 2026년 8월 20일<br>
+      시행일: 2026년 8월 20일
+    </div>
 
     <!-- 6 -->
     <h2><span class="num">06</span>문의처</h2>
     <p>
-      개인정보 처리와 관련한 문의, 데이터 삭제 요청, 아동 개인정보 관련 문의 등은 아래 연락처로 접수해 주시기 바랍니다.
+      개인정보 처리와 관련한 문의, 데이터 삭제 요청, Google Play Games 클라우드 데이터 삭제 요청, 아동 개인정보 관련 문의 및 권리 행사는 다음 연락처로 접수할 수 있습니다.
     </p>
     <table class="contact-table">
       <tr>
-        <th>개발자</th>
+        <th>개발자·개인정보 보호책임자</th>
         <td>ModooLabs</td>
       </tr>
       <tr>
-        <th>앱 패키지명</th>
+        <th>앱명</th>
+        <td>오이밭 수호대 (Cucumber Defense Force)</td>
+      </tr>
+      <tr>
+        <th>패키지명</th>
         <td>com.defensegame.cucumber</td>
       </tr>
       <tr>
@@ -559,9 +784,32 @@
         <td><a href="mailto:gas1730@gmail.com">gas1730@gmail.com</a></td>
       </tr>
     </table>
+    <p style="margin-top: 20px;">
+      개인정보 침해에 관한 상담 또는 신고가 필요한 경우 아래 기관에 문의할 수 있습니다.
+    </p>
+    <ul>
+      <li>개인정보침해 신고센터: 국번 없이 118</li>
+      <li>개인정보분쟁조정위원회: 1833-6972</li>
+      <li>경찰청 사이버범죄 신고시스템: 국번 없이 182</li>
+    </ul>
+
+    <!-- 국제 이용자 안내 -->
+    <h2><span class="num">부록</span>국제 이용자 안내</h2>
+    <p>
+      오이밭 수호대는 Google Play를 통해 여러 국가와 지역에 제공될 수 있습니다.
+    </p>
+    <p>
+      유럽경제지역(EEA), 영국 또는 스위스 이용자에게 관련 법령이 적용되는 경우, 개발자와 Google은 필요한 동의관리 절차를 제공하고 이용자가 개인정보의 열람, 정정, 삭제, 처리 제한, 이동 및 동의 철회를 요청할 수 있도록 조치합니다.
+    </p>
+    <p>
+      미국 일부 주의 이용자에게 적용되는 개인정보보호법에 따라 이용자는 자신의 개인정보에 대한 열람, 삭제, 정정 또는 개인 맞춤형 광고와 관련된 처리의 거부를 요청할 수 있습니다.
+    </p>
+    <p>
+      이용자는 위 권리를 gas1730@gmail.com을 통해 행사할 수 있습니다. Google이 직접 관리하는 개인정보에 관한 권리는 Google 개인정보처리방침 및 Google 계정 설정을 통해 행사할 수 있습니다.
+    </p>
 
     <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
-      최종 수정일: 2026-08-04
+      최종 수정일: 2026-08-20
     </p>
 
   </main>
