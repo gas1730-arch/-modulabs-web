@@ -538,7 +538,7 @@
       <div class="meta-item">앱명<b>모두의 견적서</b></div>
       <div class="meta-item">개발자<b>김진춘</b></div>
       <div class="meta-item">최초 시행일<b>2025년 11월 8일</b></div>
-      <div class="meta-item">최근 개정일<b>2026년 7월 22일</b></div>
+      <div class="meta-item">최근 개정일<b>2026년 8월 23일</b></div>
     </div>
 
     <!-- 1 -->
@@ -579,31 +579,51 @@
       <li><strong>수집 방법:</strong> Firebase Crashlytics 등 오류 분석 도구 사용 시 자동 수집</li>
     </ul>
 
-    <h3>4) 클라우드 동기화 시 수집되는 정보 (선택 기능)</h3>
+    <h3>4) 회원 로그인 정보</h3>
     <ul>
-      <li><strong>수집 항목:</strong> Firebase 계정 식별자(예: Google 로그인 시 사용자 UID), 견적/일정/고객 정보 등 앱 내에 저장된 데이터의 백업본</li>
+      <li><strong>구글 계정 로그인:</strong> 이름, 이메일 주소</li>
+      <li><strong>애플 계정 로그인 (iOS):</strong> 이름, 이메일 주소
+        <ul>
+          <li>이용자가 애플의 '나의 이메일 가리기'를 선택한 경우, 실제 이메일 대신 애플이 생성한 전달용 주소(@privaterelay.appleid.com)를 제공받습니다.</li>
+          <li>이름과 이메일은 애플 정책에 따라 최초 로그인 시에만 제공됩니다.</li>
+        </ul>
+      </li>
+      <li><strong>이메일 로그인:</strong> 이메일 주소</li>
+      <li><strong>수집 방법:</strong> 이용자가 로그인 시 선택한 방식(구글/애플/이메일)에 따라 각 인증 제공자로부터 전달받아 수집</li>
+      <li><strong>이용 목적:</strong> 회원 식별, 로그인 및 계정 인증</li>
+    </ul>
+
+    <h3>5) 클라우드 동기화 시 수집되는 정보 (선택 기능)</h3>
+    <ul>
+      <li><strong>수집 항목:</strong> Firebase 계정 식별자(UID), 견적/일정/고객 정보 등 앱 내에 저장된 데이터의 백업본</li>
       <li><strong>수집 방법:</strong> 사용자가 로그인 및 동기화 기능을 사용하도록 설정한 경우에 한하여, 앱이 Firebase(구글 서버)로 데이터를 전송하여 백업/복원용으로 저장</li>
     </ul>
 
-    <h3>5) 광고 식별자 (광고 ID)</h3>
+    <h3>6) 광고 식별자</h3>
     <ul>
-      <li><strong>수집 항목:</strong> 기기의 광고 식별자(Advertising ID)</li>
+      <li><strong>Android:</strong> 광고 ID(Advertising ID)</li>
+      <li><strong>iOS:</strong> 광고 식별자(IDFA)
+        <ul>
+          <li>iOS에서는 광고 식별자에 접근하기 전에 '앱 추적 허용(App Tracking Transparency)' 요청을 표시하며, 허용하지 않으면 맞춤형 광고 목적으로 사용하지 않습니다.</li>
+          <li>허용 여부와 관계없이 앱의 모든 기능은 동일하게 이용 가능합니다.</li>
+        </ul>
+      </li>
       <li><strong>수집 방법:</strong> 무료 이용자 화면에 광고를 제공하는 Google Mobile Ads SDK(AdMob)를 통해 자동 수집</li>
       <li><strong>이용 목적:</strong> 광고 게재, 광고 성과 측정, 부정 클릭 방지</li>
       <li><strong>동의 절차:</strong> 앱 최초 실행 시 Google의 사용자 동의 플랫폼(UMP)을 통해 광고 관련 동의를 받으며, 설정 &gt; "광고 동의 설정 다시 보기"에서 언제든지 동의 내용을 다시 확인·변경할 수 있습니다.</li>
     </ul>
 
-    <h3>6) 인앱 구독 (결제) 정보</h3>
+    <h3>7) 인앱 구독 (결제) 정보</h3>
     <ul>
-      <li><strong>수집 항목:</strong> 구독 상품 구매 내역, 구독 상태(활성/만료), 구매 토큰</li>
-      <li><strong>수집 방법:</strong> 사용자가 앱 내에서 프리미엄 구독을 결제할 때 Google Play 결제 시스템을 통해 처리</li>
+      <li><strong>Android:</strong> 구독 상품 구매 내역, 구독 상태(활성/만료), 구매 토큰 — 사용자가 앱 내에서 프리미엄 구독을 결제할 때 Google Play 결제 시스템을 통해 처리</li>
+      <li><strong>iOS:</strong> 현재 앱 내 결제 기능을 제공하지 않습니다.</li>
     </ul>
 
     <div class="callout">
       카드번호 등 결제 수단 정보는 앱이 직접 수집하지 않으며, Google Play가 결제를 처리하고 앱은 구독 상태 확인에 필요한 최소 정보만 서버(Firebase)에 보관합니다.
     </div>
 
-    <h3>7) 이사 견적 요청 정보 (비회원 소비자)</h3>
+    <h3>8) 이사 견적 요청 정보 (비회원 소비자)</h3>
     <ul>
       <li><strong>필수 항목:</strong> 성명, 전화번호, 조회용 비밀번호(4자리 이상, 이용자가 직접 설정), 출발지 및 도착지 상세주소, 이사 희망일, 이사 물품 체크리스트(품목·수량 등), 기기의 푸시 알림 토큰(Android)</li>
       <li><strong>선택 항목:</strong> 이사 물품 및 현장 사진(최대 8장)</li>
@@ -662,6 +682,7 @@
       <li>이용자가 사전에 동의한 경우</li>
       <li><strong>Google AdMob (Google LLC):</strong> 광고 게재 및 광고 성과 측정을 위해 광고 식별자를 처리 (이용자 동의 하에)</li>
       <li><strong>Google Play (Google LLC):</strong> 인앱 구독 결제 처리</li>
+      <li><strong>Apple Inc.:</strong> 애플 계정 로그인(Sign in with Apple) 처리</li>
     </ul>
 
     <h3>이사 견적 요청 정보의 제공 범위 및 조건</h3>
