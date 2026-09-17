@@ -44,6 +44,7 @@
       --oiplace-visual-bg: #2A3038;
       --quote-visual-bg: #2E2A3A;
       --cucumber-visual-bg: #2E3630;
+      --lottocheck-visual-bg: #2A2F3E;
       --hover-3: rgba(255, 255, 255, 0.03);
       --hover-4: rgba(255, 255, 255, 0.04);
       --hover-6: rgba(255, 255, 255, 0.06);
@@ -76,6 +77,7 @@
       --oiplace-visual-bg: #0F1A15;
       --quote-visual-bg: #14121F;
       --cucumber-visual-bg: #131B15;
+      --lottocheck-visual-bg: #11141F;
       --hover-3: rgba(255, 255, 255, 0.03);
       --hover-4: rgba(255, 255, 255, 0.04);
       --hover-6: rgba(255, 255, 255, 0.06);
@@ -103,6 +105,7 @@
       --oiplace-visual-bg: #F0F5EA;
       --quote-visual-bg: #F0EDF7;
       --cucumber-visual-bg: #EEF5EA;
+      --lottocheck-visual-bg: #EAF0F7;
       --hover-3: rgba(10, 10, 21, 0.03);
       --hover-4: rgba(10, 10, 21, 0.04);
       --hover-6: rgba(10, 10, 21, 0.06);
@@ -592,6 +595,13 @@
         var(--cucumber-visual-bg);
     }
 
+    .product-lottocheck .product-visual {
+      background:
+        radial-gradient(circle at 30% 25%, rgba(34, 212, 196, 0.35), transparent 55%),
+        radial-gradient(circle at 75% 75%, rgba(128, 103, 255, 0.30), transparent 55%),
+        var(--lottocheck-visual-bg);
+    }
+
     .product-tag {
       font-family: var(--font-mono);
       font-size: 11px;
@@ -905,7 +915,7 @@
   <section class="hero" id="top">
     <div class="orb"><span></span></div>
 
-    <div class="eyebrow">Independent Software Studio · Suwon, KR</div>
+    <div class="eyebrow">Independent Software Studio · Ulsan, KR</div>
 
     <h1 class="hero-title">
       생각을 앱으로,<br>
@@ -1054,6 +1064,30 @@
         </div>
       </article>
 
+      <!-- LottoCheck (로또체크) -->
+      <article class="product product-lottocheck">
+        <div class="product-visual">運.</div>
+        <div>
+          <span class="product-tag">Lotto 6/45 · Utility</span>
+          <h3>
+            로또체크
+            <span class="en">LottoCheck — 로또 번호 생성·보관·당첨 확인</span>
+          </h3>
+          <p>
+            로또 번호를 만들고, 저장하고, 추첨이 끝나면 당첨 여부를 자동으로 확인합니다.
+            QR 인식과 토요일 추첨 알림까지 — 회원가입 없이, 데이터는 내 폰에만 저장됩니다.
+          </p>
+          <div class="product-meta">
+            <div>Platform<b>Android</b></div>
+            <div>Type<b>Utility</b></div>
+            <div>Status<b>Coming Soon</b></div>
+          </div>
+          <div class="product-links">
+            <a href="/privacy-lottocheck.html" class="product-link">개인정보처리방침 →</a>
+          </div>
+        </div>
+      </article>
+
     </div>
   </section>
 
@@ -1071,7 +1105,7 @@
         <h4>김진춘</h4>
         <div class="role">Founder · Developer</div>
         <p>
-          경기 수원 기반의 1인 개발자. 모두랩스를 이끌며 오이플레이스와 모두의견적서를
+          울산 기반의 1인 개발자. 모두랩스를 이끌며 오이플레이스와 모두의견적서를
           직접 만들고 운영하고 있습니다. AI와 함께 코드를 짜는 새로운 개발 방식을 실험합니다.
         </p>
       </div>
