@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>로또체크 개인정보처리방침 | ModooLabs</title>
+  <meta name="description" content="로또체크 개인정보처리방침 — 최초 시행 2026년 9월 17일" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('modoolabs-theme');
+        if (saved && ['dark', 'mid', 'light'].indexOf(saved) !== -1) {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, html[data-theme="mid"] {
+      --bg: #252530;
+      --bg-2: #2E2E3D;
+      --surface: #383848;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #E8E8ED;
+      --text-2: #A5A5B5;
+      --muted: #7A7A88;
+      --cyan: #22D4C4;
+      --violet: #8067FF;
+      --lime: #C0EB60;
+      --nav-bg: rgba(37, 37, 48, 0.75);
+      --mark-bg: #252530;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --callout-tint: rgba(128, 103, 255, 0.12);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --nav-bg: rgba(10, 10, 21, 0.75);
+      --mark-bg: #0A0A15;
+      --hover-3: rgba(255, 255, 255, 0.02);
+      --callout-tint: rgba(124, 92, 255, 0.08);
+    }
+
+    html[data-theme="light"] {
+      --bg: #FAFAF7;
+      --bg-2: #F2F2EC;
+      --surface: #E8E8E1;
+      --border: rgba(10, 10, 21, 0.08);
+      --border-strong: rgba(10, 10, 21, 0.16);
+      --text: #0A0A15;
+      --text-2: #4A4A5C;
+      --muted: #8B8B9F;
+      --cyan: #06B8AB;
+      --violet: #6B4CE6;
+      --lime: #7EB026;
+      --nav-bg: rgba(250, 250, 247, 0.75);
+      --mark-bg: #FAFAF7;
+      --hover-3: rgba(10, 10, 21, 0.03);
+      --callout-tint: rgba(107, 76, 230, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.28;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
+        var(--mark-bg);
+      box-shadow: 0 0 24px rgba(128, 103, 255, 0.3);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-back {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-back:hover { color: var(--text); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      background: var(--hover-3);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-switcher button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-switcher button[data-set-theme="dark"] { background: #0A0A15; }
+    .theme-switcher button[data-set-theme="mid"] { background: #252530; }
+    .theme-switcher button[data-set-theme="light"] {
+      background: #FAFAF7;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-switcher button:hover { transform: scale(1.15); }
+
+    html[data-theme="dark"] .theme-switcher button[data-set-theme="dark"],
+    html[data-theme="mid"] .theme-switcher button[data-set-theme="mid"],
+    html:not([data-theme]) .theme-switcher button[data-set-theme="mid"],
+    html[data-theme="light"] .theme-switcher button[data-set-theme="light"] {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+    }
+
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      background: var(--hover-3);
+    }
+
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent {
+      background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 55%, var(--lime) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .doc-lead {
+      color: var(--text-2);
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    .meta-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 60px;
+    }
+
+    .meta-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-item b {
+      display: block;
+      font-family: var(--font-body);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    h2 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      line-height: 1.3;
+    }
+
+    h2 .num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 20px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    li::marker {
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .callout {
+      padding: 20px 24px;
+      background:
+        radial-gradient(circle at 20% 30%, var(--callout-tint), transparent 60%),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 12px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-2);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 480px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table thead th {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--hover-3);
+      white-space: nowrap;
+    }
+
+    .data-table tbody th {
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--text);
+      width: 30%;
+    }
+
+    .data-table tbody td {
+      color: var(--text-2);
+    }
+
+    .data-table tr:last-child th,
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .contact-table th,
+    .contact-table td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-table th {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--hover-3);
+      width: 30%;
+    }
+
+    .contact-table td {
+      color: var(--text);
+    }
+
+    .contact-table tr:last-child th,
+    .contact-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .contact-table a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: opacity 0.2s var(--ease);
+    }
+
+    .contact-table a:hover { opacity: 0.8; }
+
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    footer .brand { opacity: 0.7; }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+
+    footer a:hover { color: var(--text); }
+
+    @media (max-width: 700px) {
+      nav { padding: 16px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      h2 { font-size: 22px; }
+      .contact-table th { width: 35%; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </a>
+    <div class="nav-right">
+      <div class="theme-switcher" role="group" aria-label="테마 선택">
+        <button type="button" data-set-theme="dark" aria-label="다크 테마" title="다크"></button>
+        <button type="button" data-set-theme="mid" aria-label="미드 테마" title="미드"></button>
+        <button type="button" data-set-theme="light" aria-label="라이트 테마" title="라이트"></button>
+      </div>
+      <a href="/" class="nav-back">← 홈으로</a>
+    </div>
+  </nav>
+
+  <main>
+    <div class="doc-eyebrow">Legal · Privacy Policy</div>
+    <h1>로또체크<br><span class="accent">개인정보처리방침</span></h1>
+    <p class="doc-lead">로또체크가 어떤 정보를 왜 처리하고, 누구에게 제공하며, 언제 삭제하는지 안내드립니다.</p>
+
+    <div class="meta-box">
+      <div class="meta-item">서비스명<b>로또체크</b></div>
+      <div class="meta-item">개인정보처리자<b>김진춘 (ModooLabs)</b></div>
+      <div class="meta-item">최초 시행일<b>2026년 9월 17일</b></div>
+      <div class="meta-item">최근 개정일<b>2026년 9월 17일</b></div>
+      <div class="meta-item">시행일<b>2026년 9월 17일</b></div>
+    </div>
+
+    <div class="callout">
+      <strong>주요 개인정보 처리 표시</strong><br>
+      로또체크는 대한민국 이용자를 대상으로 회원가입·로그인 없이 사용하는 로또 6/45 번호 생성·기록·확인 도구입니다. 생성·저장한 번호와 설정은 기기 안에만 저장되며 회사 서버로 전송되지 않습니다.
+      광고 게재를 위해 Google AdMob이 광고 식별자 등 일부 정보를 자동으로 처리하며 이 과정에서 국외이전이 발생합니다.
+      개인정보 관련 문의는 <a href="mailto:modoolabs1730@gmail.com" style="color:var(--cyan)">modoolabs1730@gmail.com</a>으로 접수할 수 있습니다.
+    </div>
+
+    <h2><span class="num">01</span>개인정보의 처리 목적·항목 및 보유기간</h2>
+    <p>김진춘(ModooLabs, 이하 "회사")은 로또체크 서비스 제공에 필요한 최소한의 정보만 처리합니다. 로또체크는 회원가입 기능이 없어 이름·이메일·전화번호 등 개인 식별정보를 수집하지 않습니다.</p>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>구분</th><th>처리 목적·항목</th><th>법적 근거</th><th>보유기간</th></tr></thead>
+      <tbody>
+        <tr><th>앱 기능</th><td>생성·저장한 로또 번호, 라벨, 회차, 구매 수, 필터·화면 설정, 내려받은 당첨번호 — 번호 보관, 당첨 자동 대조, 설정 유지에 사용하며 기기의 앱 전용 저장공간에만 저장</td><td>제15조 제1항 제4호(서비스 제공을 위한 처리)</td><td>이용자가 직접 삭제하거나 앱 데이터를 지우거나 앱을 삭제할 때까지</td></tr>
+        <tr><th>당첨번호 조회</th><td>동행복권 서버에서 당첨번호를 받아올 때 요청에 수반되는 IP 주소 등 통신 정보. 이용자가 저장한 번호는 조회 요청에 포함하지 않음</td><td>제15조 제1항 제4호</td><td>회사는 별도로 보관하지 않음 (동행복권 서버 정책에 따름)</td></tr>
+        <tr><th>맞춤형 광고(Google AdMob)</th><td>광고 게재, 성과 측정, 부정 클릭 방지 — 안드로이드 광고 ID, IP 주소(대략적 위치), 기기 정보(모델·OS 버전), 앱 이용·광고 상호작용 정보, 진단 정보. Google Mobile Ads SDK가 자동으로 수집·전송</td><td>제15조 제1항 제1호(동의, 기기 설정을 통한 동의)</td><td>광고 개인 최적화를 끄거나 광고 ID를 재설정할 때까지, 또는 AdMob 정책상 보유기간</td></tr>
+        <tr><th>이메일 문의</th><td>이용자가 보낸 이메일 주소와 문의 내용 — 문의 접수 및 답변</td><td>제15조 제1항 제1호(문의 시 자발적 제공)</td><td>답변 및 분쟁 대응에 필요한 기간. 목적 달성 시 삭제하되 법령상 보존 의무가 있으면 해당 기간</td></tr>
+      </tbody>
+    </table></div>
+
+    <h3>선택 기능에서 처리하는 정보</h3>
+    <ul>
+      <li><strong>QR 코드 인식:</strong> 로또 용지의 QR 코드를 읽을 때만 카메라 권한을 사용합니다. 촬영한 사진·영상은 저장하거나 전송하지 않으며, QR에서 읽은 번호만 이용자가 저장을 선택한 경우 기기에 저장합니다.</li>
+      <li><strong>추첨 결과 알림:</strong> 알림을 켠 경우 기기에 매주 토요일 알림을 예약합니다. 기기 안에서만 처리되며, 권한을 거부해도 다른 기능은 이용할 수 있습니다.</li>
+      <li><strong>백업·복원:</strong> 이용자가 백업을 실행하면 저장된 번호와 설정을 기기 클립보드에 복사하고, 복원을 실행하면 클립보드 내용을 읽습니다. 회사 서버를 거치지 않습니다. 클립보드에 남은 내용은 앱을 삭제해도 지워지지 않을 수 있어 이용자가 직접 지워야 합니다.</li>
+      <li><strong>PDF 내보내기·인쇄:</strong> 이용자가 실행한 경우에만 인쇄용 문서를 만들어 프린터로 보내거나, 이용자가 선택한 공유 앱으로 PDF를 전달합니다.</li>
+    </ul>
+
+    <h2><span class="num">02</span>개인정보의 제3자 제공</h2>
+    <p>회사는 정보주체의 동의 또는 법률의 특별한 규정이 있는 경우를 제외하고 개인정보를 제3자에게 제공하지 않습니다. 광고 게재를 위해 아래와 같이 정보가 처리됩니다.</p>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>제공받는 자</th><th>제공 목적</th><th>제공 항목</th><th>보유기간</th></tr></thead>
+      <tbody>
+        <tr><th>Google LLC (AdMob)</th><td>맞춤형 광고 게재 및 성과 측정</td><td>안드로이드 광고 ID, 대략적 위치, 기기 정보, 광고 상호작용 정보</td><td>Google 정책상 보유기간까지</td></tr>
+      </tbody>
+    </table></div>
+    <p>회사는 이용자가 기기에 저장한 로또 번호, 라벨 등 앱 기능 데이터를 광고 요청에 담아 Google에 전송하지 않습니다. Google의 정보 이용 방식은 <a href="https://policies.google.com/technologies/partner-sites" style="color:var(--cyan)" target="_blank" rel="noopener">Google이 파트너 앱의 정보를 사용하는 방법</a> 및 <a href="https://policies.google.com/privacy" style="color:var(--cyan)" target="_blank" rel="noopener">Google 개인정보처리방침</a>에서 확인할 수 있습니다.</p>
+    <p>정보주체는 기기 설정에서 맞춤형 광고 동의를 거부할 수 있습니다. 이 경우 비맞춤형 광고가 대신 표시되며, 다른 기능 이용에는 영향이 없습니다.</p>
+
+    <h2><span class="num">03</span>개인정보의 국외이전</h2>
+    <p>회사는 광고 게재를 위해 아래 해외 서비스를 이용합니다. 거부하려면 기기 설정에서 맞춤형 광고 동의를 철회할 수 있으며, 이 경우에도 로또체크의 번호 생성·저장·당첨확인 등 핵심 기능은 동일하게 이용할 수 있습니다.</p>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>이전받는 자·연락처</th><th>이전 항목·목적</th><th>국가·시점·방법</th><th>근거·기간·거부방법</th></tr></thead>
+      <tbody>
+        <tr><th>Google LLC<br>privacy.google.com</th><td>AdMob: 광고 ID, 대략적 위치, 기기 정보, 광고 상호작용 정보의 광고 게재·성과측정·부정이용 방지</td><td>미국 등 Google 데이터센터 소재 국가<br>광고 요청 시 암호화된 네트워크로 전송</td><td>개인정보 보호법 제28조의8 제1항 제1호(동의)<br>Google 정책상 보유기간<br>기기 설정에서 맞춤형 광고 동의 철회</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2><span class="num">04</span>개인정보의 파기 절차 및 방법</h2>
+    <ul>
+      <li><strong>이용자가 직접 삭제:</strong> 내 번호 탭에서 저장된 번호를 언제든 개별적으로 또는 한 번에 삭제할 수 있습니다.</li>
+      <li><strong>앱 삭제:</strong> 앱을 삭제하면 기기의 앱 전용 저장공간에 있던 데이터가 운영체제 정책에 따라 함께 삭제됩니다. 회사 서버에는 별도로 보관되는 개인정보가 없습니다. 단, 클립보드로 내보낸 백업은 앱 삭제만으로 지워지지 않을 수 있습니다.</li>
+      <li><strong>이메일 문의:</strong> 답변과 분쟁 대응에 필요한 기간이 지나면 삭제합니다.</li>
+      <li><strong>전자파일:</strong> 복구 또는 재생되지 않도록 안전한 방법으로 삭제합니다.</li>
+    </ul>
+
+    <h2><span class="num">05</span>자동 수집정보와 광고식별자</h2>
+    <ul>
+      <li>Google AdMob은 안드로이드 광고 ID를 처리할 수 있으며, 이용자는 기기 설정에서 맞춤형 광고를 끄거나 광고 ID를 재설정할 수 있습니다.</li>
+      <li>현재 앱 코드에는 별도의 분석·오류로그 SDK가 설치되어 있지 않아, 이를 통한 행동분석 정보를 수집하지 않습니다. 향후 도입 시 이 방침을 먼저 개정합니다.</li>
+    </ul>
+
+    <h2><span class="num">06</span>정보주체의 권리</h2>
+    <p>정보주체는 개인정보 열람, 정정·삭제, 처리정지, 동의 철회를 요구할 수 있습니다. 앱 안의 삭제 기능 또는 아래 접수창구를 이용할 수 있으며, 회사는 본인확인 후 지체 없이 처리합니다.</p>
+    <ul>
+      <li><strong>앱 안에서:</strong> 내 번호 탭과 설정에서 저장한 번호와 설정을 확인·수정·삭제할 수 있습니다.</li>
+      <li><strong>기기 권한:</strong> 카메라·알림 권한은 기기 설정에서 언제든 변경할 수 있습니다.</li>
+      <li><strong>광고 ID:</strong> Android 기기 설정에서 광고 ID를 재설정하거나 삭제할 수 있고, Google 광고 설정에서 맞춤 광고를 관리할 수 있습니다. 기기나 Android 버전에 따라 메뉴 이름이 다를 수 있습니다.</li>
+    </ul>
+    <p>법정대리인은 관련 법령에 따라 정보주체를 대신해 권리를 행사할 수 있습니다.</p>
+    <h3>만 14세 미만 아동</h3>
+    <p>로또체크는 실제 복권 구매를 대행하지 않는 번호 생성·기록 도구이며, 만 14세 미만 아동을 대상으로 서비스를 제공하지 않습니다. 만 14세 미만 이용자로부터 의도적으로 개인정보를 수집하지 않으며, 수집된 사실을 확인하면 지체 없이 삭제합니다.</p>
+
+    <h2><span class="num">07</span>개인정보의 안전성 확보조치</h2>
+    <ul>
+      <li>HTTPS/TLS를 통한 전송구간 암호화</li>
+      <li>운영체제 앱 전용 저장영역을 통한 데이터 접근통제</li>
+      <li>서버에 별도로 개인정보를 저장하지 않아 서버 유출 위험을 최소화</li>
+    </ul>
+    <p>개인정보 유출 사실을 알게 된 경우 개인정보 보호법 제34조에 따라 해당 정보주체에게 필요한 사항을 통지하고 관계기관 신고 등 필요한 조치를 합니다.</p>
+
+    <h2><span class="num">08</span>개인정보 열람청구 접수처 및 보호책임자</h2>
+    <table class="contact-table">
+      <tr><th>개인정보 보호책임자</th><td>김진춘</td></tr>
+      <tr><th>열람청구 접수·처리</th><td>ModooLabs 개인정보 담당</td></tr>
+      <tr><th>이메일</th><td><a href="mailto:modoolabs1730@gmail.com">modoolabs1730@gmail.com</a></td></tr>
+      <tr><th>처리업무</th><td>열람·정정·삭제·처리정지·동의철회, 개인정보 문의 및 불만처리</td></tr>
+    </table>
+
+    <h2><span class="num">09</span>권익침해 구제방법</h2>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>기관</th><th>연락처</th><th>웹사이트</th></tr></thead>
+      <tbody>
+        <tr><th>개인정보분쟁조정위원회</th><td>1833-6972</td><td>www.kopico.go.kr</td></tr>
+        <tr><th>개인정보침해신고센터</th><td>118</td><td>privacy.kisa.or.kr</td></tr>
+        <tr><th>대검찰청</th><td>1301</td><td>www.spo.go.kr</td></tr>
+        <tr><th>경찰청</th><td>182</td><td>ecrm.police.go.kr</td></tr>
+      </tbody>
+    </table></div>
+
+    <h2><span class="num">10</span>개인정보처리방침의 변경 및 고지</h2>
+    <p>이 방침은 2026년 9월 17일부터 시행합니다. 변경사항은 앱 내 공지 또는 홈페이지를 통해 시행 전에 안내하며, 별도 동의가 필요한 변경은 적법한 방법으로 동의를 받습니다.</p>
+    <h3>개정 이력</h3>
+    <div class="data-table-wrap"><table class="data-table">
+      <thead><tr><th>시행일</th><th>주요 변경내용</th></tr></thead>
+      <tbody>
+        <tr><th>2026년 9월 17일</th><td>최초 시행</td></tr>
+      </tbody>
+    </table></div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </div>
+    <div>© 2026 ModooLabs · <a href="/">modooscoin.com</a></div>
+  </footer>
+  <!-- Theme Switcher Script -->
+  <script>
+    (function() {
+      var buttons = document.querySelectorAll('.theme-switcher button[data-set-theme]');
+      buttons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var theme = btn.getAttribute('data-set-theme');
+          document.documentElement.setAttribute('data-theme', theme);
+          try {
+            localStorage.setItem('modoolabs-theme', theme);
+          } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
