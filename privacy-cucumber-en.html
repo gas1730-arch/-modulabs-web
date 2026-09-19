@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cucumber Squad: Veggie Defense Privacy Policy | ModooLabs</title>
+  <meta name="description" content="Privacy Policy for the Cucumber Squad: Veggie Defense app — effective September 20, 2026" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('modoolabs-theme');
+        if (saved && ['dark', 'mid', 'light'].indexOf(saved) !== -1) {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, html[data-theme="mid"] {
+      --bg: #252530;
+      --bg-2: #2E2E3D;
+      --surface: #383848;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #E8E8ED;
+      --text-2: #A5A5B5;
+      --muted: #7A7A88;
+      --cyan: #22D4C4;
+      --violet: #8067FF;
+      --lime: #C0EB60;
+      --nav-bg: rgba(37, 37, 48, 0.75);
+      --mark-bg: #252530;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --callout-tint: rgba(128, 103, 255, 0.12);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --nav-bg: rgba(10, 10, 21, 0.75);
+      --mark-bg: #0A0A15;
+      --hover-3: rgba(255, 255, 255, 0.02);
+      --callout-tint: rgba(124, 92, 255, 0.08);
+    }
+
+    html[data-theme="light"] {
+      --bg: #FAFAF7;
+      --bg-2: #F2F2EC;
+      --surface: #E8E8E1;
+      --border: rgba(10, 10, 21, 0.08);
+      --border-strong: rgba(10, 10, 21, 0.16);
+      --text: #0A0A15;
+      --text-2: #4A4A5C;
+      --muted: #8B8B9F;
+      --cyan: #06B8AB;
+      --violet: #6B4CE6;
+      --lime: #7EB026;
+      --nav-bg: rgba(250, 250, 247, 0.75);
+      --mark-bg: #FAFAF7;
+      --hover-3: rgba(10, 10, 21, 0.03);
+      --callout-tint: rgba(107, 76, 230, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.28;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
+        var(--mark-bg);
+      box-shadow: 0 0 24px rgba(128, 103, 255, 0.3);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-back {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-back:hover { color: var(--text); }
+
+    /* Nav right — theme switcher + back link */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      background: var(--hover-3);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-switcher button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-switcher button[data-set-theme="dark"] { background: #0A0A15; }
+    .theme-switcher button[data-set-theme="mid"] { background: #252530; }
+    .theme-switcher button[data-set-theme="light"] {
+      background: #FAFAF7;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-switcher button:hover { transform: scale(1.15); }
+
+    html[data-theme="dark"] .theme-switcher button[data-set-theme="dark"],
+    html[data-theme="mid"] .theme-switcher button[data-set-theme="mid"],
+    html:not([data-theme]) .theme-switcher button[data-set-theme="mid"],
+    html[data-theme="light"] .theme-switcher button[data-set-theme="light"] {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+    }
+
+    /* HEADER */
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      background: var(--hover-3);
+    }
+
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent {
+      background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 55%, var(--lime) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .doc-lead {
+      color: var(--text-2);
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* META BOX */
+    .meta-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 60px;
+    }
+
+    .meta-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-item b {
+      display: block;
+      font-family: var(--font-body);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* SECTIONS */
+    h2 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      line-height: 1.3;
+    }
+
+    h2 .num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 20px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    li::marker {
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* NOTE / CALLOUT */
+    .callout {
+      padding: 20px 24px;
+      background:
+        radial-gradient(circle at 20% 30%, var(--callout-tint), transparent 60%),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 12px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    /* DATA TABLE */
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-2);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 560px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table thead th {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--hover-3);
+      white-space: nowrap;
+    }
+
+    .data-table tbody th {
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--text);
+      width: 30%;
+    }
+
+    .data-table tbody td {
+      color: var(--text-2);
+    }
+
+    .data-table tr:last-child th,
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* CONTACT TABLE */
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .contact-table th,
+    .contact-table td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-table th {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--hover-3);
+      width: 30%;
+    }
+
+    .contact-table td {
+      color: var(--text);
+    }
+
+    .contact-table tr:last-child th,
+    .contact-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .contact-table a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: opacity 0.2s var(--ease);
+    }
+
+    .contact-table a:hover { opacity: 0.8; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    footer .brand {
+      opacity: 0.7;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      nav { padding: 16px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      h2 { font-size: 22px; }
+      .contact-table th { width: 35%; }
+    }
+
+    /* Language switch */
+    .lang-switch { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .lang-switch a {
+      font-family: var(--font-mono); font-size: 12px; color: var(--text-2);
+      padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+      text-decoration: none;
+    }
+    .lang-switch a:hover { color: var(--text); border-color: var(--border-strong); }
+    .lang-switch a.active { color: var(--text); border-color: var(--border-strong); background: var(--hover-3); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </a>
+    <div class="nav-right">
+      <div class="theme-switcher" role="group" aria-label="Theme">
+        <button type="button" data-set-theme="dark" aria-label="Dark theme" title="Dark"></button>
+        <button type="button" data-set-theme="mid" aria-label="Mid theme" title="Mid"></button>
+        <button type="button" data-set-theme="light" aria-label="Light theme" title="Light"></button>
+      </div>
+      <a href="/" class="nav-back">← Home</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- LANGUAGE SWITCH -->
+    <div class="lang-switch" role="navigation" aria-label="Language">
+      <a href="/privacy-cucumber.html" lang="ko">한국어</a>
+      <a href="/privacy-cucumber-en.html" lang="en" class="active" aria-current="page">English</a>
+      <a href="/privacy-cucumber-zh.html" lang="zh-Hant">繁體中文</a>
+    </div>
+
+    <div class="doc-eyebrow">Legal · Privacy Policy</div>
+
+    <h1>
+      Cucumber Squad: Veggie Defense<br>
+      <span class="accent">Privacy Policy</span>
+    </h1>
+
+    <p class="doc-lead">
+      ModooLabs, the operator of Cucumber Squad: Veggie Defense (오이밭 수호대), values your privacy and complies with applicable laws, including the Personal Information Protection Act of the Republic of Korea. This Privacy Policy explains what information is collected and processed through the app and for what purposes it is used.
+    </p>
+
+    <div class="meta-box">
+      <div class="meta-item">App<b>Cucumber Squad: Veggie Defense (오이밭 수호대)</b></div>
+      <div class="meta-item">Platform<b>Android (Google Play)</b></div>
+      <div class="meta-item">Package name<b>com.defensegame.cucumber</b></div>
+      <div class="meta-item">Developer<b>ModooLabs</b></div>
+      <div class="meta-item">Effective date<b>September 20, 2026</b></div>
+      <div class="meta-item">Contact<b>gas1730@gmail.com</b></div>
+    </div>
+
+    <!-- 1 -->
+    <h2><span class="num">01</span>Information We Collect and Process</h2>
+    <p>
+      Cucumber Squad: Veggie Defense can be used without creating a separate account. However, the following information may be processed to provide Google Play Games sign-in, advertising, and in-app purchase features.
+    </p>
+
+    <h3>1) Google Play Games Services</h3>
+    <p>You may optionally sign in with your Google Play account. If you sign in or use Play Games features, the following information may be processed:</p>
+    <ul>
+      <li>Google Play Games player ID</li>
+      <li>Display name of your Google account or in-game nickname</li>
+      <li>Player profile and profile image</li>
+      <li>Game level, in-game currency, stage clear records, settings, and other game progress data</li>
+    </ul>
+    <p>Game progress data may be stored both in local storage on your device and in Google Play Games cloud storage, and is used to back up, sync, and restore your progress when you change devices or reinstall the app.</p>
+    <p>Signing in to Google Play Games is optional. Without signing in, you can still use the basic features of the game, except for cloud saves and cross-device sync.</p>
+    <p>Personal information processed by Google Play Games Services is separately subject to Google's Privacy Policy.</p>
+    <ul>
+      <li><a href="https://policies.google.com/privacy?hl=en" style="color: var(--cyan); text-decoration: none;">Google Privacy Policy</a></li>
+      <li><a href="https://support.google.com/googleplay/answer/9130646?hl=en" style="color: var(--cyan); text-decoration: none;">How to delete Google Play Games data and profile</a></li>
+    </ul>
+
+    <h3>2) Google AdMob Advertising</h3>
+    <p>The app may display banner, interstitial, and rewarded ads through Google AdMob. In the course of serving ads, Google and its partner ad networks may automatically collect or process the following information:</p>
+    <ul>
+      <li>Advertising ID</li>
+      <li>IP address and approximate location derived from the IP address</li>
+      <li>Device type, model, operating system, and language settings</li>
+      <li>App version and ad SDK information</li>
+      <li>Ad impressions, clicks, view completion, and reward status</li>
+      <li>App launch and ad interaction information</li>
+      <li>Technical information needed for ad fraud prevention and security</li>
+      <li>Error, diagnostic, and performance information</li>
+    </ul>
+    <p>This information may be processed to serve ads, limit ad frequency, provide personalized or non-personalized ads, measure ad performance, prevent ad fraud, and improve the service.</p>
+    <p>Depending on your age, region, consent status, and device settings, personalized ads may be shown. You can opt out of personalized ads or reset/delete your advertising ID through Google My Ad Center or the ad settings on your Android device.</p>
+    <p>Menu names may vary by device and Android version, but these settings are generally found at:</p>
+    <ul>
+      <li>Android Settings → Google → Ads (or Ads privacy)</li>
+      <li>Turn off ads personalization</li>
+      <li>Reset or delete advertising ID</li>
+      <li><a href="https://myadcenter.google.com/" style="color: var(--cyan); text-decoration: none;">Google My Ad Center</a></li>
+      <li><a href="https://policies.google.com/privacy?hl=en" style="color: var(--cyan); text-decoration: none;">Google Privacy Policy</a></li>
+    </ul>
+    <p>Even if you turn off ads personalization, ads will still be shown, but they may be non-personalized ads that are not based on your interests.</p>
+
+    <h3>3) Google Play In-App Purchases</h3>
+    <p>You can purchase digital goods such as diamonds, game items, and bundles through the Google Play billing system.</p>
+    <p>Payments and payment methods are handled directly by Google Play. The developer does not access or store your payment method information, such as credit card numbers, bank account numbers, or payment passwords.</p>
+    <p>The following minimal purchase information may be processed to verify purchases, deliver items, restore purchases, prevent duplicate delivery, handle refunds, and prevent fraudulent transactions:</p>
+    <ul>
+      <li>Product ID</li>
+      <li>Order number or transaction ID</li>
+      <li>Purchase token</li>
+      <li>Date and time of purchase</li>
+      <li>Payment and purchase status</li>
+      <li>Cancellation, refund, or revocation status</li>
+      <li>Whether the item has been delivered and consumed</li>
+    </ul>
+
+    <h3>4) Game Progress Data</h3>
+    <p>The following data may be generated as you play:</p>
+    <ul>
+      <li>Level and experience points</li>
+      <li>In-game currency and owned items</li>
+      <li>Weapon enhancement and upgrade information</li>
+      <li>Stage and wave clear records</li>
+      <li>Stars earned and mission records</li>
+      <li>Game settings</li>
+      <li>Attendance and reward claim records</li>
+    </ul>
+    <p>Game progress data is stored in local storage on your device. If you are signed in to Google Play Games, it may also be stored in Google Play Games storage for cloud backup and cross-device sync.</p>
+
+    <h3>5) How Information Is Collected</h3>
+    <p>Personal and usage information may be collected and processed in the following ways:</p>
+    <ul>
+      <li>When you choose to sign in to Google Play Games</li>
+      <li>When you launch and play the game</li>
+      <li>When you make a Google Play in-app purchase</li>
+      <li>When Google AdMob ads are requested, displayed, clicked, or viewed</li>
+      <li>Through automatic communication between the app and Google services</li>
+      <li>When you contact us with inquiries, error reports, or refund requests</li>
+    </ul>
+
+    <!-- 2 -->
+    <h2><span class="num">02</span>How We Use Information</h2>
+    <p>The developer and the third-party services used in the app process the collected information for the following purposes:</p>
+    <ul>
+      <li>Google Play Games sign-in and player identification</li>
+      <li>Saving, backing up, syncing, and restoring game progress data</li>
+      <li>Serving banner, interstitial, and rewarded ads</li>
+      <li>Providing personalized or non-personalized ads</li>
+      <li>Measuring ad performance and limiting ad frequency</li>
+      <li>Preventing ad fraud and abnormal use</li>
+      <li>Verifying in-app purchases, delivering items, and restoring purchases</li>
+      <li>Preventing duplicate or fraudulent payments and handling refunds</li>
+      <li>Identifying game errors, ensuring service stability, and improving the user experience</li>
+      <li>Responding to user inquiries and resolving disputes</li>
+      <li>Complying with legal obligations</li>
+    </ul>
+    <p>The developer does not use the collected information for purposes unrelated to those listed above. If the purposes change, we will obtain separate consent or provide notice as required by applicable law.</p>
+
+    <!-- 3 -->
+    <h2><span class="num">03</span>Retention, Third-Party Sharing, and Processing</h2>
+
+    <h3>1) Retention Period</h3>
+    <p>The developer deletes personal information without delay once the purpose of processing has been achieved or the information is no longer needed. However, where applicable law requires information to be kept for a certain period, it may be retained separately for that period.</p>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Category</th><th>Retention period</th></tr></thead>
+        <tbody>
+          <tr><th>Game progress data stored on the device</th><td>Until the app is deleted or app data is cleared</td></tr>
+          <tr><th>Google Play Games profile and cloud game data</th><td>While the Play Games account remains linked, or until you request deletion</td></tr>
+          <tr><th>Product ID, transaction ID, purchase token, and purchase status</th><td>5 years from the date of purchase, or the retention period required by law</td></tr>
+          <tr><th>Records of item delivery, purchase restoration, and fraud prevention</th><td>Until the purpose is achieved, or the retention period required by law</td></tr>
+          <tr><th>Customer inquiry and dispute records</th><td>3 years from the date of resolution</td></tr>
+          <tr><th>AdMob advertising information</th><td>As determined by Google's Privacy Policy and ad data retention policies</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Deleting the app does not necessarily delete game data stored in Google Play Games cloud storage.</p>
+    <p>To delete this app's cloud data, you can unlink your Play Games account and use Google Play's "Delete Play Games data or Play Games profile" feature, or contact the developer.</p>
+    <ul>
+      <li><a href="https://support.google.com/googleplay/answer/9130646?hl=en" style="color: var(--cyan); text-decoration: none;">How to delete Play Games data</a></li>
+    </ul>
+
+    <h3>2) Third-Party Sharing and Processing</h3>
+    <p>The app uses the following Google services to provide its features. Each service provider may process personal information while performing its function, and some information may be processed independently by Google under its own Privacy Policy and Terms of Service.</p>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Recipient / processor</th><th>Service</th><th>Information processed</th><th>Purpose</th><th>Retention</th></tr></thead>
+        <tbody>
+          <tr><th>Google LLC and its affiliates</th><td>Google Play Games Services</td><td>Player ID, display name, profile information, game progress data</td><td>Sign-in, player identification, cloud save and sync</td><td>While the account remains linked, or until you delete it</td></tr>
+          <tr><th>Google LLC and ad partners</th><td>Google AdMob</td><td>Advertising ID, IP address, approximate location, device information, ad impressions/clicks/views, and app usage information</td><td>Ad serving, personalized ads, performance measurement, fraud prevention</td><td>As determined by the policies of Google and its ad partners</td></tr>
+          <tr><th>Google LLC and Google Play payment entities</th><td>Google Play Billing</td><td>Product ID, order/transaction ID, purchase token, purchase date and time, and purchase/refund status</td><td>Payment processing, purchase verification, item delivery, purchase restoration, refunds, and fraud prevention</td><td>As determined by Google's policies and applicable law</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>The developer does not receive your card numbers, bank account numbers, or payment passwords from Google.</p>
+    <p>Information collected and processed directly by Google is subject to the following policies:</p>
+    <ul>
+      <li><a href="https://policies.google.com/privacy?hl=en" style="color: var(--cyan); text-decoration: none;">Google Privacy Policy</a></li>
+      <li><a href="https://policies.google.com/terms?hl=en" style="color: var(--cyan); text-decoration: none;">Google Terms of Service</a></li>
+    </ul>
+
+    <h3>3) International Processing and Transfer</h3>
+    <p>Google Play Games Services, Google AdMob, and Google Play Billing are provided through Google's globally distributed systems. As a result, personal information may be processed and stored on Google servers located outside the Republic of Korea.</p>
+    <div class="data-table-wrap">
+      <table class="data-table">
+        <thead><tr><th>Recipient</th><th>Destination country</th><th>Information transferred</th><th>Purpose</th><th>Timing and method</th></tr></thead>
+        <tbody>
+          <tr><th>Google LLC and its affiliates</th><td>United States and other countries where Google data centers are located</td><td>Play Games profile, player ID, game progress data, advertising ID, IP address, device information, ad usage information, product ID, transaction ID, purchase token, and purchase status</td><td>Providing Play Games, advertising, payment, security, and backup/sync services</td><td>Transmitted over encrypted networks when the related features are used</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>For more details on international processing of personal information, please see Google's Privacy Policy.</p>
+    <p>You can limit the international processing of Play Games information by not using the optional Google Play Games sign-in or by unlinking your account.</p>
+    <p>However, if you refuse the transfer of information needed for the app's basic operation or for purchases you choose to make, such as Google AdMob ads or Google Play payments, your use of those ad or purchase features may be limited.</p>
+
+    <h3>4) Your Rights and How to Exercise Them</h3>
+    <p>You may exercise the following rights regarding your personal information:</p>
+    <ul>
+      <li>Request access to your personal information</li>
+      <li>Request correction of your personal information</li>
+      <li>Request deletion of your personal information</li>
+      <li>Request suspension of processing</li>
+      <li>Unlink your Google Play Games account</li>
+      <li>Request deletion of your Play Games profile and game data</li>
+      <li>Opt out of ads personalization</li>
+      <li>Reset or delete your advertising ID</li>
+      <li>View your in-app purchase history and restore purchases</li>
+      <li>Request refunds in accordance with applicable law and Google Play policies</li>
+    </ul>
+    <p>Requests regarding information held by the developer can be sent to gas1730@gmail.com.</p>
+    <p>Account, advertising, and payment information managed directly by Google can be viewed, modified, or deleted in your Google Account, Google Play, or Android device settings.</p>
+    <p>Upon receiving a request, the developer will verify your identity and process the request within the period required by applicable law. A request may be limited where the law requires the information to be retained or where it may infringe the rights or safety of others; in such cases, we will explain the reason.</p>
+
+    <h3>5) Destruction of Personal Information</h3>
+    <p>The developer destroys personal information without delay once the retention period expires or the purpose of processing has been achieved.</p>
+    <p>Electronic files are deleted in a way that cannot be recovered or reproduced. Information that must be retained under applicable law is stored separately from other information and is not used for any purpose other than the legally required retention.</p>
+    <p>You can delete game progress data stored on your device yourself by deleting the app or clearing its app data.</p>
+
+    <!-- 4 -->
+    <h2><span class="num">04</span>Children's Privacy</h2>
+    <p>
+      Cucumber Squad: Veggie Defense does not knowingly collect personal information from children under the age of 14. If we process a child's personal information, we will take the necessary protective measures required by applicable law, such as obtaining consent from a legal guardian.
+    </p>
+    <p>
+      Where children under 14 may use the app, we apply Google AdMob's child- and family-related policies, and users identified as children are served non-personalized ads only.
+    </p>
+    <p>
+      We do not serve interest-based or remarketing ads to children, and we apply the necessary settings and restrictions to keep ad content suitable for children.
+    </p>
+    <p>
+      If we learn that personal information of a child under 14 has been processed without consent, we will take necessary measures, such as deleting that information without delay.
+    </p>
+    <p>
+      A child's legal guardian may request access, correction, deletion, or suspension of processing of the child's personal information by contacting gas1730@gmail.com.
+    </p>
+
+    <!-- 5 -->
+    <h2><span class="num">05</span>Changes to This Policy</h2>
+    <p>
+      This Privacy Policy may be updated in response to changes in applicable law, Google policies, app features, or the third-party services we use.
+    </p>
+    <p>
+      If this policy changes, the updated version will be posted on this page. If a change significantly affects your rights, we will notify you in advance through an in-app notice or other appropriate means.
+    </p>
+    <p>
+      If advertising networks, in-app payments, analytics tools, cloud storage, or account features are added or changed, we will update this policy to reflect the information actually processed and the purposes of processing.
+    </p>
+    <div class="callout">
+      Announced: September 20, 2026<br>
+      Effective: September 20, 2026
+    </div>
+
+    <!-- 6 -->
+    <h2><span class="num">06</span>Contact Us</h2>
+    <p>
+      For questions about the processing of personal information, data deletion requests, Google Play Games cloud data deletion requests, inquiries about children's privacy, or to exercise your rights, please contact us at:
+    </p>
+    <table class="contact-table">
+      <tr>
+        <th>Developer / Privacy Officer</th>
+        <td>ModooLabs</td>
+      </tr>
+      <tr>
+        <th>App</th>
+        <td>Cucumber Squad: Veggie Defense (오이밭 수호대)</td>
+      </tr>
+      <tr>
+        <th>Package name</th>
+        <td>com.defensegame.cucumber</td>
+      </tr>
+      <tr>
+        <th>Email</th>
+        <td><a href="mailto:gas1730@gmail.com">gas1730@gmail.com</a></td>
+      </tr>
+    </table>
+    <p style="margin-top: 20px;">
+      Users in the Republic of Korea who need counseling or wish to report a privacy violation may also contact the following organizations:
+    </p>
+    <ul>
+      <li>Personal Information Infringement Report Center (KISA): 118</li>
+      <li>Personal Information Dispute Mediation Committee: 1833-6972</li>
+      <li>Korean National Police Agency Cyber Crime Reporting System: 182</li>
+    </ul>
+
+    <!-- International users -->
+    <h2><span class="num">Appendix</span>Notice for International Users</h2>
+    <p>
+      Cucumber Squad: Veggie Defense may be offered in multiple countries and regions through Google Play.
+    </p>
+    <p>
+      Where applicable laws apply to users in the European Economic Area (EEA), the United Kingdom, or Switzerland, the developer and Google provide the necessary consent management procedures and allow users to request access, correction, deletion, restriction of processing, portability of their personal information, and withdrawal of consent.
+    </p>
+    <p>
+      Under the privacy laws of certain U.S. states, users may request access to, deletion or correction of their personal information, or opt out of processing related to personalized advertising.
+    </p>
+    <p>
+      You can exercise these rights by contacting gas1730@gmail.com. Rights regarding personal information managed directly by Google can be exercised through Google's Privacy Policy and your Google Account settings.
+    </p>
+    <p>
+      This Privacy Policy is provided in Korean, English, and Traditional Chinese. If there is any inconsistency between the versions, the Korean version shall prevail.
+    </p>
+
+    <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
+      Last updated: 2026-09-20
+    </p>
+
+  </main>
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </div>
+    <div>© 2026 ModooLabs · <a href="/">modooscoin.com</a></div>
+  </footer>
+  <!-- Theme Switcher Script -->
+  <script>
+    (function() {
+      var buttons = document.querySelectorAll('.theme-switcher button[data-set-theme]');
+      buttons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var theme = btn.getAttribute('data-set-theme');
+          document.documentElement.setAttribute('data-theme', theme);
+          try {
+            localStorage.setItem('modoolabs-theme', theme);
+          } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>

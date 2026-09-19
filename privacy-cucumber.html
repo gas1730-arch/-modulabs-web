@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>오이밭 수호대 개인정보처리방침 | ModooLabs</title>
-  <meta name="description" content="오이밭 수호대 (Cucumber Defense Force) 앱의 개인정보처리방침 — 시행 2026년 8월 20일" />
+  <meta name="description" content="오이밭 수호대 (Cucumber Squad: Veggie Defense) 앱의 개인정보처리방침 — 시행 2026년 9월 20일" />
   <meta name="robots" content="index, follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -502,6 +502,16 @@
       h2 { font-size: 22px; }
       .contact-table th { width: 35%; }
     }
+
+    /* Language switch */
+    .lang-switch { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .lang-switch a {
+      font-family: var(--font-mono); font-size: 12px; color: var(--text-2);
+      padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+      text-decoration: none;
+    }
+    .lang-switch a:hover { color: var(--text); border-color: var(--border-strong); }
+    .lang-switch a.active { color: var(--text); border-color: var(--border-strong); background: var(--hover-3); }
   </style>
 </head>
 <body>
@@ -523,6 +533,13 @@
   </nav>
 
   <main>
+    <!-- LANGUAGE SWITCH -->
+    <div class="lang-switch" role="navigation" aria-label="언어 선택">
+      <a href="/privacy-cucumber.html" lang="ko" class="active" aria-current="page">한국어</a>
+      <a href="/privacy-cucumber-en.html" lang="en">English</a>
+      <a href="/privacy-cucumber-zh.html" lang="zh-Hant">繁體中文</a>
+    </div>
+
     <div class="doc-eyebrow">Legal · Privacy Policy</div>
 
     <h1>
@@ -531,15 +548,15 @@
     </h1>
 
     <p class="doc-lead">
-      오이밭 수호대(Cucumber Defense Force)를 운영하는 ModooLabs는 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 앱에서 어떤 정보가 수집·처리되고, 해당 정보가 어떤 목적으로 이용되는지 안내합니다.
+      오이밭 수호대(Cucumber Squad: Veggie Defense)를 운영하는 ModooLabs는 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 앱에서 어떤 정보가 수집·처리되고, 해당 정보가 어떤 목적으로 이용되는지 안내합니다.
     </p>
 
     <div class="meta-box">
-      <div class="meta-item">앱명<b>오이밭 수호대 (Cucumber Defense Force)</b></div>
+      <div class="meta-item">앱명<b>오이밭 수호대 (Cucumber Squad: Veggie Defense)</b></div>
       <div class="meta-item">플랫폼<b>Android (Google Play)</b></div>
       <div class="meta-item">패키지명<b>com.defensegame.cucumber</b></div>
       <div class="meta-item">개발자<b>ModooLabs</b></div>
-      <div class="meta-item">시행일<b>2026년 8월 20일</b></div>
+      <div class="meta-item">시행일<b>2026년 9월 20일</b></div>
       <div class="meta-item">문의<b>gas1730@gmail.com</b></div>
     </div>
 
@@ -555,11 +572,10 @@
       <li>Google Play Games 플레이어 ID</li>
       <li>Google 계정의 표시 이름 또는 게임 닉네임</li>
       <li>플레이어 프로필 및 프로필 이미지</li>
-      <li>업적, 순위표 등 Play Games 이용정보</li>
       <li>게임 레벨, 게임 내 재화, 스테이지 클리어 기록, 설정 및 그 밖의 게임 진행 데이터</li>
     </ul>
     <p>게임 진행 데이터는 기기 내부 로컬 저장소와 Google Play Games 클라우드 저장소에 함께 저장될 수 있으며, 기기 변경 또는 앱 재설치 시 진행 데이터를 백업·동기화·복원하는 데 이용됩니다.</p>
-    <p>Google Play Games 로그인은 선택사항입니다. 로그인하지 않더라도 일부 온라인 기능, 클라우드 저장, 업적 및 기기 간 동기화 기능을 제외한 게임의 기본 기능을 이용할 수 있습니다.</p>
+    <p>Google Play Games 로그인은 선택사항입니다. 로그인하지 않더라도 클라우드 저장 및 기기 간 동기화 기능을 제외한 게임의 기본 기능을 이용할 수 있습니다.</p>
     <p>Google Play Games Services에서 처리하는 개인정보에는 Google의 개인정보처리방침이 별도로 적용됩니다.</p>
     <ul>
       <li><a href="https://policies.google.com/privacy?hl=ko" style="color: var(--cyan); text-decoration: none;">Google 개인정보처리방침</a></li>
@@ -611,7 +627,7 @@
       <li>게임 내 재화와 보유 아이템</li>
       <li>무기 강화 및 업그레이드 정보</li>
       <li>스테이지·웨이브 클리어 기록</li>
-      <li>별 획득 및 업적 기록</li>
+      <li>별 획득 및 미션 기록</li>
       <li>게임 설정정보</li>
       <li>출석 및 보상 수령 기록</li>
     </ul>
@@ -634,7 +650,6 @@
     <ul>
       <li>Google Play Games 로그인 및 플레이어 식별</li>
       <li>게임 진행 데이터의 저장, 백업, 동기화 및 복원</li>
-      <li>업적 및 순위표 등 Play Games 기능 제공</li>
       <li>배너·전면·보상형 광고 제공</li>
       <li>개인 맞춤형 또는 비개인 맞춤형 광고 제공</li>
       <li>광고 성과 측정 및 광고 빈도 조절</li>
@@ -677,7 +692,7 @@
       <table class="data-table">
         <thead><tr><th>제공·처리 사업자</th><th>이용 서비스</th><th>처리되는 정보</th><th>처리 목적</th><th>보유기간</th></tr></thead>
         <tbody>
-          <tr><th>Google LLC 및 그 계열사</th><td>Google Play Games Services</td><td>플레이어 ID, 표시 이름, 프로필 정보, 게임 진행 데이터, 업적·순위정보</td><td>로그인, 플레이어 식별, 클라우드 저장·동기화, 업적 및 순위표 제공</td><td>계정 연동 유지 또는 이용자 삭제 시까지</td></tr>
+          <tr><th>Google LLC 및 그 계열사</th><td>Google Play Games Services</td><td>플레이어 ID, 표시 이름, 프로필 정보, 게임 진행 데이터</td><td>로그인, 플레이어 식별, 클라우드 저장·동기화 제공</td><td>계정 연동 유지 또는 이용자 삭제 시까지</td></tr>
           <tr><th>Google LLC 및 광고 파트너</th><td>Google AdMob</td><td>광고 식별자, IP 주소, 대략적 위치, 기기정보, 광고 노출·클릭·시청 및 앱 사용정보</td><td>광고 제공, 맞춤형 광고, 성과 측정, 부정행위 방지</td><td>Google 및 광고 파트너의 정책에 따른 기간</td></tr>
           <tr><th>Google LLC 및 Google Play 결제 관련 법인</th><td>Google Play Billing</td><td>상품 ID, 주문·거래 ID, 구매 토큰, 구매일시 및 구매·환불 상태</td><td>결제 처리, 구매 확인, 상품 지급, 구매 복원, 환불 및 부정거래 방지</td><td>Google 정책 및 관계 법령에 따른 기간</td></tr>
         </tbody>
@@ -757,8 +772,8 @@
       광고 네트워크, 인앱 결제, 분석도구, 클라우드 저장 또는 계정 기능이 추가·변경되는 경우 실제 처리되는 정보와 목적을 본 방침에 반영합니다.
     </p>
     <div class="callout">
-      공고일: 2026년 8월 20일<br>
-      시행일: 2026년 8월 20일
+      공고일: 2026년 9월 20일<br>
+      시행일: 2026년 9월 20일
     </div>
 
     <!-- 6 -->
@@ -773,7 +788,7 @@
       </tr>
       <tr>
         <th>앱명</th>
-        <td>오이밭 수호대 (Cucumber Defense Force)</td>
+        <td>오이밭 수호대 (Cucumber Squad: Veggie Defense)</td>
       </tr>
       <tr>
         <th>패키지명</th>
@@ -809,7 +824,7 @@
     </p>
 
     <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
-      최종 수정일: 2026-08-20
+      최종 수정일: 2026-09-20
     </p>
 
   </main>
