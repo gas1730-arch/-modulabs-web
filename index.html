@@ -829,10 +829,100 @@
 
     .footer-right a:hover { color: var(--text); }
 
+    /* ═══════════════════ SIDEBAR (데스크톱) ═══════════════════ */
+    .nav-toggle { display: none; }
+
+    @media (min-width: 901px) {
+      body { padding-left: 200px; }
+
+      nav {
+        right: auto;
+        bottom: 0;
+        width: 200px;
+        flex-direction: column;
+        align-items: stretch;
+        justify-content: flex-start;
+        gap: 32px;
+        padding: 28px 0;
+        border-bottom: none;
+        border-right: 1px solid var(--border);
+      }
+
+      nav .brand { padding: 0 24px; }
+
+      .nav-links {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .nav-links a {
+        display: block;
+        padding: 11px 24px 11px 22px;
+        border-left: 2px solid transparent;
+      }
+
+      .nav-links a:hover { background: var(--hover-3); }
+
+      .nav-links a.active {
+        color: var(--cyan);
+        background: var(--hover-3);
+        border-left-color: var(--cyan);
+      }
+
+      .nav-right {
+        margin-top: auto;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 14px;
+        padding: 0 24px;
+      }
+
+      .theme-switcher { justify-content: center; }
+      .nav-cta { text-align: center; }
+    }
+
     /* ═══════════════════ RESPONSIVE ═══════════════════ */
     @media (max-width: 900px) {
       nav { padding: 16px 24px; }
       .nav-links { display: none; }
+
+      .nav-right { gap: 8px; }
+      .nav-cta { white-space: nowrap; padding: 8px 12px; }
+
+      .nav-toggle {
+        display: block;
+        width: 36px;
+        height: 36px;
+        padding: 0;
+        margin-left: 4px;
+        background: transparent;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        color: var(--text);
+        font-size: 18px;
+        line-height: 1;
+        cursor: pointer;
+      }
+
+      nav.open .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        padding: 8px 24px 16px;
+        background: var(--bg);
+        border-bottom: 1px solid var(--border);
+      }
+
+      nav.open .nav-links a {
+        display: block;
+        padding: 12px 0;
+      }
+
+      nav.open .nav-links a.active { color: var(--cyan); }
 
       .hero { padding: 120px 24px 60px; }
       .hero-meta {
@@ -896,6 +986,7 @@
       <span class="brand-name">ModooLabs</span>
     </a>
     <ul class="nav-links">
+      <li><a href="#top">Home</a></li>
       <li><a href="#about">Studio</a></li>
       <li><a href="#products">Products</a></li>
       <li><a href="#team">Team</a></li>
@@ -908,6 +999,7 @@
         <button type="button" data-set-theme="light" aria-label="라이트 테마" title="라이트"></button>
       </div>
       <a href="mailto:modoolabs1730@gmail.com" class="nav-cta">문의하기</a>
+      <button type="button" class="nav-toggle" aria-label="메뉴 열기" aria-expanded="false">☰</button>
     </div>
   </nav>
 
@@ -1152,6 +1244,48 @@
           } catch (e) {}
         });
       });
+    })();
+  </script>
+
+  <!-- Sidebar Menu Script -->
+  <script>
+    (function() {
+      var nav = document.querySelector('nav');
+      var toggle = nav.querySelector('.nav-toggle');
+      var links = nav.querySelectorAll('.nav-links a');
+
+      function setOpen(open) {
+        nav.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+        toggle.setAttribute('aria-label', open ? '메뉴 닫기' : '메뉴 열기');
+      }
+
+      toggle.addEventListener('click', function() {
+        setOpen(!nav.classList.contains('open'));
+      });
+      links.forEach(function(a) {
+        a.addEventListener('click', function() { setOpen(false); });
+      });
+
+      var sections = [];
+      links.forEach(function(a) {
+        var el = document.querySelector(a.getAttribute('href'));
+        if (el) sections.push({ link: a, el: el });
+      });
+
+      function updateActive() {
+        var y = window.scrollY + window.innerHeight * 0.35;
+        var current = sections[0];
+        sections.forEach(function(s) {
+          if (s.el.offsetTop <= y) current = s;
+        });
+        links.forEach(function(a) { a.classList.remove('active'); });
+        if (current) current.link.classList.add('active');
+      }
+
+      window.addEventListener('scroll', updateActive, { passive: true });
+      window.addEventListener('resize', updateActive);
+      updateActive();
     })();
   </script>
 
