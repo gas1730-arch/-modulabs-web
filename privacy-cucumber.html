@@ -262,6 +262,30 @@
       margin-bottom: 40px;
     }
 
+    /* 앱 받기 — 정책을 읽다가 바로 설치로 갈 수 있게 둔다 */
+    .app-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      margin-bottom: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .app-cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .app-cta-row .app-cta { margin-bottom: 0; }
+    .app-cta:hover { border-color: var(--lime); transform: translateY(-1px); }
+    .app-cta .app-cta-icon { font-size: 18px; line-height: 1; }
+    .app-cta .app-cta-sub { color: var(--muted); font-weight: 400; font-size: 13px; }
+
     /* META BOX */
     .meta-box {
       display: grid;
@@ -550,6 +574,17 @@
     <p class="doc-lead">
       오이밭 수호대(Cucumber Squad: Veggie Defense)를 운영하는 ModooLabs는 이용자의 개인정보를 중요하게 생각하며, 「개인정보 보호법」 등 관련 법령을 준수합니다. 본 방침은 앱에서 어떤 정보가 수집·처리되고, 해당 정보가 어떤 목적으로 이용되는지 안내합니다.
     </p>
+
+    <div class="app-cta-row">
+      <a class="app-cta" href="https://play.google.com/store/apps/details?id=com.defensegame.cucumber" target="_blank" rel="noopener noreferrer">
+        <span class="app-cta-icon">▶</span>
+        <span>Google Play에서 받기<br><span class="app-cta-sub">오이밭 수호대 · Android</span></span>
+      </a>
+      <a class="app-cta" href="https://apps.apple.com/app/id6814783250" target="_blank" rel="noopener noreferrer">
+        <span class="app-cta-icon">▲</span>
+        <span>App Store에서 받기<br><span class="app-cta-sub">오이밭 수호대 · iPhone</span></span>
+      </a>
+    </div>
 
     <div class="meta-box">
       <div class="meta-item">앱명<b>오이밭 수호대 (Cucumber Squad: Veggie Defense)</b></div>
