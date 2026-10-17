@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Under Hatch 隱私權政策 | ModooLabs</title>
-  <meta name="description" content="Under Hatch 應用程式隱私權政策 — 2026 年 10 月 10 日生效" />
+  <meta name="description" content="Under Hatch 應用程式隱私權政策 — 2026 年 10 月 18 日生效" />
   <meta name="robots" content="index, follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -583,14 +583,14 @@
       <div class="meta-item">平台<b>Android (Google Play) · iOS (App Store)</b></div>
       <div class="meta-item">套件名稱／Bundle ID<b>com.modoolabs.underhatch</b></div>
       <div class="meta-item">開發者<b>ModooLabs</b></div>
-      <div class="meta-item">生效日期<b>2026 年 10 月 10 日</b></div>
+      <div class="meta-item">生效日期<b>2026 年 10 月 18 日</b></div>
       <div class="meta-item">聯絡方式<b>modoolabs1730@gmail.com</b></div>
     </div>
 
     <!-- 1 -->
     <h2><span class="num">01</span>蒐集及處理的資訊</h2>
     <p>
-      Under Hatch 無須另行註冊會員即可使用。但為提供 Google Play 遊戲登入（Android）、廣告、應用程式內購買及應用程式更新功能，可能會處理下列資訊。
+      Under Hatch 無須另行註冊會員即可使用。但為提供 Google Play 遊戲登入（Android）、排行榜與對戰伺服器紀錄、廣告、應用程式內購買及應用程式更新功能，可能會處理下列資訊。
     </p>
 
     <h3>1) Google Play 遊戲服務（僅限 Android）</h3>
@@ -671,9 +671,25 @@
     </ul>
     <p>遊戲進度資料儲存於裝置的本機儲存空間；若使用者在 Android 上已登入 Google Play 遊戲，亦可能為雲端備份及跨裝置同步而儲存於 Google Play 遊戲儲存空間。</p>
 
-    <p>艦長名稱是僅在遊戲內使用的暱稱，儲存在使用者的裝置中，不會傳送至開發者的伺服器，也不會公開給其他使用者。但在 Android 上登入 Google Play 遊戲時，可能會與其他遊戲進度資料一併備份至雲端。建議不要在艦長名稱中輸入真實姓名、聯絡方式等個人資料。</p>
+    <p>艦長名稱是僅在遊戲內使用的暱稱，儲存在使用者的裝置中。但若使用排行榜與對戰功能，則會一併儲存於下方 5) 的伺服器，並顯示給其他使用者。在 Android 上登入 Google Play 遊戲時，則可能會與其他遊戲進度資料一併備份至雲端。建議不要在艦長名稱中輸入真實姓名、聯絡方式等個人資料。</p>
 
-    <h3>5) 應用程式更新檢查（Expo）</h3>
+    <h3>5) 排行榜與對戰伺服器（Google Firebase）</h3>
+    <p>本應用程式為管理排位戰、無盡戰及對戰功能的紀錄與排名，使用開發者營運的伺服器（Google Firebase：匿名驗證、Cloud Firestore、Cloud Functions）。使用此功能無須另行登入或註冊會員，應用程式會在使用者不須操作的情況下，自動建立不含姓名、聯絡方式的<b>匿名帳戶</b>並使用。過程中伺服器會儲存下列資訊：</p>
+    <ul>
+      <li>匿名帳戶編號（Firebase 匿名驗證所賦予的識別編號）及應用程式在裝置上產生的遊戲用 ID</li>
+      <li>艦長名稱（使用者自行輸入的暱稱，最多 12 字）</li>
+      <li>關卡通關紀錄、所受傷害、通關時間、挑戰次數等排位戰、無盡戰紀錄</li>
+      <li>對戰獎盃、戰鬥力，以及對戰所使用的陣容（武器、強化階段）配置與外觀資訊</li>
+      <li>每日對戰次數、競技場點數、每週獎勵是否已發放等由伺服器管理的功能使用紀錄</li>
+      <li>向伺服器請求時傳送的 IP 位址等通訊紀錄（由 Google 處理，開發者不會將其用於識別使用者）</li>
+    </ul>
+    <p><b>公開範圍</b> — 艦長名稱、關卡、獎盃、戰鬥力及排名資訊會在排行榜上顯示給其他使用者。在對戰中，使用者的艦長名稱及陣容配置會被用作其他使用者的對戰對手，並可能顯示給對方。匿名帳戶編號及遊戲用 ID 不會顯示在應用程式畫面上，但基於排行榜資料結構，包含於伺服器文件中。使用者的真實姓名、聯絡方式、付款資訊及廣告識別碼不會儲存於此伺服器。</p>
+    <p>排名及對戰紀錄由伺服器管理，並限制應用程式不得直接寫入伺服器。每週排行榜的過往紀錄會予以保留，可查詢本週及上週排名。刪除應用程式後重新安裝時，會建立新的匿名帳戶並在排行榜上產生新的紀錄，舊帳戶的紀錄在要求刪除之前可能仍會保留。</p>
+    <ul>
+      <li><a href="https://firebase.google.com/support/privacy?hl=zh-TW" style="color: var(--cyan); text-decoration: none;">Firebase 隱私權與安全性</a></li>
+    </ul>
+
+    <h3>6) 應用程式更新檢查（Expo）</h3>
     <p>本應用程式啟動時會檢查遊戲內容（程式碼、圖片）是否有新的更新，若有則下載並套用。此功能使用 Expo（650 Industries, Inc.）的更新伺服器，過程中會傳送下列資訊：</p>
     <ul>
       <li>IP 位址</li>
@@ -684,11 +700,12 @@
       <li><a href="https://expo.dev/privacy" style="color: var(--cyan); text-decoration: none;">Expo 隱私權政策</a></li>
     </ul>
 
-    <h3>6) 資訊蒐集方式</h3>
+    <h3>7) 資訊蒐集方式</h3>
     <p>個人資料及使用資訊可能透過下列方式蒐集及處理：</p>
     <ul>
       <li>使用者選擇登入 Google Play 遊戲的過程（Android）</li>
       <li>啟動及遊玩遊戲的過程</li>
+      <li>傳送排位戰、無盡戰、對戰紀錄及查詢排名的過程（包含自動建立匿名帳戶）</li>
       <li>Google Play 或 Apple App Store 應用程式內購買及購買驗證的過程</li>
       <li>Google AdMob 廣告請求、曝光、點擊及觀看的過程</li>
       <li>iOS 追蹤許可要求及 EEA、英國、瑞士廣告同意的過程</li>
@@ -703,6 +720,8 @@
     <ul>
       <li>Google Play 遊戲登入及玩家識別</li>
       <li>遊戲進度資料的儲存、備份、同步及還原</li>
+      <li>排位戰、無盡戰、對戰的排名彙整與顯示、對戰對手配對、發放每週獎勵</li>
+      <li>防止紀錄遭竄改及確認異常使用</li>
       <li>提供獎勵廣告</li>
       <li>提供個人化或非個人化廣告</li>
       <li>衡量廣告成效及控制廣告頻率</li>
@@ -727,6 +746,7 @@
         <tbody>
           <tr><th>裝置內的遊戲進度資料</th><td>至刪除應用程式或清除應用程式資料為止</td></tr>
           <tr><th>Google Play 遊戲個人資料及雲端遊戲資料（Android）</th><td>至解除 Play 遊戲帳戶連結或使用者要求刪除為止</td></tr>
+          <tr><th>排行榜與對戰伺服器紀錄（艦長名稱、排行及對戰紀錄、匿名帳戶編號等）</th><td>服務營運期間內保存，使用者要求刪除時予以刪除（每週排行榜的過往紀錄予以保留）</td></tr>
           <tr><th>傳送至購買驗證伺服器的購買憑證及交易資訊</th><td>不儲存（驗證後立即捨棄）</td></tr>
           <tr><th>裝置內的商品發放紀錄（購買帳本）</th><td>至刪除應用程式或清除應用程式資料為止</td></tr>
           <tr><th>購買、付款及退款紀錄</th><td>依 Google Play 或 Apple 的政策及相關法令規定的期間（由 Google、Apple 保存）</td></tr>
@@ -752,6 +772,7 @@
           <tr><th>Google LLC 及廣告合作夥伴</th><td>Google AdMob</td><td>廣告 ID、IP 位址、大略位置、裝置資訊、廣告曝光／點擊／觀看及應用程式使用資訊</td><td>提供廣告、個人化廣告、成效衡量、防止詐欺</td><td>依 Google 及廣告合作夥伴政策規定的期間</td></tr>
           <tr><th>Google LLC 及 Google Play 付款相關法人</th><td>Google Play 帳款服務</td><td>商品 ID、訂單／交易 ID、購買憑證、購買日期及時間、購買／退款狀態</td><td>付款處理、購買確認、商品發放、購買還原、退款及防止詐欺交易</td><td>依 Google 政策及相關法令規定的期間</td></tr>
           <tr><th>Apple Inc.</th><td>App Store 應用程式內購買、App Tracking Transparency（iOS）</td><td>商品 ID、交易 ID、購買日期及時間、購買／退款狀態、是否允許追蹤</td><td>付款處理、購買確認、商品發放、購買還原、退款、追蹤許可管理</td><td>依 Apple 政策及相關法令規定的期間</td></tr>
+          <tr><th>Google LLC（Google Cloud · Firebase）</th><td>排行榜與對戰伺服器（Firebase 匿名驗證、Cloud Firestore、Cloud Functions 首爾區域）</td><td>匿名帳戶編號、遊戲用 ID、艦長名稱、排行及對戰紀錄、獎盃、戰鬥力、陣容配置、通訊紀錄（IP 位址等）</td><td>提供排行榜與對戰功能、保存紀錄、發放每週獎勵、防止異常使用</td><td>服務營運期間，或至使用者要求刪除為止（Google 的通訊紀錄依 Google 政策）</td></tr>
           <tr><th>Google LLC（Google Cloud）</th><td>購買驗證伺服器託管（Cloud Functions，首爾區域）</td><td>購買憑證或 Apple 簽署的交易資訊、商品 ID、商品類型、套件名稱、平台</td><td>確認購買是否正常</td><td>不儲存</td></tr>
           <tr><th>650 Industries, Inc.（Expo）</th><td>應用程式更新伺服器</td><td>IP 位址、平台、應用程式版本、更新識別碼</td><td>檢查及傳送應用程式更新</td><td>依 Expo 政策規定的期間</td></tr>
         </tbody>
@@ -767,12 +788,12 @@
     </ul>
 
     <h3>3) 個人資料的境外處理及傳輸</h3>
-    <p>Google Play 遊戲服務、Google AdMob、Google Play 帳款服務、Apple App Store 及 Expo 更新伺服器可能透過位於大韓民國境外的伺服器提供。因此，個人資料可能在境外處理及保存。開發者營運的購買驗證伺服器位於大韓民國（首爾）。</p>
+    <p>Google Play 遊戲服務、Google AdMob、Google Play 帳款服務、Google Firebase（排行榜與對戰伺服器）、Apple App Store 及 Expo 更新伺服器可能透過位於大韓民國境外的伺服器提供。因此，個人資料可能在境外處理及保存。開發者營運的伺服器函式（排行榜與對戰、購買驗證）位於大韓民國（首爾）區域，但基於 Google 基礎設施的特性，部分資訊可能在境外處理。</p>
     <div class="data-table-wrap">
       <table class="data-table">
         <thead><tr><th>接收者</th><th>傳輸國家</th><th>傳輸項目</th><th>傳輸目的</th><th>傳輸時間及方式</th></tr></thead>
         <tbody>
-          <tr><th>Google LLC 及其關係企業</th><td>美國及 Google 資料中心所在國家</td><td>Play 遊戲個人資料、玩家 ID、遊戲進度資料、廣告 ID、IP 位址、裝置資訊、廣告使用資訊、商品 ID、交易 ID、購買憑證及購買狀態</td><td>提供 Play 遊戲、廣告、付款、安全及備份／同步服務</td><td>使用相關功能時，透過加密網路傳輸</td></tr>
+          <tr><th>Google LLC 及其關係企業</th><td>美國及 Google 資料中心所在國家</td><td>Play 遊戲個人資料、玩家 ID、遊戲進度資料、廣告 ID、IP 位址、裝置資訊、廣告使用資訊、商品 ID、交易 ID、購買憑證及購買狀態、匿名帳戶編號、艦長名稱、排行及對戰紀錄</td><td>提供 Play 遊戲、廣告、付款、安全、備份／同步及排行榜與對戰服務</td><td>使用相關功能時，透過加密網路傳輸</td></tr>
           <tr><th>Apple Inc.</th><td>美國及 Apple 資料中心所在國家</td><td>商品 ID、交易 ID、購買日期及時間、購買狀態、是否允許追蹤（iOS）</td><td>處理應用程式內購買、追蹤許可管理</td><td>使用相關功能時，透過加密網路傳輸</td></tr>
           <tr><th>650 Industries, Inc.（Expo）</th><td>美國</td><td>IP 位址、平台、應用程式版本、更新識別碼</td><td>檢查及傳送應用程式更新</td><td>啟動應用程式時，透過加密網路傳輸</td></tr>
         </tbody>
@@ -791,6 +812,7 @@
       <li>要求停止處理個人資料</li>
       <li>解除 Google Play 遊戲帳戶連結（Android）</li>
       <li>要求刪除 Play 遊戲個人資料及遊戲資料</li>
+      <li>要求查閱、更正、刪除儲存於排行榜與對戰伺服器的艦長名稱及紀錄（請告知艦長名稱或遊戲用 ID，確認後將為您處理）</li>
       <li>拒絕廣告個人化</li>
       <li>重設或刪除廣告 ID</li>
       <li>撤回 iOS 追蹤許可（iPhone「設定」→「隱私權與安全性」→「追蹤」）</li>
@@ -837,9 +859,9 @@
       若新增或變更廣告聯播網、應用程式內付款、分析工具、雲端儲存、更新或帳戶功能，將把實際處理的資訊及目的反映於本政策。
     </p>
     <div class="callout">
-      公告日期：2026 年 10 月 10 日<br>
-      生效日期：2026 年 10 月 10 日<br>
-      初始版本
+      公告日期：2026 年 10 月 18 日<br>
+      生效日期：2026 年 10 月 18 日<br>
+      修訂內容：新增排行榜與對戰伺服器（Google Firebase）的使用，以及艦長名稱等紀錄儲存於伺服器並對外顯示的說明（首次生效：2026 年 10 月 10 日）
     </div>
 
     <!-- 6 -->
@@ -893,7 +915,7 @@
     </p>
 
     <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
-      最後更新日期：2026-10-10
+      最後更新日期：2026-10-18
     </p>
 
   </main>
