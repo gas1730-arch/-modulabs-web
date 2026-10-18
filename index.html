@@ -45,6 +45,7 @@
       --quote-visual-bg: #2E2A3A;
       --cucumber-visual-bg: #2E3630;
       --lottocheck-visual-bg: #2A2F3E;
+      --underhatch-visual-bg: #1F2E3E;
       --hover-3: rgba(255, 255, 255, 0.03);
       --hover-4: rgba(255, 255, 255, 0.04);
       --hover-6: rgba(255, 255, 255, 0.06);
@@ -78,6 +79,7 @@
       --quote-visual-bg: #14121F;
       --cucumber-visual-bg: #131B15;
       --lottocheck-visual-bg: #11141F;
+      --underhatch-visual-bg: #0C1822;
       --hover-3: rgba(255, 255, 255, 0.03);
       --hover-4: rgba(255, 255, 255, 0.04);
       --hover-6: rgba(255, 255, 255, 0.06);
@@ -106,6 +108,7 @@
       --quote-visual-bg: #F0EDF7;
       --cucumber-visual-bg: #EEF5EA;
       --lottocheck-visual-bg: #EAF0F7;
+      --underhatch-visual-bg: #E8F1F6;
       --hover-3: rgba(10, 10, 21, 0.03);
       --hover-4: rgba(10, 10, 21, 0.04);
       --hover-6: rgba(10, 10, 21, 0.06);
@@ -600,6 +603,13 @@
         radial-gradient(circle at 30% 25%, rgba(34, 212, 196, 0.35), transparent 55%),
         radial-gradient(circle at 75% 75%, rgba(128, 103, 255, 0.30), transparent 55%),
         var(--lottocheck-visual-bg);
+    }
+
+    .product-underhatch .product-visual {
+      background:
+        radial-gradient(circle at 25% 25%, rgba(34, 212, 196, 0.32), transparent 55%),
+        radial-gradient(circle at 75% 75%, rgba(86, 128, 255, 0.28), transparent 55%),
+        var(--underhatch-visual-bg);
     }
 
     .product-tag {
@@ -1154,6 +1164,32 @@
           <div class="product-links">
             <a href="https://play.google.com/store/apps/details?id=com.defensegame.cucumber" target="_blank" rel="noopener noreferrer" class="product-link">Google Play →</a>
             <a href="/privacy-cucumber.html" class="product-link">개인정보처리방침 →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Under Hatch (언더 해치) -->
+      <article class="product product-underhatch">
+        <div class="product-visual">潛.</div>
+        <div>
+          <span class="product-tag">Submarine Defense · Casual · Game</span>
+          <h3>
+            언더 해치
+            <span class="en">Under Hatch — 심해 잠수함 디펜스</span>
+          </h3>
+          <p>
+            깊은 바다 속에서 잠수함을 지켜내는 디펜스 게임입니다.
+            스테이지를 하나씩 돌파하고, 랭킹전·무한전·경기장 대전으로
+            다른 함장들과 실력을 겨뤄 보세요.
+          </p>
+          <div class="product-meta">
+            <div>Platform<b>Android · iOS</b></div>
+            <div>Stack<b>Expo · React Native</b></div>
+            <div>Status<b>Coming Soon</b></div>
+          </div>
+          <div class="product-links">
+            <a href="/terms-underhatch.html" class="product-link">이용약관 →</a>
+            <a href="/privacy-underhatch.html" class="product-link">개인정보처리방침 →</a>
           </div>
         </div>
       </article>
