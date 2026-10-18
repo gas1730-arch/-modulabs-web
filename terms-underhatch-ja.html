@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>アンダーハッチ 利用規約 | ModooLabs</title>
+  <meta name="description" content="アンダーハッチ (Under Hatch) ゲームの利用規約 — 2026年10月19日施行" />
+  <meta name="robots" content="index, follow" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Noto+Sans+KR:wght@300;400;500;700;900&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('modoolabs-theme');
+        if (saved && ['dark', 'mid', 'light'].indexOf(saved) !== -1) {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root, html[data-theme="mid"] {
+      --bg: #252530;
+      --bg-2: #2E2E3D;
+      --surface: #383848;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.14);
+      --text: #E8E8ED;
+      --text-2: #A5A5B5;
+      --muted: #7A7A88;
+      --cyan: #22D4C4;
+      --violet: #8067FF;
+      --lime: #C0EB60;
+      --nav-bg: rgba(37, 37, 48, 0.75);
+      --mark-bg: #252530;
+      --hover-3: rgba(255, 255, 255, 0.03);
+      --callout-tint: rgba(128, 103, 255, 0.12);
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html[data-theme="dark"] {
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --nav-bg: rgba(10, 10, 21, 0.75);
+      --mark-bg: #0A0A15;
+      --hover-3: rgba(255, 255, 255, 0.02);
+      --callout-tint: rgba(124, 92, 255, 0.08);
+    }
+
+    html[data-theme="light"] {
+      --bg: #FAFAF7;
+      --bg-2: #F2F2EC;
+      --surface: #E8E8E1;
+      --border: rgba(10, 10, 21, 0.08);
+      --border-strong: rgba(10, 10, 21, 0.16);
+      --text: #0A0A15;
+      --text-2: #4A4A5C;
+      --muted: #8B8B9F;
+      --cyan: #06B8AB;
+      --violet: #6B4CE6;
+      --lime: #7EB026;
+      --nav-bg: rgba(250, 250, 247, 0.75);
+      --mark-bg: #FAFAF7;
+      --hover-3: rgba(10, 10, 21, 0.03);
+      --callout-tint: rgba(107, 76, 230, 0.10);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      font-weight: 400;
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Ambient grain */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+      opacity: 0.28;
+      mix-blend-mode: overlay;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.4'/%3E%3C/svg%3E");
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 48px;
+      background: var(--nav-bg);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .brand-mark {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background:
+        radial-gradient(circle at 30% 30%, var(--cyan) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, var(--violet) 0%, transparent 55%),
+        radial-gradient(circle at 50% 90%, var(--lime) 0%, transparent 60%),
+        var(--mark-bg);
+      box-shadow: 0 0 24px rgba(128, 103, 255, 0.3);
+    }
+
+    .brand-name {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-back {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-2);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s var(--ease);
+    }
+
+    .nav-back:hover { color: var(--text); }
+
+    /* Nav right — theme switcher + back link */
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .theme-switcher {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      padding: 4px 6px;
+      background: var(--hover-3);
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .theme-switcher button {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      border: 1.5px solid transparent;
+      cursor: pointer;
+      padding: 0;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .theme-switcher button[data-set-theme="dark"] { background: #0A0A15; }
+    .theme-switcher button[data-set-theme="mid"] { background: #252530; }
+    .theme-switcher button[data-set-theme="light"] {
+      background: #FAFAF7;
+      border-color: rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-switcher button:hover { transform: scale(1.15); }
+
+    html[data-theme="dark"] .theme-switcher button[data-set-theme="dark"],
+    html[data-theme="mid"] .theme-switcher button[data-set-theme="mid"],
+    html:not([data-theme]) .theme-switcher button[data-set-theme="mid"],
+    html[data-theme="light"] .theme-switcher button[data-set-theme="light"] {
+      border-color: var(--text);
+      transform: scale(1.1);
+    }
+
+    /* MAIN LAYOUT */
+    main {
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 80px 48px 120px;
+    }
+
+    /* HEADER */
+    .doc-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--text-2);
+      padding: 6px 14px;
+      border: 1px solid var(--border-strong);
+      border-radius: 999px;
+      margin-bottom: 32px;
+      background: var(--hover-3);
+    }
+
+    .doc-eyebrow::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--lime);
+      box-shadow: 0 0 8px var(--lime);
+    }
+
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(36px, 5vw, 56px);
+      font-weight: 500;
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      margin-bottom: 20px;
+    }
+
+    h1 .accent {
+      background: linear-gradient(120deg, var(--cyan) 0%, var(--violet) 55%, var(--lime) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .doc-lead {
+      color: var(--text-2);
+      font-size: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* 앱 받기 — 정책을 읽다가 바로 설치로 갈 수 있게 둔다 */
+    .app-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 22px;
+      margin-bottom: 40px;
+      border-radius: 12px;
+      border: 1px solid var(--border-strong);
+      background: var(--surface);
+      color: var(--text);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: border-color 0.2s var(--ease), transform 0.2s var(--ease);
+    }
+
+    .app-cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-bottom: 40px; }
+    .app-cta-row .app-cta { margin-bottom: 0; }
+    .app-cta:hover { border-color: var(--lime); transform: translateY(-1px); }
+    .app-cta .app-cta-icon { font-size: 18px; line-height: 1; }
+    .app-cta .app-cta-sub { color: var(--muted); font-weight: 400; font-size: 13px; }
+
+    /* META BOX */
+    .meta-box {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+      padding: 24px;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      margin-bottom: 60px;
+    }
+
+    .meta-item {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .meta-item b {
+      display: block;
+      font-family: var(--font-body);
+      color: var(--text);
+      font-size: 15px;
+      font-weight: 500;
+      margin-top: 6px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+
+    /* SECTIONS */
+    h2 {
+      font-family: var(--font-display);
+      font-size: 26px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      padding-top: 32px;
+      border-top: 1px solid var(--border);
+      line-height: 1.3;
+    }
+
+    h2 .num {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-2);
+      font-weight: 400;
+      display: block;
+      margin-bottom: 8px;
+      letter-spacing: 0.05em;
+    }
+
+    h3 {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--text);
+      margin-top: 28px;
+      margin-bottom: 12px;
+      letter-spacing: -0.01em;
+    }
+
+    p {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+
+    ul, ol {
+      color: var(--text-2);
+      font-size: 15px;
+      margin-bottom: 20px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+      line-height: 1.7;
+    }
+
+    li::marker {
+      color: var(--muted);
+    }
+
+    strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* NOTE / CALLOUT */
+    .callout {
+      padding: 20px 24px;
+      background:
+        radial-gradient(circle at 20% 30%, var(--callout-tint), transparent 60%),
+        var(--bg-2);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--violet);
+      border-radius: 12px;
+      margin: 24px 0;
+      font-size: 14px;
+      color: var(--text-2);
+    }
+
+    /* DATA TABLE */
+    .data-table-wrap {
+      overflow-x: auto;
+      margin: 20px 0;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--bg-2);
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      min-width: 560px;
+    }
+
+    .data-table th,
+    .data-table td {
+      padding: 12px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+      vertical-align: top;
+    }
+
+    .data-table thead th {
+      font-family: var(--font-display);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text);
+      background: var(--hover-3);
+      white-space: nowrap;
+    }
+
+    .data-table tbody th {
+      font-family: var(--font-body);
+      font-weight: 500;
+      color: var(--text);
+      width: 30%;
+    }
+
+    .data-table tbody td {
+      color: var(--text-2);
+    }
+
+    .data-table tr:last-child th,
+    .data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* CONTACT TABLE */
+    .contact-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      background: var(--bg-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      font-size: 14px;
+    }
+
+    .contact-table th,
+    .contact-table td {
+      padding: 14px 20px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .contact-table th {
+      font-family: var(--font-display);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-2);
+      background: var(--hover-3);
+      width: 30%;
+    }
+
+    .contact-table td {
+      color: var(--text);
+    }
+
+    .contact-table tr:last-child th,
+    .contact-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .contact-table a {
+      color: var(--cyan);
+      text-decoration: none;
+      transition: opacity 0.2s var(--ease);
+    }
+
+    .contact-table a:hover { opacity: 0.8; }
+
+    /* FOOTER */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--muted);
+      position: relative;
+      z-index: 2;
+      max-width: 820px;
+      margin: 0 auto;
+    }
+
+    footer .brand {
+      opacity: 0.7;
+    }
+
+    footer a {
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s var(--ease);
+    }
+
+    footer a:hover { color: var(--text); }
+
+    /* RESPONSIVE */
+    @media (max-width: 700px) {
+      nav { padding: 16px 24px; }
+      main { padding: 48px 24px 80px; }
+      footer {
+        padding: 32px 24px;
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+      h2 { font-size: 22px; }
+      .contact-table th { width: 35%; }
+    }
+
+    /* Language switch */
+    .lang-switch { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 20px; }
+    .lang-switch a {
+      font-family: var(--font-mono); font-size: 12px; color: var(--text-2);
+      padding: 6px 12px; border: 1px solid var(--border); border-radius: 999px;
+      text-decoration: none;
+    }
+    .lang-switch a:hover { color: var(--text); border-color: var(--border-strong); }
+    .lang-switch a.active { color: var(--text); border-color: var(--border-strong); background: var(--hover-3); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </a>
+    <div class="nav-right">
+      <div class="theme-switcher" role="group" aria-label="テーマ選択">
+        <button type="button" data-set-theme="dark" aria-label="ダークテーマ" title="ダーク"></button>
+        <button type="button" data-set-theme="mid" aria-label="ミッドテーマ" title="ミッド"></button>
+        <button type="button" data-set-theme="light" aria-label="ライトテーマ" title="ライト"></button>
+      </div>
+      <a href="/" class="nav-back">← ホームへ</a>
+    </div>
+  </nav>
+
+  <main>
+    <!-- LANGUAGE SWITCH -->
+    <div class="lang-switch" role="navigation" aria-label="言語選択">
+      <a href="/terms-underhatch.html" lang="ko">한국어</a>
+      <a href="/terms-underhatch-en.html" lang="en">English</a>
+      <a href="/terms-underhatch-zh.html" lang="zh-Hant">繁體中文</a>
+      <a href="/terms-underhatch-ja.html" lang="ja" class="active" aria-current="page">日本語</a>
+    </div>
+
+    <div class="doc-eyebrow">Legal · Terms of Service</div>
+
+    <h1>
+      アンダーハッチ<br>
+      <span class="accent">利用規約</span>
+    </h1>
+
+    <p class="doc-lead">
+      本規約は、ModooLabs（모두랩스）が提供するモバイルゲーム「アンダーハッチ（Under Hatch）」をご利用いただく際の、運営者と利用者の権利・義務、およびあらかじめ知っておいていただきたい事項を定めたものです。ゲームを始める前にお読みください。
+    </p>
+
+    <div class="meta-box">
+      <div class="meta-item">サービス名<b>アンダーハッチ (Under Hatch)</b></div>
+      <div class="meta-item">プラットフォーム<b>Android (Google Play) · iOS (App Store)</b></div>
+      <div class="meta-item">運営者<b>ModooLabs（모두랩스）</b></div>
+      <div class="meta-item">施行日<b>2026年10月19日</b></div>
+      <div class="meta-item">お問い合わせ<b>modoolabs1730@gmail.com</b></div>
+    </div>
+
+    <!-- 1 -->
+    <h2><span class="num">01</span>目的と用語</h2>
+    <p>
+      本規約は、運営者が提供する「アンダーハッチ」ゲームおよびこれに付随するサービス（以下「本サービス」）の利用に関して、運営者と利用者の権利、義務および責任、その他必要な事項を定めることを目的とします。
+    </p>
+    <p>本規約で使用する用語の意味は、次のとおりです。</p>
+    <ul>
+      <li><strong>運営者</strong>：本サービスを提供する ModooLabs（모두랩스）をいいます。</li>
+      <li><strong>利用者</strong>：本規約に従って本サービスを利用するすべての方をいいます。</li>
+      <li><strong>仮想アイテム</strong>：ダイヤ、コイン、部品、鋼板、エネルギー、スキン、スキンの欠片、パス券（スモール・プレミアム）、パッケージ・特価商品など、本サービス内でのみ使用できるデジタルコンテンツをいいます。</li>
+      <li><strong>有料商品</strong>：利用者が Google Play または Apple App Store のアプリ内課金により、対価を支払って購入する仮想アイテムをいいます。</li>
+      <li><strong>サーバー機能</strong>：ランキング戦、無限戦、ステージ順位、アリーナ（仮想対戦、トロフィー、アリーナポイント）、スキンの欠片の付与、お知らせなど、運営者のサーバーと通信しなければ利用できない機能をいいます。</li>
+      <li><strong>ニックネーム（艦長名）</strong>：利用者がゲーム内で使用するために自ら決める名前をいいます。</li>
+    </ul>
+
+    <!-- 2 -->
+    <h2><span class="num">02</span>規約の効力と変更</h2>
+    <ul>
+      <li>本規約は、利用者が本サービスを利用した時から効力を生じ、本サイト（modooscoin.com）およびアプリの設定画面でいつでもご覧いただけます。</li>
+      <li>運営者は、関連法令に違反しない範囲で本規約を変更することができます。</li>
+      <li>規約を変更する場合は、変更内容と施行日を、施行の7日前までにアプリのお知らせまたは本サイトでお知らせします。ただし、利用者に不利な変更または重要な変更については、施行の30日前までにお知らせします。</li>
+      <li>運営者が上記のとおりお知らせし、あわせて「施行日までに拒否の意思表示がない場合は同意したものとみなします」と案内したにもかかわらず、利用者が施行日以降も本サービスを引き続き利用した場合は、変更後の規約に同意したものとみなします。変更後の規約に同意しない利用者は、本サービスの利用を中止し、アプリを削除することができます。</li>
+      <li>本規約に定めのない事項は、関連法令、Google Play・Apple App Store のポリシー、および一般的な商慣習に従います。</li>
+    </ul>
+
+    <!-- 3 -->
+    <h2><span class="num">03</span>利用年齢</h2>
+    <ul>
+      <li>アンダーハッチは、会員登録やログインなしでご利用いただけます。</li>
+      <li>14歳未満の利用者は、保護者（法定代理人）とともに本規約およびプライバシーポリシーをお読みになり、保護者の同意のもとで本サービスをご利用ください。有料商品の購入は、保護者の同意がある場合に限ってお願いします。</li>
+      <li>利用者の個人情報は、別に定める<a href="/privacy-underhatch-ja.html" style="color: var(--cyan); text-decoration: none;">プライバシーポリシー</a>に従って取り扱われます。</li>
+    </ul>
+
+    <!-- 4 -->
+    <h2><span class="num">04</span>サービスの内容と変更・中断・終了</h2>
+
+    <h3>1) サービスの内容</h3>
+    <p>本サービスは、深海の潜水艦を守るディフェンス型モバイルゲームであり、次の機能を含みます。</p>
+    <ul>
+      <li>ステージのプレイとゲームの進行（ステージ記録、通貨、スキン、設定など）</li>
+      <li>ランキング戦、無限戦、ステージ順位</li>
+      <li>アリーナ（他の利用者の艦隊との仮想対戦、トロフィー、アリーナポイント）</li>
+      <li>スキンの欠片の付与、お知らせなどのサーバー機能</li>
+      <li>リワード広告、有料商品</li>
+    </ul>
+
+    <h3>2) 運営上の基準と調整</h3>
+    <p>エネルギー、1日の挑戦回数、週間報酬、順位の集計などの機能は、サーバー時刻を基準として定められ（例：韓国時間の午前9時に更新）、運営状況に応じて基準、回数および報酬が調整されることがあります。利用者に大きな影響を与える調整については、可能な限り事前にお知らせでご案内します。</p>
+
+    <h3>3) サービスの変更と中断</h3>
+    <ul>
+      <li>運営者は、サービスの改善、新機能の追加、バランス調整などのために、本サービスの全部または一部を変更することができます。</li>
+      <li>システム点検、サーバーの入れ替え、障害復旧、天災地変、通信の途絶、ストアまたはクラウド事業者の事情など、やむを得ない場合には、本サービスを一時的に停止することができ、可能な限り事前にお知らせします。緊急の対応が必要な場合は、先に措置を行ってからお知らせします。</li>
+    </ul>
+
+    <h3>4) サービスの終了</h3>
+    <p>運営者が本サービスを終了しなければならない場合は、終了日の30日前までに、アプリのお知らせおよび本サイトで、終了の理由、日程および有料の仮想アイテムの取り扱い方法をお知らせします。有料の仮想アイテムの取り扱いは、第7条5)に従います。</p>
+
+    <!-- 5 -->
+    <h2><span class="num">05</span>利用者の義務と禁止行為</h2>
+    <p>利用者は本サービスを健全にご利用いただく必要があり、次の行為をしてはなりません。</p>
+
+    <h3>1) 不正行為</h3>
+    <ul>
+      <li>端末の時刻の操作などにより、サーバー時刻を基準とするエネルギー、挑戦回数または報酬の制限を回避する行為</li>
+      <li>アプリまたはゲームのメモリを改変する行為、通信内容を傍受または改ざんする行為、アプリを偽造・改造・逆コンパイルする行為</li>
+      <li>通常のプレイでは得られない異常な記録を順位に登録する行為</li>
+      <li>自動化ツール（マクロ、ボットなど）を用いて順位または報酬を得る行為</li>
+      <li>サーバーに不正にアクセスする行為、過度なリクエストを送信する行為、または本サービスの正常な運営を妨げる行為</li>
+      <li>エラー（バグ）と知りながらこれを利用して利益を得る行為、または他の利用者に知らせる行為（エラーを発見した場合は、お問い合わせのメールでお知らせください）</li>
+    </ul>
+
+    <h3>2) ニックネーム（艦長名）の基準</h3>
+    <p>ニックネームは、ランキング表およびアリーナで他の利用者に表示されます。次のいずれかに該当するニックネームは使用できません。</p>
+    <ul>
+      <li>他人を誹謗中傷する名前、または罵倒・憎悪・性的な表現を含む名前</li>
+      <li>本名、連絡先、アカウント情報などの個人情報を含む名前</li>
+      <li>広告・宣伝・なりすましを目的とする名前、または運営者もしくは運営スタッフになりすます名前</li>
+      <li>その他、法令または公序良俗に反する名前</li>
+    </ul>
+    <p>運営者は、上記の基準に合わないニックネームについて、利用者に通知したうえで変更または初期化することができます。</p>
+
+    <h3>3) その他の禁止行為</h3>
+    <ul>
+      <li>他の利用者による本サービスの利用を妨げたり、嫌がらせをしたりする行為</li>
+      <li>仮想アイテムまたはアカウント（端末内のゲームデータ）を、現金その他の財産上の利益を受けて売買、譲渡または貸与する行為</li>
+      <li>本サービスに関連する絵、音、文章などを、運営者の許可なく複製・配布する行為、または営利目的で使用する行為</li>
+      <li>他人の決済手段を盗用する行為、または不正な方法で決済する行為</li>
+      <li>その他、関連法令、本規約またはストアのポリシーに反する行為</li>
+    </ul>
+
+    <!-- 6 -->
+    <h2><span class="num">06</span>利用制限の措置と異議申し立て</h2>
+
+    <h3>1) 制限措置の種類</h3>
+    <p>利用者が第5条の禁止行為を行った、または本規約に違反したことが確認された場合、運営者は、その程度に応じて次の措置を講じることができます。</p>
+    <ul>
+      <li>警告および是正の要求</li>
+      <li>ニックネームの変更または初期化</li>
+      <li>不正に取得した記録・報酬・仮想アイテムの削除または回収</li>
+      <li>順位からの除外</li>
+      <li>サーバー機能の利用の一時停止または永久停止</li>
+    </ul>
+
+    <h3>2) 措置の手続き</h3>
+    <p>運営者は、措置の理由、内容および異議申し立ての方法を、可能な限り事前にお知らせします。ただし、サーバーの安定性または他の利用者の保護のために急を要する場合は、先に措置を行ってからお知らせすることがあります。不正行為が繰り返された場合または悪質な場合は、警告なく直ちに措置を講じることがあります。</p>
+
+    <h3>3) 異議申し立て</h3>
+    <p>利用者は、措置に納得できない場合、措置を知った日から30日以内に、お問い合わせのメール（modoolabs1730@gmail.com）で異議を申し立てることができます。運営者は、受け付けた内容を確認したうえで、可能な限り速やかに結果をメールでお知らせします。利用者の異議が正当であると確認された場合は、措置の解除または軽減など、必要な措置を講じます。</p>
+
+    <!-- 7 -->
+    <h2><span class="num">07</span>仮想アイテムと有料決済</h2>
+
+    <h3>1) 仮想アイテムの性質</h3>
+    <ul>
+      <li>仮想アイテムは、本サービス内でのみ使用できるデジタルコンテンツであり、利用者は本サービス内でこれを利用できる権利のみを有します。現金または財産に換えることはできません。</li>
+      <li>利用者は、仮想アイテムを他の利用者または第三者に販売、譲渡または貸与することはできません。これに違反した場合は、第6条の利用制限の措置を受けることがあります。</li>
+      <li>仮想アイテムは、本サービス内で定められた用途にのみ使用でき、用途および使用条件は各アイテムの案内画面に表示します。</li>
+    </ul>
+
+    <h3>2) 有料決済</h3>
+    <ul>
+      <li>有料商品は、Google Play または Apple App Store のアプリ内課金で販売します。価格、決済手段、決済時期、税金などは、各ストアのポリシーおよび画面の案内に従います。</li>
+      <li>決済情報（カード番号など）はストアが直接処理し、運営者は利用者の決済手段に関する情報を把握せず、保存もしません。</li>
+      <li>商品の構成、価格および販売期間は運営状況により変更されることがあり、購入画面に表示された内容が基準となります。</li>
+      <li>パス券（スモール・プレミアム）、パッケージ・特価商品などは、購入画面に案内された特典、期間および条件に従って付与・適用されます。</li>
+      <li>決済機能は正式リリースの時点で連携され、連携される前は本条項は適用されません。</li>
+    </ul>
+
+    <h3>3) 未成年者の決済</h3>
+    <p>未成年者が法定代理人の同意なく決済した場合、法定代理人は、関連法令およびストアのポリシーの定めるところにより、その決済の取り消しまたは返金を請求することができます。</p>
+
+    <h3>4) 返金</h3>
+    <ul>
+      <li>有料商品の返金および申込みの撤回は、Google Play または Apple App Store の返金ポリシーおよび関連法令に従って処理されます。返金は、決済したストアに直接請求しなければならない場合が多く、運営者は、利用者の要請があれば、案内と確認をお手伝いします。</li>
+      <li>すでに付与されて使用した、または使用を開始した仮想アイテム、および利用期間が過ぎた商品は、法令が認める範囲で返金が制限されることがあります。</li>
+      <li>イベントや報酬として無料で受け取った仮想アイテムは、返金の対象ではありません。</li>
+      <li>利用制限の措置により仮想アイテムが失われた場合、利用者に責めに帰すべき事由があるときは、返金しないことがあります。</li>
+    </ul>
+
+    <h3>5) サービス終了時の有料アイテムの取り扱い</h3>
+    <p>本サービスが終了する場合、利用者が使用せずに残っている有料の仮想アイテムは、関連法令に従って返金し、またはこれに相応する補償を行います。具体的な方法および申請期間は、第4条4)の終了のお知らせでご案内します。</p>
+
+    <!-- 8 -->
+    <h2><span class="num">08</span>広告のご利用について</h2>
+    <ul>
+      <li>本サービスには、Google AdMob が提供するリワード広告があります。利用者が自らボタンを押して広告を最後まで視聴すると、所定の報酬が付与されます。</li>
+      <li>広告は任意であり、広告を視聴しなくてもゲームの基本機能はご利用いただけます。</li>
+      <li>広告の内容および広告主が提供する商品・サービスは広告主の責任であり、運営者はこれについて責任を負いません。</li>
+      <li>広告の配信過程で処理される情報および広告設定の方法は、<a href="/privacy-underhatch-ja.html" style="color: var(--cyan); text-decoration: none;">プライバシーポリシー</a>でご案内します。</li>
+      <li>広告が正常に表示されない場合、または視聴が終わる前に閉じた場合は、報酬が付与されないことがあります。</li>
+    </ul>
+
+    <!-- 9 -->
+    <h2><span class="num">09</span>データの保存と復元できない場合のご案内</h2>
+    <ul>
+      <li>ゲームの進行情報（ステージ記録、通貨、スキン、設定など）は、基本的に利用者の端末に保存されます。</li>
+      <li>サーバー機能を利用する際には、匿名認証（Firebase）により任意の識別子が付与され、順位や対戦記録などがサーバーに保存されます。ニックネーム、記録、称号、プロフィール枠、艦船スキンの外観は、他の利用者に表示されることがあります。</li>
+      <li><strong>端末を変更した場合、アプリを削除した場合、またはアプリデータを消去した場合、ゲームの記録を復元できないことがあります。</strong>現在、アカウントを連携して記録を移行する機能はありません。</li>
+      <li>利用者はこの点を理解したうえで本サービスをご利用ください。利用者の端末管理の不注意によりデータが失われた場合、運営者は復元する義務を負いません。ただし、運営者の故意または重大な過失によりデータが失われた場合は、第11条に従います。</li>
+      <li>サーバーに保存された情報の具体的な内容、保管期間および削除の請求方法は、<a href="/privacy-underhatch-ja.html" style="color: var(--cyan); text-decoration: none;">プライバシーポリシー</a>に従います。</li>
+    </ul>
+
+    <!-- 10 -->
+    <h2><span class="num">10</span>知的財産権</h2>
+    <ul>
+      <li>本サービスに使用されている絵、キャラクター、音、音楽、文章、プログラム、商標などすべてのコンテンツに関する権利は、運営者または正当な権利者に帰属し、著作権法その他の法令により保護されます。</li>
+      <li>運営者は、利用者に対し、本サービスを利用するために必要な範囲で、譲渡できない個人的な利用権を付与します。</li>
+      <li>利用者は、運営者の事前の許可なく、本サービスのコンテンツを複製、送信、配布、改変、二次的著作物の作成、または営利目的で利用してはなりません。</li>
+      <li>利用者が決めたニックネームは、ランキング表やアリーナなど本サービスの画面に表示するために必要な範囲で、運営者が利用することができます。</li>
+    </ul>
+
+    <!-- 11 -->
+    <h2><span class="num">11</span>免責と損害賠償</h2>
+
+    <h3>1) 免責</h3>
+    <p>運営者は、次の場合に本サービスの利用中に利用者に生じた損害について責任を負いません。ただし、運営者の故意または重大な過失により生じた損害は除きます。</p>
+    <ul>
+      <li>天災地変、戦争、火災、停電、通信網の障害、ストア・クラウドなど外部事業者の障害のように、運営者の力が及ばない場合</li>
+      <li>利用者の端末の故障、オペレーティングシステムの問題、通信環境または不注意による場合</li>
+      <li>利用者が本規約に違反したために生じた場合</li>
+      <li>利用者間、または利用者と第三者との間で生じた紛争</li>
+      <li>広告主が提供した広告、およびその広告から遷移した外部サービスの内容</li>
+      <li>無料で提供されるサービスで生じた損害（法令に別段の定めがある場合を除く）</li>
+    </ul>
+
+    <h3>2) 損害賠償</h3>
+    <ul>
+      <li>運営者または利用者が、本規約または法令に違反して相手方に損害を与えた場合は、その損害を与えた側が関連法令に従って賠償します。</li>
+      <li>運営者の賠償責任は、利用者が立証した通常の損害の範囲とし、法令に定める場合を除き、利用者が当該有料商品に対して実際に支払った金額を超えないことを原則とします。</li>
+      <li>利用者が本規約に違反して運営者または他の利用者に損害を与えた場合、利用者はその損害を賠償しなければなりません。</li>
+    </ul>
+
+    <!-- 12 -->
+    <h2><span class="num">12</span>紛争の解決</h2>
+    <ul>
+      <li>運営者と利用者の間で紛争が生じた場合は、互いに誠実に協議して解決するよう努めます。</li>
+      <li>協議で解決しない場合は、消費者紛争調停機関の調停を受けることができます。</li>
+      <li>本規約は、大韓民国の法律に従って解釈・適用されます。</li>
+      <li>本サービスに関して訴訟が必要な場合、管轄裁判所は民事訴訟法に従います。</li>
+    </ul>
+
+    <!-- 13 -->
+    <h2><span class="num">13</span>お問い合わせ先と施行日</h2>
+    <table class="contact-table">
+      <tr>
+        <th>サービス名</th>
+        <td>アンダーハッチ (Under Hatch)</td>
+      </tr>
+      <tr>
+        <th>商号</th>
+        <td>모두랩스</td>
+      </tr>
+      <tr>
+        <th>代表者</th>
+        <td>김진춘</td>
+      </tr>
+      <tr>
+        <th>事業者登録番号</th>
+        <td>801-04-03636</td>
+      </tr>
+      <tr>
+        <th>事業所の所在地</th>
+        <td>울산광역시 동구 봉수로 110, 704동 410호 (화정동, 현대아파트)</td>
+      </tr>
+      <tr>
+        <th>通信販売業の届出番号</th>
+        <td>제2026-울산동구-162호 (울산광역시 동구청)</td>
+      </tr>
+      <tr>
+        <th>メールアドレス</th>
+        <td><a href="mailto:modoolabs1730@gmail.com">modoolabs1730@gmail.com</a></td>
+      </tr>
+      <tr>
+        <th>関連文書</th>
+        <td><a href="/privacy-underhatch-ja.html">プライバシーポリシー</a></td>
+      </tr>
+    </table>
+    <p>本規約に関するお問い合わせ、エラーのご報告、利用制限に対する異議申し立て、返金のご案内のご依頼は、上記のメールアドレスまでお送りください。</p>
+
+    <!-- 부칙 -->
+    <h2><span class="num">附則</span>施行日</h2>
+    <p>本規約は、<strong>2026年10月19日</strong>から施行します。</p>
+    <div class="callout">
+      公告日：2026年10月19日<br>
+      施行日：2026年10月19日<br>
+      初回施行
+    </div>
+
+    <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
+      最終更新日：2026-10-19
+    </p>
+
+  </main>
+
+
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="brand">
+      <div class="brand-mark"></div>
+      <span class="brand-name">ModooLabs</span>
+    </div>
+    <div>© 2026 ModooLabs · <a href="/">modooscoin.com</a></div>
+  </footer>
+  <!-- Theme Switcher Script -->
+  <script>
+    (function() {
+      var buttons = document.querySelectorAll('.theme-switcher button[data-set-theme]');
+      buttons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var theme = btn.getAttribute('data-set-theme');
+          document.documentElement.setAttribute('data-theme', theme);
+          try {
+            localStorage.setItem('modoolabs-theme', theme);
+          } catch (e) {}
+        });
+      });
+    })();
+  </script>
+
+</body>
+</html>
