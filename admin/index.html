@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>관리자 | ModooLabs</title>
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Noto+Sans+KR:wght@300;400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0A0A15;
+      --bg-2: #12121F;
+      --surface: #191927;
+      --border: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text: #F5F5F7;
+      --text-2: #B8B8C8;
+      --muted: #6E6E82;
+      --cyan: #06E3D4;
+      --violet: #7C5CFF;
+      --lime: #C7F868;
+      --warn: #FFB454;
+      --font-display: 'Space Grotesk', system-ui, sans-serif;
+      --font-body: 'Noto Sans KR', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font-body);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      background: var(--bg-2);
+    }
+    .bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 60px; }
+    .brand { font-family: var(--font-display); font-weight: 700; font-size: 18px; letter-spacing: 0.02em; }
+    .brand span { color: var(--cyan); }
+    .who { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--text-2); }
+    .who .mail { font-family: var(--font-mono); font-size: 12px; max-width: 40vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+    button {
+      font-family: inherit; font-size: 14px; cursor: pointer;
+      border: 1px solid var(--border-strong); background: var(--surface); color: var(--text);
+      border-radius: 8px; padding: 8px 14px;
+    }
+    button:hover { border-color: var(--cyan); }
+    button.primary { background: var(--cyan); color: #04141A; border-color: var(--cyan); font-weight: 700; }
+
+    main { padding: 28px 0 60px; }
+    h1 { font-family: var(--font-display); font-size: 24px; margin-bottom: 4px; }
+    .sub { color: var(--text-2); font-size: 14px; margin-bottom: 24px; }
+
+    .center { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; text-align: center; }
+    .center p { color: var(--text-2); max-width: 420px; font-size: 14px; }
+
+    .notice {
+      border: 1px solid var(--warn); background: rgba(255, 180, 84, 0.08);
+      border-radius: 10px; padding: 14px 16px; font-size: 13px; color: var(--text-2); margin-bottom: 20px;
+    }
+    .notice b { color: var(--warn); }
+    .notice code, .center code { font-family: var(--font-mono); font-size: 12px; color: var(--text); }
+
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; }
+    .card { border: 1px solid var(--border); background: var(--surface); border-radius: 12px; padding: 18px; }
+    .card h2 { font-size: 16px; margin-bottom: 4px; }
+    .card .desc { color: var(--text-2); font-size: 13px; margin-bottom: 12px; }
+    .badge { display: inline-block; font-family: var(--font-mono); font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted); }
+    .badge.on { color: var(--lime); border-color: var(--lime); }
+    .stats { margin-top: 12px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .stat { background: var(--bg-2); border-radius: 8px; padding: 10px; }
+    .stat .v { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
+    .stat .k { font-size: 11px; color: var(--muted); }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="wrap bar">
+      <div class="brand">Modoo<span>Labs</span> 관리자</div>
+      <div class="who hidden" id="who">
+        <span class="mail" id="mail"></span>
+        <button id="signOutBtn">로그아웃</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+
+    <!-- 로그인 전 -->
+    <section class="center" id="signedOut">
+      <h1>관리자 전용</h1>
+      <p>허용된 구글 계정으로 로그인해야 볼 수 있습니다.</p>
+      <button class="primary" id="signInBtn">구글로 로그인</button>
+      <p id="authMsg" style="color: var(--warn);"></p>
+    </section>
+
+    <!-- 설정 필요 -->
+    <section class="center hidden" id="needsSetup">
+      <h1>설정이 아직 안 끝났습니다</h1>
+      <p>이 파일 아래쪽 <code>FIREBASE_CONFIG</code>에 Firebase 웹 앱 설정 값을 넣어야 로그인이 동작합니다.</p>
+    </section>
+
+    <!-- 로그인 후 -->
+    <section class="hidden" id="dashboard">
+      <h1>앱 현황</h1>
+      <p class="sub">앱을 하나씩 연결합니다. 연결되지 않은 앱은 '연결 대기'로 표시됩니다.</p>
+
+      <div class="notice">
+        <b>안내</b> 이 페이지는 주소를 알아도 로그인하지 않으면 데이터가 오지 않습니다.
+        보안은 Firebase 보안 규칙이 지킵니다(허용 계정만 읽기). 검색 엔진에는 노출하지 않습니다.
+      </div>
+
+      <div class="grid" id="appGrid"></div>
+    </section>
+
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import {
+      getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged,
+    } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+
+    // ── 설정 (형이 Firebase 콘솔에서 복사해 넣는 곳) ─────────────────────────────
+    // Firebase 콘솔 → 프로젝트 설정 → 일반 → 내 앱 → 웹 앱(</>) 추가 → 'firebaseConfig' 값을 그대로 붙여 넣는다.
+    // 이 값들은 비밀이 아니다(웹에 공개되는 값). 데이터를 지키는 건 이 값이 아니라 Firebase '보안 규칙'이다.
+    const FIREBASE_CONFIG = {
+      apiKey: 'AIzaSyCz8j8aTCLJZccecU9yGlIT9d9SohOojeA',
+      authDomain: 'cucumberdefense.firebaseapp.com',
+      projectId: 'cucumberdefense',
+      appId: '1:785229940010:web:a2b0f4eae0eb3d0b984a53',
+    };
+
+    // 이 계정만 화면을 연다(화면용 확인일 뿐이고, 진짜 차단은 Firebase 보안 규칙이 한다).
+    const ALLOWED_EMAILS = ['gas1730@gmail.com'];
+
+    // ── 앱 목록 ─────────────────────────────────────────────────────────────────
+    // connected: true로 바꾸고 아래 loadStats()에 그 앱의 읽기 코드를 붙이면 숫자가 채워진다.
+    const APPS = [
+      { id: 'cucumber', name: '오이밭 수호대', desc: '타워디펜스 · Android / iOS', connected: false, note: '앱이 통계를 보내도록 고친 뒤 연결' },
+      { id: 'underhatch', name: '언더 해치', desc: '순위표·대전 서버(Firebase)', connected: false, note: '기존 데이터 위치 확인 후 연결' },
+      { id: 'quote', name: '모두의견적서', desc: '견적서 앱', connected: false, note: '데이터 위치 조사 필요' },
+      { id: 'lottocheck', name: '로또체크', desc: '로또 번호 확인 앱', connected: false, note: '데이터 위치 조사 필요' },
+    ];
+
+    const $ = (id) => document.getElementById(id);
+    const show = (id, on) => $(id).classList.toggle('hidden', !on);
+
+    function renderApps() {
+      const grid = $('appGrid');
+      grid.innerHTML = '';
+      for (const app of APPS) {
+        const card = document.createElement('div');
+        card.className = 'card';
+        const badge = app.connected ? '<span class="badge on">연결됨</span>' : '<span class="badge">연결 대기</span>';
+        card.innerHTML = `
+          <h2></h2>
+          <div class="desc"></div>
+          ${badge}
+          <div class="stats" id="stats-${app.id}"></div>
+          <div class="desc" style="margin:10px 0 0;font-size:12px;color:var(--muted)"></div>`;
+        card.querySelector('h2').textContent = app.name;
+        card.querySelector('.desc').textContent = app.desc;
+        card.lastElementChild.textContent = app.connected ? '' : app.note;
+        grid.appendChild(card);
+      }
+    }
+
+    // 앱을 연결할 때 여기에 읽기 코드를 추가한다. 예) 수호대: Firestore 'battles' 컬렉션을 읽어 클리어율 계산.
+    async function loadStats(_user) {
+      // 지금은 연결된 앱이 없어 할 일이 없다.
+    }
+
+    function setStats(appId, pairs) {
+      const el = $('stats-' + appId);
+      if (!el) return;
+      el.innerHTML = '';
+      for (const [k, v] of pairs) {
+        const box = document.createElement('div');
+        box.className = 'stat';
+        box.innerHTML = '<div class="v"></div><div class="k"></div>';
+        box.querySelector('.v').textContent = String(v);
+        box.querySelector('.k').textContent = k;
+        el.appendChild(box);
+      }
+    }
+    window.__setStats = setStats; // 연결 작업 때 콘솔에서 시험해 보기 위한 용도
+
+    const configured = Object.values(FIREBASE_CONFIG).every((v) => v !== '');
+    if (!configured) {
+      show('signedOut', false);
+      show('needsSetup', true);
+    } else {
+      const app = initializeApp(FIREBASE_CONFIG);
+      const auth = getAuth(app);
+
+      $('signInBtn').addEventListener('click', async () => {
+        $('authMsg').textContent = '';
+        try {
+          await signInWithPopup(auth, new GoogleAuthProvider());
+        } catch (e) {
+          $('authMsg').textContent = '로그인하지 못했습니다. 창을 닫았거나 팝업이 막혔는지 확인하세요.';
+        }
+      });
+      $('signOutBtn').addEventListener('click', () => signOut(auth));
+
+      onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+          show('who', false); show('dashboard', false); show('signedOut', true);
+          return;
+        }
+        const email = (user.email || '').toLowerCase();
+        if (!ALLOWED_EMAILS.includes(email) || user.emailVerified === false) {
+          await signOut(auth);
+          $('authMsg').textContent = '이 계정은 접근할 수 없습니다.';
+          return;
+        }
+        $('mail').textContent = email;
+        show('who', true); show('signedOut', false); show('dashboard', true);
+        renderApps();
+        loadStats(user).catch(() => {});
+      });
+    }
+  </script>
+</body>
+</html>
