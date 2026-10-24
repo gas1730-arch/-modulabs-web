@@ -181,7 +181,7 @@
         <button data-days="90">90일</button>
         <input type="date" id="uhFrom" /> ~ <input type="date" id="uhTo" />
         <button class="primary" id="uhLoad">불러오기</button>
-        <span class="hint">하루 = 한국 오전 9시 ~ 다음 날 오전 9시(게임 하루)</span>
+        <span class="hint">하루 = 한국 시간 자정 ~ 자정</span>
       </div>
 
       <div class="pane" id="pane-overview">
@@ -352,7 +352,7 @@
     const fmt = (n) => (Math.round(n * 10) / 10).toLocaleString('ko-KR');
     const won = (n) => '₩' + Math.round(n).toLocaleString('ko-KR');
     const pct = (a, b) => (b > 0 ? Math.round((a / b) * 1000) / 10 + '%' : '-');
-    const today = () => new Date().toISOString().slice(0, 10);
+    const today = () => new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10); // 한국 날짜(자정에 바뀐다, 서버 집계와 같은 기준)
     const addDays = (d, n) => new Date(Date.parse(d) + n * 86400000).toISOString().slice(0, 10);
     const uhMsg = (t, bad = false) => { $('uhMsg').textContent = t; $('uhMsg').style.color = bad ? 'var(--warn)' : 'var(--text-2)'; };
     const errText = (e) => (e && e.message ? e.message : String(e));
@@ -430,7 +430,7 @@
       const sales = {};
       for (const p of r.purchases) if (!p.test) sales[p.day] = (sales[p.day] ?? 0) + p.krw;
       const list = [];
-      // 기록이 처음 들어온 날부터만 보인다(그 전 날짜는 빈 줄이라 평균만 깎는다). 이용 기록은 2026-10-24(앱 1.0.9)부터
+      // 기록이 처음 들어온 날부터만 보인다(그 전 날짜는 빈 줄이라 평균만 깎는다). 이용 기록은 앱 1.0.9부터
       const first = [...r.days.map((d) => d.day), ...r.purchases.map((p) => p.day)].sort()[0];
       if (first) for (let d = r.to; d >= (first > r.from ? first : r.from); d = addDays(d, -1)) list.push(d);
       const g = (d, k) => (byDay[d]?.[k] ?? 0);
