@@ -781,7 +781,7 @@
           <tr><th>Google LLC 및 광고 파트너</th><td>Google AdMob</td><td>광고 식별자, IP 주소, 대략적 위치, 기기정보, 광고 노출·클릭·시청 및 앱 사용정보</td><td>광고 제공, 맞춤형 광고, 성과 측정, 부정행위 방지</td><td>Google 및 광고 파트너의 정책에 따른 기간</td></tr>
           <tr><th>Google LLC 및 Google Play 결제 관련 법인</th><td>Google Play Billing</td><td>상품 ID, 주문·거래 ID, 구매 토큰, 구매일시 및 구매·환불 상태</td><td>결제 처리, 구매 확인, 상품 지급, 구매 복원, 환불 및 부정거래 방지</td><td>Google 정책 및 관계 법령에 따른 기간</td></tr>
 <tr><th>Apple Inc.</th><td>App Store 인앱 구매, App Tracking Transparency (iOS)</td><td>상품 ID, 거래 ID, 구매일시 및 구매·환불 상태, 추적 허용 여부</td><td>결제 처리, 구매 확인, 상품 지급, 구매 복원, 환불, 추적 허용 관리</td><td>Apple 정책 및 관계 법령에 따른 기간</td></tr>
-<tr><th>Google LLC (Google Cloud·Firebase)</th><td>순위표·대전 서버 (Firebase 익명 인증, Cloud Firestore, Cloud Functions 서울 리전)</td><td>익명 계정 번호, 게임용 ID, 함장 이름, 순위·대전 기록, 트로피, 전투력, 진영 배치, 칭호·계급·프로필 테두리, 스킨 조각 보유 수, 대전 보고서, 우편·상점 이용 기록, 통신 기록(IP 주소 등)</td><td>순위표·대전 기능 제공, 기록 보관, 주간 보상 지급, 비정상 이용 방지</td><td>서비스 운영 기간 또는 이용자 삭제 요청 시까지 (Google의 통신 기록은 Google 정책에 따름)</td></tr>
+<tr><th>Google LLC (Google Cloud·Firebase)</th><td>순위표·대전 서버 (Firebase 익명 인증, Cloud Firestore, Cloud Functions 서울 리전)</td><td>익명 계정 번호, 게임용 ID, 함장 이름, 순위·대전 기록, 트로피, 전투력, 진영 배치, 칭호·계급·프로필 테두리, 스킨 조각 보유 수, 대전 보고서, 우편·상점 이용 기록, 게임 이용 기록(접속·전투·광고·진행·보유 재화·기기 정보), 통신 기록(IP 주소 등)</td><td>순위표·대전 기능 제공, 기록 보관, 주간 보상 지급, 비정상 이용 방지, 이용 통계 분석 및 게임 균형 조정</td><td>서비스 운영 기간 또는 이용자 삭제 요청 시까지 (Google의 통신 기록은 Google 정책에 따름)</td></tr>
 <tr><th>Google LLC (Google Cloud)</th><td>구매 확인 서버 호스팅 (Cloud Functions, 서울 리전)</td><td>구매 토큰 또는 Apple 서명 거래 정보, 상품 ID, 상품 유형, 패키지명, 플랫폼(저장되는 정보: 구매 식별 해시값, 익명 계정 번호, 상품 ID, 구매 시각, 시험 결제 여부, 기록 시각)</td><td>구매가 정상인지 확인(Google Play 개발자 API 조회, Apple 영수증 서명 검증), 중복 지급 방지</td><td>구매 토큰·영수증 원문은 저장하지 않음. 구매 기록은 서비스 운영 기간 동안 보관</td></tr>
 <tr><th>650 Industries, Inc. (Expo)</th><td>앱 업데이트 서버</td><td>IP 주소, 플랫폼, 앱 버전, 업데이트 식별자</td><td>앱 업데이트 확인 및 전송</td><td>Expo 정책에 따른 기간</td></tr>
 <tr><th>Google LLC</th><td>서버 시각 확인 (www.google.com)</td><td>IP 주소</td><td>서버 시각 기준 기능(에너지, 도전 횟수, 주간 보상 등)의 운영</td><td>Google 정책에 따른 기간</td></tr>
@@ -804,7 +804,7 @@
       <table class="data-table">
         <thead><tr><th>이전받는 자</th><th>이전되는 국가</th><th>이전 항목</th><th>이전 목적</th><th>이전 시기·방법</th></tr></thead>
         <tbody>
-          <tr><th>Google LLC 및 그 계열사</th><td>미국 및 Google의 데이터센터가 위치한 국가</td><td>광고 식별자, IP 주소, 기기정보, 광고 이용정보, 상품 ID, 거래 ID, 구매 토큰 및 구매상태, 익명 계정 번호, 함장 이름, 순위·대전 기록, 대전 보고서, 스킨 조각 보유 수</td><td>광고, 결제, 보안, 순위표·대전 서비스, 서버 시각 확인 제공</td><td>관련 기능 이용 시 암호화된 네트워크를 통한 전송</td></tr>
+          <tr><th>Google LLC 및 그 계열사</th><td>미국 및 Google의 데이터센터가 위치한 국가</td><td>광고 식별자, IP 주소, 기기정보, 광고 이용정보, 상품 ID, 거래 ID, 구매 토큰 및 구매상태, 익명 계정 번호, 함장 이름, 순위·대전 기록, 대전 보고서, 스킨 조각 보유 수, 게임 이용 기록</td><td>광고, 결제, 보안, 순위표·대전 서비스, 서버 시각 확인 제공, 이용 통계 분석</td><td>관련 기능 이용 시 암호화된 네트워크를 통한 전송</td></tr>
 <tr><th>Apple Inc.</th><td>미국 및 Apple의 데이터센터가 위치한 국가</td><td>상품 ID, 거래 ID, 구매일시, 구매상태, 추적 허용 여부 (iOS)</td><td>인앱 구매 처리, 추적 허용 관리</td><td>관련 기능 이용 시 암호화된 네트워크를 통한 전송</td></tr>
 <tr><th>650 Industries, Inc. (Expo)</th><td>미국</td><td>IP 주소, 플랫폼, 앱 버전, 업데이트 식별자</td><td>앱 업데이트 확인 및 전송</td><td>앱 실행 시 암호화된 네트워크를 통한 전송</td></tr>
 </tbody>
