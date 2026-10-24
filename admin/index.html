@@ -83,6 +83,36 @@
     .stat .v { font-family: var(--font-display); font-size: 20px; font-weight: 700; }
     .stat .k { font-size: 11px; color: var(--muted); }
     .hidden { display: none !important; }
+
+    /* 언더 해치 대시보드 */
+    #uh .wide, #uh { max-width: 100%; }
+    .uh-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+    .uh-head h1 { margin: 0; }
+    .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .tabs button.on, .range button.on { border-color: var(--cyan); color: var(--cyan); }
+    .range, .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
+    input, textarea { font-family: inherit; font-size: 14px; background: var(--bg-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: 8px; padding: 7px 10px; }
+    input[type=number] { width: 90px; }
+    #pid { min-width: 240px; }
+    label { font-size: 13px; color: var(--text-2); display: inline-flex; gap: 6px; align-items: center; }
+    .hint { font-size: 12px; color: var(--muted); }
+    .msg { font-size: 13px; min-height: 20px; margin-bottom: 6px; color: var(--text-2); }
+    h3 { font-size: 14px; margin: 18px 0 8px; color: var(--text-2); }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+    .stat .s { font-size: 11px; color: var(--text-2); }
+    .tablewrap { overflow-x: auto; border: 1px solid var(--border); border-radius: 10px; }
+    table { border-collapse: collapse; width: 100%; font-size: 13px; }
+    th, td { padding: 6px 10px; border-bottom: 1px solid var(--border); text-align: left; white-space: nowrap; vertical-align: top; }
+    th { color: var(--muted); font-weight: 500; background: var(--bg-2); }
+    td.pre { white-space: pre; font-family: var(--font-mono); font-size: 11px; color: var(--text-2); }
+    td.empty { color: var(--muted); text-align: center; }
+    tr.bad td { color: var(--warn); }
+    table.kv th { width: 160px; }
+    #playerBox table { margin-bottom: 14px; }
+    .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+    .form { display: flex; flex-direction: column; gap: 8px; }
+    .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    button.danger { border-color: var(--warn); color: var(--warn); }
   </style>
 </head>
 <body>
@@ -126,6 +156,104 @@
       <div class="grid" id="appGrid"></div>
     </section>
 
+    <!-- 언더 해치 대시보드(2026-10-25): 언더 해치 파이어베이스(cucumber-defense)로 한 번 더 구글 로그인한 뒤, 서버 관리자 함수(admin*)로 읽고 쓴다 -->
+    <section class="hidden" id="uh">
+      <div class="uh-head">
+        <button id="uhBack">← 앱 목록</button>
+        <h1>언더 해치</h1>
+        <span class="badge on" id="uhWho"></span>
+      </div>
+      <div class="tabs" id="uhTabs">
+        <button data-tab="overview" class="on">개요</button>
+        <button data-tab="stages">스테이지</button>
+        <button data-tab="flow">광고·흐름</button>
+        <button data-tab="sales">매출</button>
+        <button data-tab="raw">원본 기록</button>
+        <button data-tab="player">플레이어</button>
+        <button data-tab="post">공지·우편</button>
+      </div>
+      <p class="msg" id="uhMsg"></p>
+
+      <!-- 기간(개요·스테이지·광고·매출 공용) -->
+      <div class="range" id="uhRange">
+        <button data-days="7">7일</button>
+        <button data-days="30" class="on">30일</button>
+        <button data-days="90">90일</button>
+        <input type="date" id="uhFrom" /> ~ <input type="date" id="uhTo" />
+        <button class="primary" id="uhLoad">불러오기</button>
+        <span class="hint">하루 = 한국 오전 9시 ~ 다음 날 오전 9시(게임 하루)</span>
+      </div>
+
+      <div class="pane" id="pane-overview">
+        <div class="kpis" id="kpis"></div>
+        <h3>날짜별</h3>
+        <div class="tablewrap"><table id="dayTable"></table></div>
+      </div>
+      <div class="pane hidden" id="pane-stages">
+        <p class="hint">실패율이 높은 스테이지가 난이도 조정 후보입니다(빨간 줄 = 실패율 60% 이상). 나가기는 중간에 그만둔 판.</p>
+        <div class="tablewrap"><table id="stageTable"></table></div>
+      </div>
+      <div class="pane hidden" id="pane-flow">
+        <div class="cols">
+          <div><h3>광고(어디서 · 끝까지 / 중간에 닫음)</h3><div class="tablewrap"><table id="adTable"></table></div></div>
+          <div><h3>처음 흐름 · 기타</h3><div class="tablewrap"><table id="flowTable"></table></div></div>
+          <div><h3>많이 쓴 무기(판 수)</h3><div class="tablewrap"><table id="weaponTable"></table></div></div>
+        </div>
+      </div>
+      <div class="pane hidden" id="pane-sales">
+        <div class="kpis" id="saleKpis"></div>
+        <div class="cols">
+          <div><h3>상품별</h3><div class="tablewrap"><table id="saleByItem"></table></div></div>
+          <div><h3>최근 구매</h3><div class="tablewrap"><table id="saleList"></table></div></div>
+        </div>
+      </div>
+      <div class="pane hidden" id="pane-raw">
+        <div class="row">
+          <input type="date" id="rawDay" />
+          <button class="primary" id="rawLoad">이 날 불러오기</button>
+          <button id="rawMore" class="hidden">더 보기</button>
+          <span class="hint">사람마다 그날 기록이 한 줄. 기본은 오늘, 과거 날짜를 골라 불러온다(30일 이전도 됨)</span>
+        </div>
+        <div class="tablewrap"><table id="rawTable"></table></div>
+      </div>
+      <div class="pane hidden" id="pane-player">
+        <div class="row">
+          <input id="pid" placeholder="플레이어 ID(설정창 '내 ID')" />
+          <button class="primary" id="pidFind">찾기</button>
+        </div>
+        <div id="playerBox"></div>
+      </div>
+      <div class="pane hidden" id="pane-post">
+        <div class="cols">
+          <div class="form">
+            <h3>공지 쓰기</h3>
+            <input id="nId" placeholder="문서 ID(비우면 자동, 같은 ID면 고치기)" />
+            <input id="nTitle" placeholder="제목" maxlength="60" />
+            <textarea id="nBody" rows="6" placeholder="내용(줄바꿈 가능)"></textarea>
+            <button class="primary" id="nSave">공지 올리기</button>
+            <h3>올라간 공지</h3>
+            <div id="noticeList"></div>
+          </div>
+          <div class="form">
+            <h3>우편 보내기</h3>
+            <input id="mTo" placeholder="받는 사람 플레이어 ID(비우면 전체)" />
+            <input id="mTitle" placeholder="제목" maxlength="60" />
+            <textarea id="mBody" rows="4" placeholder="내용"></textarea>
+            <div class="row">
+              <label>다이아 <input id="mDia" type="number" min="0" value="0" /></label>
+              <label>코인 <input id="mCoin" type="number" min="0" value="0" /></label>
+              <label>강철판 <input id="mSteel" type="number" min="0" value="0" /></label>
+              <label>에너지 <input id="mEnergy" type="number" min="0" value="0" /></label>
+              <label>기한(일) <input id="mDays" type="number" min="1" max="365" value="30" /></label>
+            </div>
+            <button class="primary" id="mSend">우편 보내기</button>
+            <h3>보낸 우편</h3>
+            <div id="mailList"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <script type="module">
@@ -133,6 +261,7 @@
     import {
       getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged,
     } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-functions.js';
 
     // ── 설정 (형이 Firebase 콘솔에서 복사해 넣는 곳) ─────────────────────────────
     // Firebase 콘솔 → 프로젝트 설정 → 일반 → 내 앱 → 웹 앱(</>) 추가 → 'firebaseConfig' 값을 그대로 붙여 넣는다.
@@ -151,7 +280,7 @@
     // connected: true로 바꾸고 아래 loadStats()에 그 앱의 읽기 코드를 붙이면 숫자가 채워진다.
     const APPS = [
       { id: 'cucumber', name: '오이밭 수호대', desc: '타워디펜스 · Android / iOS', connected: false, note: '앱이 통계를 보내도록 고친 뒤 연결' },
-      { id: 'underhatch', name: '언더 해치', desc: '순위표·대전 서버(Firebase)', connected: false, note: '기존 데이터 위치 확인 후 연결' },
+      { id: 'underhatch', name: '언더 해치', desc: '이용 기록·매출·공지·우편(Firebase cucumber-defense)', connected: true, open: () => window.__openUnderHatch() },
       { id: 'quote', name: '모두의견적서', desc: '견적서 앱', connected: false, note: '데이터 위치 조사 필요' },
       { id: 'lottocheck', name: '로또체크', desc: '로또 번호 확인 앱', connected: false, note: '데이터 위치 조사 필요' },
     ];
@@ -175,6 +304,14 @@
         card.querySelector('h2').textContent = app.name;
         card.querySelector('.desc').textContent = app.desc;
         card.lastElementChild.textContent = app.connected ? '' : app.note;
+        if (app.open) {
+          const b = document.createElement('button');
+          b.className = 'primary';
+          b.style.marginTop = '12px';
+          b.textContent = '대시보드 열기';
+          b.addEventListener('click', app.open);
+          card.appendChild(b);
+        }
         grid.appendChild(card);
       }
     }
@@ -199,6 +336,314 @@
     }
     window.__setStats = setStats; // 연결 작업 때 콘솔에서 시험해 보기 위한 용도
 
+    // ── 언더 해치(2026-10-25): 데이터는 언더 해치 파이어베이스(cucumber-defense). 그 프로젝트로 한 번 더 구글 로그인하고, 서버 관리자 함수만 쓴다 ──
+    // 진짜 차단은 서버(functions/index.js 의 needAdmin: 형 구글 계정만)가 한다. 이 값들은 웹에 공개되는 값이다.
+    const UH_CONFIG = {
+      apiKey: 'AIzaSyAPjS9MhqwCMztIe6aSUPtyB9DDQpXgf1Y',
+      authDomain: 'cucumber-defense.firebaseapp.com',
+      projectId: 'cucumber-defense',
+      appId: '1:941374602913:web:ed56cddb245c14082bbae0',
+    };
+    const uhApp = initializeApp(UH_CONFIG, 'underhatch');
+    const uhAuth = getAuth(uhApp);
+    const uhFns = getFunctions(uhApp, 'asia-northeast3');
+    const call = async (name, data = {}) => (await httpsCallable(uhFns, name)(data)).data;
+
+    const fmt = (n) => (Math.round(n * 10) / 10).toLocaleString('ko-KR');
+    const won = (n) => '₩' + Math.round(n).toLocaleString('ko-KR');
+    const pct = (a, b) => (b > 0 ? Math.round((a / b) * 1000) / 10 + '%' : '-');
+    const today = () => new Date().toISOString().slice(0, 10);
+    const addDays = (d, n) => new Date(Date.parse(d) + n * 86400000).toISOString().slice(0, 10);
+    const uhMsg = (t, bad = false) => { $('uhMsg').textContent = t; $('uhMsg').style.color = bad ? 'var(--warn)' : 'var(--text-2)'; };
+    const errText = (e) => (e && e.message ? e.message : String(e));
+
+    // 표 그리기(글자는 전부 textContent 로: 플레이어 이름 등이 화면을 망가뜨리지 않게)
+    function table(id, head, rows, rowClass) {
+      const t = $(id);
+      t.innerHTML = '';
+      const tr = document.createElement('tr');
+      for (const h of head) { const th = document.createElement('th'); th.textContent = h; tr.appendChild(th); }
+      t.appendChild(tr);
+      rows.forEach((r, i) => {
+        const row = document.createElement('tr');
+        if (rowClass) row.className = rowClass(r, i) || '';
+        for (const c of r) { const td = document.createElement('td'); td.textContent = c === undefined || c === null ? '' : String(c); row.appendChild(td); }
+        t.appendChild(row);
+      });
+      if (rows.length === 0) { const row = document.createElement('tr'); const td = document.createElement('td'); td.colSpan = head.length; td.textContent = '기록이 없습니다'; td.className = 'empty'; row.appendChild(td); t.appendChild(row); }
+    }
+    function kpis(id, pairs) {
+      const el = $(id);
+      el.innerHTML = '';
+      for (const [k, v, sub] of pairs) {
+        const box = document.createElement('div');
+        box.className = 'stat';
+        box.innerHTML = '<div class="v"></div><div class="k"></div><div class="s"></div>';
+        box.querySelector('.v').textContent = v;
+        box.querySelector('.k').textContent = k;
+        box.querySelector('.s').textContent = sub || '';
+        el.appendChild(box);
+      }
+    }
+
+    // ── 탭 ──
+    let tab = 'overview';
+    function setTab(t) {
+      tab = t;
+      document.querySelectorAll('#uhTabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
+      document.querySelectorAll('#uh .pane').forEach((p) => p.classList.toggle('hidden', p.id !== 'pane-' + t));
+      $('uhRange').classList.toggle('hidden', !['overview', 'stages', 'flow', 'sales'].includes(t));
+      uhMsg('');
+      if (t === 'post') { loadNotices(); loadMails(); }
+    }
+    document.querySelectorAll('#uhTabs button').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab)));
+
+    // ── 기간 ──
+    function setDays(n) {
+      $('uhTo').value = today();
+      $('uhFrom').value = addDays(today(), -(n - 1));
+      document.querySelectorAll('#uhRange button[data-days]').forEach((b) => b.classList.toggle('on', Number(b.dataset.days) === n));
+    }
+    document.querySelectorAll('#uhRange button[data-days]').forEach((b) => b.addEventListener('click', () => { setDays(Number(b.dataset.days)); loadUhStats(); }));
+    $('uhLoad').addEventListener('click', () => loadUhStats());
+
+    // ── 개요·스테이지·광고·매출(한 번에 받아서 나눠 그림) ──
+    let last = null;
+    async function loadUhStats() {
+      uhMsg('불러오는 중…');
+      try {
+        last = await call('adminStats', { from: $('uhFrom').value, to: $('uhTo').value });
+        drawOverview(last); drawStages(last); drawFlow(last); drawSales(last);
+        uhMsg(`${last.from} ~ ${last.to}`);
+      } catch (e) {
+        uhMsg('불러오지 못했습니다: ' + errText(e), true);
+      }
+    }
+    const sumKeys = (days, pre) => {
+      const out = {};
+      for (const d of days) for (const [k, v] of Object.entries(d)) if (k.startsWith(pre) && typeof v === 'number') out[k] = (out[k] ?? 0) + v;
+      return out;
+    };
+    function drawOverview(r) {
+      const byDay = Object.fromEntries(r.days.map((d) => [d.day, d]));
+      const sales = {};
+      for (const p of r.purchases) if (!p.test) sales[p.day] = (sales[p.day] ?? 0) + p.krw;
+      const list = [];
+      for (let d = r.to; d >= r.from; d = addDays(d, -1)) list.push(d);
+      const g = (d, k) => (byDay[d]?.[k] ?? 0);
+      const tot = (k) => list.reduce((a, d) => a + g(d, k), 0);
+      const dau = tot('dau'), ses = tot('sessions'), sec = tot('play_sec'), nu = tot('new_users');
+      // 재방문율: 설치일이 기간 안이고, 1일(7일) 뒤가 이미 지난 날만 센다
+      const done1 = list.filter((d) => addDays(d, 1) < today()), done7 = list.filter((d) => addDays(d, 7) < today());
+      const r1 = done1.reduce((a, d) => a + g(d, 'ret1'), 0), n1 = done1.reduce((a, d) => a + g(d, 'new_users'), 0);
+      const r7 = done7.reduce((a, d) => a + g(d, 'ret7'), 0), n7 = done7.reduce((a, d) => a + g(d, 'new_users'), 0);
+      const revenue = Object.values(sales).reduce((a, b) => a + b, 0);
+      kpis('kpis', [
+        ['매출(시험 결제 제외)', won(revenue), `${r.purchases.filter((p) => !p.test).length}건`],
+        ['하루 평균 접속자', fmt(dau / list.length), `연인원 ${dau.toLocaleString('ko-KR')}`],
+        ['1인 하루 평균 접속', dau > 0 ? fmt(ses / dau) + '번' : '-', `총 접속 ${ses.toLocaleString('ko-KR')}`],
+        ['접속 1번 평균', ses > 0 ? fmt(sec / ses / 60) + '분' : '-', `하루 총 ${fmt(sec / 3600 / list.length)}시간`],
+        ['새 설치', nu.toLocaleString('ko-KR'), ''],
+        ['1일 뒤 재방문', pct(r1, n1), `7일 뒤 ${pct(r7, n7)}`],
+      ]);
+      const maxDau = Math.max(1, ...list.map((d) => g(d, 'dau')));
+      table('dayTable', ['날짜', '접속자', '그래프', '접속', '플레이(분)', '새 설치', '1일 뒤', '7일 뒤', '일반 판', '지옥 판', '매출'], list.map((d) => [
+        d, g(d, 'dau'), '█'.repeat(Math.round((g(d, 'dau') / maxDau) * 20)), g(d, 'sessions'), fmt(g(d, 'play_sec') / 60), g(d, 'new_users'),
+        g(d, 'new_users') ? pct(g(d, 'ret1'), g(d, 'new_users')) : '', g(d, 'new_users') ? pct(g(d, 'ret7'), g(d, 'new_users')) : '',
+        g(d, 'runs_normal'), g(d, 'runs_hell'), sales[d] ? won(sales[d]) : '',
+      ]));
+    }
+    function drawStages(r) {
+      const agg = {};
+      for (const s of r.stages) for (const [k, v] of Object.entries(s)) {
+        if (k === 'day' || typeof v !== 'number') continue;
+        const m = k.match(/^(.+)_(\d+)_([a-z0-9]+)$/);
+        if (!m) continue;
+        const key = `${m[1]}_${m[2]}`;
+        agg[key] = agg[key] ?? { mode: m[1], st: Number(m[2]) };
+        agg[key][m[3]] = (agg[key][m[3]] ?? 0) + v;
+      }
+      const MODE = { normal: '일반', hell: '지옥', ranked: '랭킹전', endless: '무한전', coop: '협동', multi: '멀티' };
+      const rows = Object.values(agg).sort((a, b) => (a.mode === b.mode ? a.st - b.st : a.mode < b.mode ? 1 : -1)).map((a) => {
+        const n = (a.clear ?? 0) + (a.fail ?? 0) + (a.quit ?? 0);
+        return [MODE[a.mode] ?? a.mode, a.st, n, a.clear ?? 0, a.fail ?? 0, a.quit ?? 0, pct(a.fail ?? 0, n), n ? fmt((a.sec ?? 0) / n / 60) + '분' : '', n ? fmt((a.lv ?? 0) / n) : '', a.t25n ? fmt(a.t25 / a.t25n / 60) + '분' : '', (a.fail ?? 0) / Math.max(1, n)];
+      });
+      table('stageTable', ['모드', '스테이지', '도전', '클리어', '실패', '나가기', '실패율', '평균 시간', '평균 도달 레벨', '25레벨까지'], rows.map((x) => x.slice(0, 10)), (x, i) => (rows[i][10] >= 0.6 && rows[i][2] >= 5 ? 'bad' : ''));
+    }
+    function drawFlow(r) {
+      const ad = sumKeys(r.days, 'ad_');
+      const places = {};
+      for (const [k, v] of Object.entries(ad)) {
+        const m = k.match(/^ad_(.+)_(ok|no)$/);
+        if (!m) continue;
+        places[m[1]] = places[m[1]] ?? { ok: 0, no: 0 };
+        places[m[1]][m[2]] += v;
+      }
+      const NAME = { patrol: '순찰 2배', patrol_quick: '빠른 순찰', energy: '에너지 충전', deal: '특가 무료', double: '결과 2배', coin: '코인 무료', arena: '경기장 추가 판', repair: '긴급 수리', reroll: '카드 다시 뽑기', speed: '배속', etc: '기타' };
+      table('adTable', ['어디서', '끝까지', '중간에 닫음', '완료율'], Object.entries(places).sort((a, b) => b[1].ok - a[1].ok).map(([k, v]) => [NAME[k] ?? k, v.ok, v.no, pct(v.ok, v.ok + v.no)]));
+      const t = (k) => r.days.reduce((a, d) => a + (d[k] ?? 0), 0);
+      const tut = sumKeys(r.days, 'tut_');
+      table('flowTable', ['항목', '수'], [
+        ['오프닝 끝까지 봄', t('intro_done')], ['오프닝 건너뜀', t('intro_skip')], ['튜토리얼 \'앞으로 보지 않기\'', t('tut_skip')],
+        ['에너지가 모자라 시작 못 함', t('energy_block')], ['프리미엄 패스권으로 광고 건너뜀', t('ad_skip')],
+        ...Object.entries(tut).filter(([k]) => k !== 'tut_skip').sort((a, b) => b[1] - a[1]).map(([k, v]) => ['튜토리얼 ' + k.slice(4), v]),
+      ]);
+      const w = sumKeys(r.days, 'weapon_');
+      table('weaponTable', ['무기', '판 수'], Object.entries(w).sort((a, b) => b[1] - a[1]).map(([k, v]) => [k.slice(7), v]));
+    }
+    function drawSales(r) {
+      const real = r.purchases.filter((p) => !p.test);
+      const byItem = {};
+      for (const p of real) { byItem[p.storeId] = byItem[p.storeId] ?? { n: 0, krw: 0 }; byItem[p.storeId].n++; byItem[p.storeId].krw += p.krw; }
+      const total = real.reduce((a, p) => a + p.krw, 0);
+      const buyers = new Set(real.map((p) => p.uid)).size;
+      kpis('saleKpis', [['매출', won(total), `${real.length}건`], ['결제한 사람', buyers.toLocaleString('ko-KR'), buyers ? '1인 평균 ' + won(total / buyers) : ''], ['시험 결제', String(r.purchases.length - real.length) + '건', '라이선스·샌드박스']]);
+      table('saleByItem', ['상품', '건수', '금액'], Object.entries(byItem).sort((a, b) => b[1].krw - a[1].krw).map(([k, v]) => [k, v.n, won(v.krw)]));
+      table('saleList', ['시각', '상품', '금액', '시험', '계정'], [...r.purchases].sort((a, b) => b.time - a.time).slice(0, 100).map((p) => [new Date(p.time).toLocaleString('ko-KR'), p.storeId, won(p.krw), p.test ? '시험' : '', (p.uid ?? '').slice(0, 8)]));
+    }
+
+    // ── 원본 기록(하루씩, 50명씩) ──
+    let rawAfter = '';
+    async function loadRaw(more = false) {
+      if (!more) { rawAfter = ''; table('rawTable', ['계정', '버전', '폰', '언어', '기록 수', '기록'], []); }
+      uhMsg('불러오는 중…');
+      try {
+        const r = await call('adminRaw', { day: $('rawDay').value || today(), limit: 50, after: rawAfter });
+        const t = $('rawTable');
+        for (const x of r.list) {
+          const row = document.createElement('tr');
+          const ev = (x.ev ?? []).slice().sort((a, b) => a.t - b.t).map((e) => new Date(e.t).toTimeString().slice(0, 5) + ' ' + e.k + ' ' + Object.entries(e).filter(([k]) => k !== 'k' && k !== 't').map(([k, v]) => k + '=' + v).join(' ')).join('\n');
+          for (const c of [(x.uid ?? '').slice(0, 10), x.v, x.os, x.lang, (x.ev ?? []).length, ev]) { const td = document.createElement('td'); td.textContent = String(c ?? ''); row.appendChild(td); }
+          row.lastChild.className = 'pre';
+          t.appendChild(row);
+        }
+        rawAfter = r.list.length ? r.list[r.list.length - 1].id : rawAfter;
+        $('rawMore').classList.toggle('hidden', !r.more);
+        uhMsg(`${r.day} · ${r.list.length}명`);
+      } catch (e) {
+        uhMsg('불러오지 못했습니다: ' + errText(e), true);
+      }
+    }
+    $('rawLoad').addEventListener('click', () => loadRaw(false));
+    $('rawMore').addEventListener('click', () => loadRaw(true));
+
+    // ── 플레이어 ──
+    async function findPlayer() {
+      const pid = $('pid').value.trim();
+      if (!pid) return;
+      uhMsg('찾는 중…');
+      const box = $('playerBox');
+      box.innerHTML = '';
+      try {
+        const r = await call('adminLookup', { pid });
+        const lines = [
+          ['계정 번호', r.uid],
+          ['처음 설치한 날', r.user?.inst ?? '-'],
+          ['마지막 접속', r.user?.last ? new Date(r.user.last).toLocaleString('ko-KR') : '-'],
+          ['폰', r.user?.os ?? '-'],
+          ['기록이 있는 날 수', r.activeDays],
+          ['이름(경기장)', r.profile?.name ?? '-'],
+          ['트로피 · 전투력', r.profile ? `${r.profile.trophy} · ${r.profile.power}` : '-'],
+          ['일반 최고 기록', r.normal ? `스테이지 ${r.normal.stage ?? '-'}` : '-'],
+          ['지옥 최고 기록', r.hell ? `스테이지 ${r.hell.stage ?? '-'}` : '-'],
+          ['구매', `${r.purchases.length}건 · ${won(r.purchases.filter((p) => !p.test).reduce((a, p) => a + p.krw, 0))}`],
+          ['받은 우편', Object.keys(r.player?.mailClaimed ?? {}).join(', ') || '-'],
+        ];
+        const dl = document.createElement('table');
+        dl.className = 'kv';
+        for (const [k, v] of lines) { const tr = document.createElement('tr'); const a = document.createElement('th'); a.textContent = k; const b = document.createElement('td'); b.textContent = String(v); tr.append(a, b); dl.appendChild(tr); }
+        box.appendChild(dl);
+        const buys = document.createElement('table');
+        box.appendChild(buys);
+        buys.id = 'pBuys';
+        table('pBuys', ['시각', '상품', '금액', '시험'], r.purchases.sort((a, b) => b.time - a.time).map((p) => [new Date(p.time).toLocaleString('ko-KR'), p.storeId, won(p.krw), p.test ? '시험' : '']));
+        const days = document.createElement('table');
+        box.appendChild(days);
+        days.id = 'pDays';
+        table('pDays', ['최근 날짜', '버전', '폰', '기록 수'], r.recentDays.map((d) => [d.day, d.v, d.os, d.n]));
+        const act = document.createElement('div');
+        act.className = 'row';
+        const mk = (label, fn, cls) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
+        mk('이 사람에게 우편', () => { setTab('post'); $('mTo').value = pid; $('mTitle').focus(); });
+        mk('닉네임을 기본 이름으로', async () => {
+          if (!confirm('순위표·경기장에 남은 이 사람 이름을 기본 이름(함장+숫자)으로 바꿀까요?')) return;
+          try { const x = await call('adminRename', { pid }); uhMsg(`바꿨습니다: ${x.name} (${x.changed}곳)`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+        });
+        mk('이용 기록 삭제(요청 처리)', async () => {
+          if (!confirm('이 사람의 이용 기록 원본을 모두 지웁니다. 되돌릴 수 없습니다. 지울까요?')) return;
+          try { const x = await call('adminDeleteStats', { pid }); uhMsg(`지웠습니다: ${x.deleted}일치`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+        }, 'danger');
+        box.appendChild(act);
+        uhMsg('');
+      } catch (e) {
+        uhMsg('찾지 못했습니다: ' + errText(e), true);
+      }
+    }
+    $('pidFind').addEventListener('click', findPlayer);
+
+    // ── 공지·우편 ──
+    function listInto(id, items, onDelete) {
+      const el = $(id);
+      el.innerHTML = '';
+      for (const it of items) {
+        const row = document.createElement('div');
+        row.className = 'item';
+        const t = document.createElement('div');
+        t.textContent = `${new Date(it.at).toLocaleString('ko-KR')} · ${it.title}${it.to ? ' (한 명에게)' : ''}${it.builtIn ? ' (코드에 들어 있는 기본)' : ''}`;
+        row.appendChild(t);
+        if (!it.builtIn) { const b = document.createElement('button'); b.textContent = '지우기'; b.className = 'danger'; b.addEventListener('click', () => onDelete(it.id)); row.appendChild(b); }
+        el.appendChild(row);
+      }
+      if (items.length === 0) el.textContent = '없습니다';
+    }
+    async function loadNotices() {
+      try {
+        const r = await call('adminNotice', {});
+        listInto('noticeList', [...r.list, ...r.builtIn.map((n) => ({ ...n, builtIn: true }))].sort((a, b) => b.at - a.at), async (id) => {
+          if (!confirm('이 공지를 지울까요?')) return;
+          await call('adminNotice', { action: 'delete', id }); loadNotices();
+        });
+      } catch (e) { uhMsg('공지를 불러오지 못했습니다: ' + errText(e), true); }
+    }
+    async function loadMails() {
+      try {
+        const r = await call('adminMail', {});
+        listInto('mailList', [...r.list, ...r.builtIn.map((m) => ({ ...m, builtIn: true }))].sort((a, b) => b.at - a.at), async (id) => {
+          if (!confirm('이 우편을 지울까요? (이미 받은 사람의 선물은 그대로)')) return;
+          await call('adminMail', { action: 'delete', id }); loadMails();
+        });
+      } catch (e) { uhMsg('우편을 불러오지 못했습니다: ' + errText(e), true); }
+    }
+    $('nSave').addEventListener('click', async () => {
+      const title = $('nTitle').value.trim(), body = $('nBody').value;
+      if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
+      if (!confirm('이 공지를 올리면 게임에 바로 보입니다. 올릴까요?')) return;
+      try { await call('adminNotice', { action: 'add', id: $('nId').value.trim(), title, body }); uhMsg('공지를 올렸습니다'); $('nTitle').value = ''; $('nBody').value = ''; $('nId').value = ''; loadNotices(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+    });
+    $('mSend').addEventListener('click', async () => {
+      const title = $('mTitle').value.trim(), body = $('mBody').value;
+      if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
+      const reward = { diamond: Number($('mDia').value) || 0, coin: Number($('mCoin').value) || 0, steel: Number($('mSteel').value) || 0, energy: Number($('mEnergy').value) || 0 };
+      const to = $('mTo').value.trim();
+      const what = Object.entries(reward).filter(([, v]) => v > 0).map(([k, v]) => `${k} ${v}`).join(', ') || '선물 없음';
+      if (!confirm(`${to ? '플레이어 ' + to : '모든 플레이어'}에게 보냅니다.\n선물: ${what}\n보낼까요?`)) return;
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); $('mTitle').value = ''; $('mBody').value = ''; loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+    });
+
+    // ── 열기·닫기 ──
+    async function openUnderHatch() {
+      if (!uhAuth.currentUser) {
+        try { await signInWithPopup(uhAuth, new GoogleAuthProvider()); } catch (e) { alert('언더 해치 로그인을 하지 못했습니다. 팝업이 막혔는지 확인하세요.'); return; }
+      }
+      $('uhWho').textContent = uhAuth.currentUser?.email ?? '';
+      show('dashboard', false); show('uh', true);
+      setDays(30); $('rawDay').value = today();
+      setTab('overview');
+      loadUhStats();
+    }
+    $('uhBack').addEventListener('click', () => { show('uh', false); show('dashboard', true); });
+    window.__openUnderHatch = openUnderHatch;
+
     const configured = Object.values(FIREBASE_CONFIG).every((v) => v !== '');
     if (!configured) {
       show('signedOut', false);
@@ -219,7 +664,8 @@
 
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
-          show('who', false); show('dashboard', false); show('signedOut', true);
+          show('who', false); show('dashboard', false); show('uh', false); show('signedOut', true);
+          signOut(uhAuth).catch(() => {});
           return;
         }
         const email = (user.email || '').toLowerCase();
