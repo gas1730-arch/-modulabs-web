@@ -414,7 +414,8 @@
       try {
         last = await call('adminStats', { from: $('uhFrom').value, to: $('uhTo').value });
         drawOverview(last); drawStages(last); drawFlow(last); drawSales(last);
-        uhMsg(`${last.from} ~ ${last.to}`);
+        const empty = last.days.length === 0 && last.stages.length === 0 && last.purchases.length === 0;
+        uhMsg(`${last.from} ~ ${last.to} · ${new Date().toLocaleTimeString('ko-KR')} 기준` + (empty ? ' · 이 기간에 받은 기록이 없습니다(기록은 앱 1.0.9부터, 폰에서 게임을 켜거나 내릴 때 보냅니다)' : ''));
       } catch (e) {
         uhMsg('불러오지 못했습니다: ' + errText(e), true);
       }
