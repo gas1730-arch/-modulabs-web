@@ -115,6 +115,7 @@
     button.danger { border-color: var(--warn); color: var(--warn); }
     table.clickable tr:not(:first-child) { cursor: pointer; }
     table.clickable tr:not(:first-child):hover td { background: var(--bg-2); }
+    .langbox { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; font-size: 13px; }
     details.pick { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
     details.pick summary { cursor: pointer; font-size: 13px; color: var(--text-2); }
     .pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 10px; margin-top: 8px; }
@@ -248,6 +249,20 @@
             <input id="nId" placeholder="문서 ID(비우면 자동, 같은 ID면 고치기)" />
             <input id="nTitle" placeholder="제목" maxlength="60" />
             <textarea id="nBody" rows="6" placeholder="내용(줄바꿈 가능)"></textarea>
+            <details class="pick"><summary>다른 언어 <span class="hint">비워 두면 그 언어 폰에도 한국어로 보입니다(1.1.0 이후 앱)</span></summary>
+              <div class="langbox"><b>English</b>
+                <input id="nT_en" placeholder="제목(English)" maxlength="60" />
+                <textarea id="nB_en" rows="3" placeholder="내용(English)"></textarea>
+              </div>
+              <div class="langbox"><b>日本語</b>
+                <input id="nT_ja" placeholder="제목(日本語)" maxlength="60" />
+                <textarea id="nB_ja" rows="3" placeholder="내용(日本語)"></textarea>
+              </div>
+              <div class="langbox"><b>繁體中文</b>
+                <input id="nT_zhTW" placeholder="제목(繁體中文)" maxlength="60" />
+                <textarea id="nB_zhTW" rows="3" placeholder="내용(繁體中文)"></textarea>
+              </div>
+            </details>
             <button class="primary" id="nSave">공지 올리기</button>
             <h3>올라간 공지</h3>
             <div id="noticeList"></div>
@@ -269,6 +284,20 @@
             </div>
             <input id="mTitle" placeholder="제목" maxlength="60" />
             <textarea id="mBody" rows="4" placeholder="내용"></textarea>
+            <details class="pick"><summary>다른 언어 <span class="hint">비워 두면 그 언어 폰에도 한국어로 보입니다(1.1.0 이후 앱)</span></summary>
+              <div class="langbox"><b>English</b>
+                <input id="mT_en" placeholder="제목(English)" maxlength="60" />
+                <textarea id="mB_en" rows="3" placeholder="내용(English)"></textarea>
+              </div>
+              <div class="langbox"><b>日本語</b>
+                <input id="mT_ja" placeholder="제목(日本語)" maxlength="60" />
+                <textarea id="mB_ja" rows="3" placeholder="내용(日本語)"></textarea>
+              </div>
+              <div class="langbox"><b>繁體中文</b>
+                <input id="mT_zhTW" placeholder="제목(繁體中文)" maxlength="60" />
+                <textarea id="mB_zhTW" rows="3" placeholder="내용(繁體中文)"></textarea>
+              </div>
+            </details>
             <div class="row">
               <label>다이아 <input id="mDia" type="number" min="0" value="0" /></label>
               <label>코인 <input id="mCoin" type="number" min="0" value="0" /></label>
@@ -723,7 +752,7 @@
       const title = $('nTitle').value.trim(), body = $('nBody').value;
       if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
       if (!confirm('이 공지를 올리면 게임에 바로 보입니다. 올릴까요?')) return;
-      try { await call('adminNotice', { action: 'add', id: $('nId').value.trim(), title, body }); uhMsg('공지를 올렸습니다'); $('nTitle').value = ''; $('nBody').value = ''; $('nId').value = ''; loadNotices(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      try { await call('adminNotice', { action: 'add', id: $('nId').value.trim(), title, body, i18n: i18nOf('n') }); uhMsg('공지를 올렸습니다'); clearI18n('n'); $('nTitle').value = ''; $('nBody').value = ''; $('nId').value = ''; loadNotices(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
     // 우편 아이템(형 요청 2026-10-25): 앱(src/ui/turretInfo.ts·src/skins/skins.ts)과 서버(functions/index.js 의 MAIL_PART_KEYS·MAIL_SKIN_IDS)와 같은 목록
     const PART_NAMES = { uni: '공용 부품', sub: '함선 본체', gun: '딥 캐논', pierce: '관통 작살', torpedo: '어뢰', eel_coil: '전기 충격포', water_cannon: '수압 캐논', sonar: '소나', bubble: '기포 포획기', mine: '기뢰', acid: '산성 먹물', lure: '미끼', drone: '드론', cryo: '냉각포' };
@@ -799,6 +828,19 @@
     $('mFromSel').addEventListener('change', syncFrom);
     $('mFromText').addEventListener('input', syncFrom);
     syncFrom();
+    // 다른 언어 칸(형 요청 2026-10-26): { en, ja, 'zh-TW' } 마다 { title, body }. 빈 칸은 보내지 않는다
+    const I18N_KEYS = [['en', 'en'], ['ja', 'ja'], ['zhTW', 'zh-TW']];
+    function i18nOf(prefix) {
+      const out = {};
+      for (const [id, lang] of I18N_KEYS) {
+        const title = $(`${prefix}T_${id}`).value.trim(), body = $(`${prefix}B_${id}`).value;
+        if (title || body.trim()) out[lang] = { title, body };
+      }
+      return out;
+    }
+    function clearI18n(prefix) {
+      for (const [id] of I18N_KEYS) { $(`${prefix}T_${id}`).value = ''; $(`${prefix}B_${id}`).value = ''; }
+    }
     $('mSend').addEventListener('click', async () => {
       const title = $('mTitle').value.trim(), body = $('mBody').value;
       if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
@@ -808,7 +850,7 @@
       const from = fromValue();
       if ($('mFromSel').value === '*' && !from) return uhMsg('보낸 사람 이름을 넣어 주세요', true);
       if (!confirm(`${to ? '플레이어 ' + to : '모든 플레이어'}에게 보냅니다.\n보낸 사람: ${from || '운영팀'}\n선물: ${what}\n보낼까요?`)) return;
-      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
 
     // ── 열기·닫기 ──
