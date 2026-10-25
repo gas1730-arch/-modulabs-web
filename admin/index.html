@@ -450,9 +450,11 @@
         ['1일 뒤 재방문', pct(r1, n1), `7일 뒤 ${pct(r7, n7)}`],
       ]);
       const maxDau = Math.max(1, ...list.map((d) => g(d, 'dau')));
-      table('dayTable', ['날짜', '접속자', '그래프', '접속', '플레이(분)', '새 설치', '1일 뒤', '7일 뒤', '일반 판', '지옥 판', '매출'], list.map((d) => [
-        d, g(d, 'dau'), '█'.repeat(Math.round((g(d, 'dau') / maxDau) * 20)), g(d, 'sessions'), fmt(g(d, 'play_sec') / 60), g(d, 'new_users'),
-        g(d, 'new_users') ? pct(g(d, 'ret1'), g(d, 'new_users')) : '', g(d, 'new_users') ? pct(g(d, 'ret7'), g(d, 'new_users')) : '',
+      // 재방문 칸은 그 날짜가 지나야 채운다(아직 안 온 날을 0%로 보이지 않게)
+      const ret = (d, n) => (g(d, 'new_users') && addDays(d, n) < today() ? pct(g(d, 'ret' + n), g(d, 'new_users')) : '');
+      table('dayTable', ['날짜', '접속자', '그래프', '접속', '플레이(분)', '1인 평균(분)', '새 설치', '1일 뒤', '7일 뒤', '일반 판', '지옥 판', '매출'], list.map((d) => [
+        d, g(d, 'dau'), '█'.repeat(Math.round((g(d, 'dau') / maxDau) * 20)), g(d, 'sessions'), fmt(g(d, 'play_sec') / 60), g(d, 'dau') ? fmt(g(d, 'play_sec') / 60 / g(d, 'dau')) : '', g(d, 'new_users'),
+        ret(d, 1), ret(d, 7),
         g(d, 'runs_normal'), g(d, 'runs_hell'), sales[d] ? won(sales[d]) : '',
       ]));
     }
