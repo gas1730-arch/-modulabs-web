@@ -653,6 +653,13 @@
     const SKIN_GRADE = { ship_abyss: 'legend', ship_gold: 'epic', ship_silver: 'epic', ship_crimson: 'epic', ship_arena: 'epic', ship_orca: 'rare', ship_magma: 'rare', ship_hunter: 'rare', cap_robot: 'rare', ship_research: 'advanced', ship_rescue: 'advanced', ship_reef: 'advanced', ship_polar: 'advanced', cap_diver: 'advanced', cap_young: 'advanced', ship_training: 'common', ship_supply: 'common', ship_patrol: 'common', ship_scrap: 'common' };
     const GRADES = { legend: ['전설', '#f59e0b'], epic: ['영웅', '#a855f7'], rare: ['희귀', '#3b82f6'], advanced: ['고급', '#22c55e'], common: ['일반', '#9ca3af'] };
     const SKIN_UNRELEASED = ['ship_abyss'];
+    // 얻는 곳(앱 skins.ts 의 krw·diamond·fragOnly·arenaOnly 기준)
+    const SKIN_FROM = {
+      ship_research: '상점 ₩3,300 · 다이아 210', ship_orca: '상점 ₩7,700 · 다이아 480', ship_gold: '상점 ₩33,000 · 다이아 2,060', ship_abyss: '상점 ₩55,000 · 다이아 3,440',
+      cap_diver: '상점 ₩3,300 · 다이아 210', cap_young: '상점 ₩3,300 · 다이아 210', cap_robot: '상점 ₩7,700 · 다이아 480',
+      ship_arena: '경기장 상점(경기장 포인트)',
+    };
+    const skinFrom = (k) => SKIN_FROM[k] ?? '스킨 조각(스테이지·랭킹전 보상)';
     const gradeRank = Object.keys(GRADES);
     for (const k of Object.keys(SKIN_NAMES).sort((a, b) => gradeRank.indexOf(SKIN_GRADE[a]) - gradeRank.indexOf(SKIN_GRADE[b]))) {
       const l = document.createElement('label');
@@ -663,7 +670,10 @@
       tag.className = 'grade';
       tag.style.color = gColor;
       tag.style.borderColor = gColor;
-      left.append(tag, ' ' + SKIN_NAMES[k] + (SKIN_UNRELEASED.includes(k) ? ' (출시 전)' : ''));
+      const from = document.createElement('div');
+      from.className = 'hint';
+      from.textContent = skinFrom(k);
+      left.append(tag, ' ' + SKIN_NAMES[k] + (SKIN_UNRELEASED.includes(k) ? ' (출시 전)' : ''), from);
       const i = document.createElement('input');
       Object.assign(i, { type: 'checkbox', disabled: SKIN_UNRELEASED.includes(k) });
       i.dataset.skin = k;
