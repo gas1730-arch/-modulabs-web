@@ -91,7 +91,7 @@
     .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
     .tabs button.on, .range button.on { border-color: var(--cyan); color: var(--cyan); }
     .range, .row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 14px; }
-    input, textarea { font-family: inherit; font-size: 14px; background: var(--bg-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: 8px; padding: 7px 10px; }
+    input, textarea, select { font-family: inherit; font-size: 14px; background: var(--bg-2); color: var(--text); border: 1px solid var(--border-strong); border-radius: 8px; padding: 7px 10px; }
     input[type=number] { width: 90px; }
     #pid { min-width: 240px; }
     label { font-size: 13px; color: var(--text-2); display: inline-flex; gap: 6px; align-items: center; }
@@ -244,6 +244,18 @@
           <div class="form">
             <h3>우편 보내기</h3>
             <input id="mTo" placeholder="받는 사람 플레이어 ID(비우면 전체)" />
+            <div class="row" style="margin-bottom:0">
+              <label>보낸 사람
+                <select id="mFromSel">
+                  <option value="GM_해치">GM_해치</option>
+                  <option value="운영자 해치">운영자 해치</option>
+                  <option value="">운영팀 (언어별로 번역됨)</option>
+                  <option value="개발팀">개발팀</option>
+                  <option value="*">직접 입력</option>
+                </select>
+              </label>
+              <input id="mFromText" class="hidden" maxlength="12" placeholder="보낸 사람 이름(12자까지)" />
+            </div>
             <input id="mTitle" placeholder="제목" maxlength="60" />
             <textarea id="mBody" rows="4" placeholder="내용"></textarea>
             <div class="row">
@@ -604,7 +616,7 @@
         const row = document.createElement('div');
         row.className = 'item';
         const t = document.createElement('div');
-        t.textContent = `${new Date(it.at).toLocaleString('ko-KR')} · ${it.title}${rewardText(it) ? ' — ' + rewardText(it) : ''}${it.to ? ' (한 명에게)' : ''}${it.builtIn ? ' (코드에 들어 있는 기본)' : ''}`;
+        t.textContent = `${new Date(it.at).toLocaleString('ko-KR')} · ${it.title}${rewardText(it) ? ' — ' + rewardText(it) : ''}${it.to ? ' (한 명에게)' : ''}${it.by ? ` · 보낸 사람 ${it.from || '운영팀'} (${it.by})` : ''}${it.builtIn ? ' (코드에 들어 있는 기본)' : ''}`;
         row.appendChild(t);
         if (!it.builtIn) { const b = document.createElement('button'); b.textContent = '지우기'; b.className = 'danger'; b.addEventListener('click', () => onDelete(it.id)); row.appendChild(b); }
         el.appendChild(row);
@@ -695,14 +707,30 @@
       for (const k of r.skins ?? []) out.push(`${SKIN_NAMES[k] ?? k} 스킨`);
       return out.join(', ');
     }
+    // 보낸 사람(형 요청 2026-10-25): 고르거나 직접 입력. 마지막 선택은 이 브라우저에 기억한다. 실제로 보낸 계정은 서버가 따로 남긴다
+    const FROM_KEY = 'uh_mail_from';
+    const fromValue = () => ($('mFromSel').value === '*' ? $('mFromText').value.trim() : $('mFromSel').value);
+    function syncFrom() {
+      $('mFromText').classList.toggle('hidden', $('mFromSel').value !== '*');
+      try { localStorage.setItem(FROM_KEY, JSON.stringify({ sel: $('mFromSel').value, text: $('mFromText').value })); } catch {}
+    }
+    try {
+      const v = JSON.parse(localStorage.getItem(FROM_KEY) || 'null');
+      if (v && [...$('mFromSel').options].some((o) => o.value === v.sel)) { $('mFromSel').value = v.sel; $('mFromText').value = v.text ?? ''; }
+    } catch {}
+    $('mFromSel').addEventListener('change', syncFrom);
+    $('mFromText').addEventListener('input', syncFrom);
+    syncFrom();
     $('mSend').addEventListener('click', async () => {
       const title = $('mTitle').value.trim(), body = $('mBody').value;
       if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
       const reward = { diamond: Number($('mDia').value) || 0, coin: Number($('mCoin').value) || 0, steel: Number($('mSteel').value) || 0, energy: Number($('mEnergy').value) || 0, parts: pickedParts(), skins: pickedSkins() };
       const to = $('mTo').value.trim();
       const what = rewardText(reward) || '선물 없음';
-      if (!confirm(`${to ? '플레이어 ' + to : '모든 플레이어'}에게 보냅니다.\n선물: ${what}\n보낼까요?`)) return;
-      try { const x = await call('adminMail', { action: 'send', title, body, reward, days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      const from = fromValue();
+      if ($('mFromSel').value === '*' && !from) return uhMsg('보낸 사람 이름을 넣어 주세요', true);
+      if (!confirm(`${to ? '플레이어 ' + to : '모든 플레이어'}에게 보냅니다.\n보낸 사람: ${from || '운영팀'}\n선물: ${what}\n보낼까요?`)) return;
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
 
     // ── 열기·닫기 ──
