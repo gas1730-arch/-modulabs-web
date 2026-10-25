@@ -113,6 +113,8 @@
     .form { display: flex; flex-direction: column; gap: 8px; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     button.danger { border-color: var(--warn); color: var(--warn); }
+    table.clickable tr:not(:first-child) { cursor: pointer; }
+    table.clickable tr:not(:first-child):hover td { background: var(--bg-2); }
     details.pick { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
     details.pick summary { cursor: pointer; font-size: 13px; color: var(--text-2); }
     .pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 10px; margin-top: 8px; }
@@ -225,9 +227,13 @@
       </div>
       <div class="pane hidden" id="pane-player">
         <div class="row">
-          <input id="pid" placeholder="플레이어 ID(설정창 '내 ID')" />
+          <input id="pid" placeholder="내 ID 또는 닉네임(정확히)" />
           <button class="primary" id="pidFind">찾기</button>
+          <button id="pAll">전체 목록</button>
+          <span class="hint">최근 접속 순. 줄을 누르면 아래에 자세히 나옵니다(1.0.9부터 게임한 사람)</span>
         </div>
+        <div class="tablewrap"><table id="playerList" class="clickable"></table></div>
+        <div class="row" style="margin-top:8px"><button id="pMore" class="hidden">더 보기</button></div>
         <div id="playerBox"></div>
       </div>
       <div class="pane hidden" id="pane-post">
@@ -417,6 +423,7 @@
       $('uhRange').classList.toggle('hidden', !['overview', 'stages', 'flow', 'sales'].includes(t));
       uhMsg('');
       if (t === 'post') { loadNotices(); loadMails(); }
+      if (t === 'player' && pRows.length === 0) loadPlayers();
     }
     document.querySelectorAll('#uhTabs button').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
@@ -555,15 +562,19 @@
     $('rawMore').addEventListener('click', () => loadRaw(true));
 
     // ── 플레이어 ──
-    async function findPlayer() {
-      const pid = $('pid').value.trim();
-      if (!pid) return;
+    // 한 사람 자세히(key = { uid } 또는 { pid })
+    async function findPlayer(key) {
       uhMsg('찾는 중…');
       const box = $('playerBox');
       box.innerHTML = '';
       try {
-        const r = await call('adminLookup', { pid });
+        const r = await call('adminLookup', key);
+        const pid = r.user?.pid || key.pid || '';
+        const who = { uid: r.uid };
         const lines = [
+          ['닉네임', r.user?.name || r.profile?.name || '-'],
+          ['내 ID', pid || '-'],
+          ['앱 버전', r.user?.v || '-'],
           ['계정 번호', r.uid],
           ['처음 설치한 날', r.user?.inst ?? '-'],
           ['마지막 접속', r.user?.last ? new Date(r.user.last).toLocaleString('ko-KR') : '-'],
@@ -594,19 +605,56 @@
         mk('이 사람에게 우편', () => { setTab('post'); $('mTo').value = pid; $('mTitle').focus(); });
         mk('닉네임을 기본 이름으로', async () => {
           if (!confirm('순위표·경기장에 남은 이 사람 이름을 기본 이름(함장+숫자)으로 바꿀까요?')) return;
-          try { const x = await call('adminRename', { pid }); uhMsg(`바꿨습니다: ${x.name} (${x.changed}곳)`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+          try { const x = await call('adminRename', who);uhMsg(`바꿨습니다: ${x.name} (${x.changed}곳)`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
         });
         mk('이용 기록 삭제(요청 처리)', async () => {
           if (!confirm('이 사람의 이용 기록 원본을 모두 지웁니다. 되돌릴 수 없습니다. 지울까요?')) return;
-          try { const x = await call('adminDeleteStats', { pid }); uhMsg(`지웠습니다: ${x.deleted}일치`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+          try { const x = await call('adminDeleteStats', who);uhMsg(`지웠습니다: ${x.deleted}일치`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
         }, 'danger');
         box.appendChild(act);
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
         uhMsg('');
       } catch (e) {
         uhMsg('찾지 못했습니다: ' + errText(e), true);
       }
     }
-    $('pidFind').addEventListener('click', findPlayer);
+
+    // 사람 목록(최근 접속 순, 50명씩) 또는 찾기 결과. 줄을 누르면 자세히
+    let pAfter = null;
+    let pRows = [];
+    function drawPlayers() {
+      const ago = (t) => {
+        if (!t) return '-';
+        const m = Math.floor((Date.now() - t) / 60000);
+        return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
+      };
+      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제'], pRows.map((x) => [x.name || '-', x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '']));
+      [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+        if (!pRows[i]) return;
+        tr.addEventListener('click', () => findPlayer({ uid: pRows[i].uid }));
+      });
+    }
+    async function loadPlayers(opt = {}) {
+      const q = opt.q ?? '';
+      if (!opt.more) { pRows = []; pAfter = null; }
+      uhMsg(q ? '찾는 중…' : '불러오는 중…');
+      try {
+        const r = await call('adminPlayers', { q, limit: 50, ...(opt.more && pAfter ? { after: pAfter } : {}) });
+        pRows = [...pRows, ...r.list];
+        const lastRow = r.list[r.list.length - 1];
+        pAfter = lastRow ? { last: lastRow.last, uid: lastRow.uid } : pAfter;
+        $('pMore').classList.toggle('hidden', !r.more);
+        drawPlayers();
+        uhMsg(q ? `찾기: ${q} · ${r.list.length}명` : `최근 접속 순 · ${pRows.length}명`);
+        if (q && r.list.length === 1) findPlayer({ uid: r.list[0].uid });
+      } catch (e) {
+        uhMsg('불러오지 못했습니다: ' + errText(e), true);
+      }
+    }
+    $('pidFind').addEventListener('click', () => { const q = $('pid').value.trim(); if (q) loadPlayers({ q }); else loadPlayers(); });
+    $('pid').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('pidFind').click(); });
+    $('pAll').addEventListener('click', () => { $('pid').value = ''; loadPlayers(); });
+    $('pMore').addEventListener('click', () => loadPlayers({ more: true }));
 
     // ── 공지·우편 ──
     function listInto(id, items, onDelete) {
