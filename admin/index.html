@@ -113,6 +113,11 @@
     .form { display: flex; flex-direction: column; gap: 8px; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
     button.danger { border-color: var(--warn); color: var(--warn); }
+    details.pick { border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; }
+    details.pick summary { cursor: pointer; font-size: 13px; color: var(--text-2); }
+    .pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 10px; margin-top: 8px; }
+    .pickgrid label { justify-content: space-between; }
+    .pickgrid input[type=number] { width: 80px; }
   </style>
 </head>
 <body>
@@ -246,6 +251,9 @@
               <label>에너지 <input id="mEnergy" type="number" min="0" value="0" /></label>
               <label>기한(일) <input id="mDays" type="number" min="1" max="365" value="30" /></label>
             </div>
+            <details class="pick"><summary>부품 넣기 <span class="hint" id="mPartsSum"></span></summary><div class="pickgrid" id="mParts"></div></details>
+            <details class="pick"><summary>스킨 넣기 <span class="hint" id="mSkinsSum"></span></summary><div class="pickgrid" id="mSkins"></div></details>
+            <p class="hint">부품·스킨이 든 우편은 옛 버전 앱(1.0.9 이전)에는 보이지 않고, 업데이트하면 받을 수 있습니다.</p>
             <button class="primary" id="mSend">우편 보내기</button>
             <h3>보낸 우편</h3>
             <div id="mailList"></div>
@@ -594,7 +602,7 @@
         const row = document.createElement('div');
         row.className = 'item';
         const t = document.createElement('div');
-        t.textContent = `${new Date(it.at).toLocaleString('ko-KR')} · ${it.title}${it.to ? ' (한 명에게)' : ''}${it.builtIn ? ' (코드에 들어 있는 기본)' : ''}`;
+        t.textContent = `${new Date(it.at).toLocaleString('ko-KR')} · ${it.title}${rewardText(it) ? ' — ' + rewardText(it) : ''}${it.to ? ' (한 명에게)' : ''}${it.builtIn ? ' (코드에 들어 있는 기본)' : ''}`;
         row.appendChild(t);
         if (!it.builtIn) { const b = document.createElement('button'); b.textContent = '지우기'; b.className = 'danger'; b.addEventListener('click', () => onDelete(it.id)); row.appendChild(b); }
         el.appendChild(row);
@@ -625,14 +633,51 @@
       if (!confirm('이 공지를 올리면 게임에 바로 보입니다. 올릴까요?')) return;
       try { await call('adminNotice', { action: 'add', id: $('nId').value.trim(), title, body }); uhMsg('공지를 올렸습니다'); $('nTitle').value = ''; $('nBody').value = ''; $('nId').value = ''; loadNotices(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
+    // 우편 아이템(형 요청 2026-10-25): 앱(src/ui/turretInfo.ts·src/skins/skins.ts)과 서버(functions/index.js 의 MAIL_PART_KEYS·MAIL_SKIN_IDS)와 같은 목록
+    const PART_NAMES = { uni: '공용 부품', sub: '함선 본체', gun: '딥 캐논', pierce: '관통 작살', torpedo: '어뢰', eel_coil: '전기 충격포', water_cannon: '수압 캐논', sonar: '소나', bubble: '기포 포획기', mine: '기뢰', acid: '산성 먹물', lure: '미끼', drone: '드론', cryo: '냉각포' };
+    const SKIN_NAMES = { ship_research: '심해 연구선', ship_orca: '범고래', ship_gold: '금장 의장함', ship_abyss: '심해 전함', ship_silver: '백은 지휘함', ship_crimson: '진홍 근위함', ship_arena: '투사함', ship_training: '훈련함', ship_supply: '보급함', ship_patrol: '순찰함', ship_scrap: '고철함', ship_rescue: '구조함', ship_reef: '암초 정찰함', ship_polar: '극지 정찰함', ship_magma: '마그마 순양함', ship_hunter: '심연 사냥함', cap_diver: '함장: 심해 베테랑', cap_young: '함장: 젊은 함장', cap_robot: '함장: 로봇 함장' };
+    const REWARD_NAMES = { diamond: '다이아', coin: '코인', steel: '강철판', energy: '에너지' };
+    for (const [k, name] of Object.entries(PART_NAMES)) {
+      const l = document.createElement('label');
+      l.textContent = name + ' ';
+      const i = document.createElement('input');
+      Object.assign(i, { type: 'number', min: 0, max: 10000, value: 0 });
+      i.dataset.part = k;
+      i.addEventListener('input', pickSummary);
+      l.appendChild(i);
+      $('mParts').appendChild(l);
+    }
+    for (const [k, name] of Object.entries(SKIN_NAMES)) {
+      const l = document.createElement('label');
+      const i = document.createElement('input');
+      Object.assign(i, { type: 'checkbox' });
+      i.dataset.skin = k;
+      i.addEventListener('change', pickSummary);
+      l.append(name + ' ', i);
+      $('mSkins').appendChild(l);
+    }
+    const pickedParts = () => Object.fromEntries([...document.querySelectorAll('#mParts input')].map((i) => [i.dataset.part, Math.floor(Number(i.value)) || 0]).filter(([, v]) => v > 0));
+    const pickedSkins = () => [...document.querySelectorAll('#mSkins input:checked')].map((i) => i.dataset.skin);
+    function pickSummary() {
+      const n = Object.keys(pickedParts()).length, m = pickedSkins().length;
+      $('mPartsSum').textContent = n ? `${n}종 선택` : '';
+      $('mSkinsSum').textContent = m ? `${m}개 선택` : '';
+    }
+    // 선물 내용을 사람이 읽는 글로(확인창·보낸 우편 목록)
+    function rewardText(r) {
+      const out = Object.entries(REWARD_NAMES).filter(([k]) => (r[k] ?? 0) > 0).map(([k, n]) => `${n} ${r[k]}`);
+      for (const [k, v] of Object.entries(r.parts ?? {})) if (v > 0) out.push(`${PART_NAMES[k] ?? k} 부품 ${v}`);
+      for (const k of r.skins ?? []) out.push(`${SKIN_NAMES[k] ?? k} 스킨`);
+      return out.join(', ');
+    }
     $('mSend').addEventListener('click', async () => {
       const title = $('mTitle').value.trim(), body = $('mBody').value;
       if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
-      const reward = { diamond: Number($('mDia').value) || 0, coin: Number($('mCoin').value) || 0, steel: Number($('mSteel').value) || 0, energy: Number($('mEnergy').value) || 0 };
+      const reward = { diamond: Number($('mDia').value) || 0, coin: Number($('mCoin').value) || 0, steel: Number($('mSteel').value) || 0, energy: Number($('mEnergy').value) || 0, parts: pickedParts(), skins: pickedSkins() };
       const to = $('mTo').value.trim();
-      const what = Object.entries(reward).filter(([, v]) => v > 0).map(([k, v]) => `${k} ${v}`).join(', ') || '선물 없음';
+      const what = rewardText(reward) || '선물 없음';
       if (!confirm(`${to ? '플레이어 ' + to : '모든 플레이어'}에게 보냅니다.\n선물: ${what}\n보낼까요?`)) return;
-      try { const x = await call('adminMail', { action: 'send', title, body, reward, days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); $('mTitle').value = ''; $('mBody').value = ''; loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
 
     // ── 열기·닫기 ──
