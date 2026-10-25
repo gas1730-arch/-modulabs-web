@@ -118,6 +118,8 @@
     .pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 10px; margin-top: 8px; }
     .pickgrid label { justify-content: space-between; }
     .pickgrid input[type=number] { width: 80px; }
+    .grade { display: inline-block; font-size: 11px; font-weight: 700; border: 1px solid; border-radius: 4px; padding: 0 4px; margin-right: 2px; }
+    .pickgrid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
   </style>
 </head>
 <body>
@@ -647,13 +649,26 @@
       l.appendChild(i);
       $('mParts').appendChild(l);
     }
-    for (const [k, name] of Object.entries(SKIN_NAMES)) {
+    // 스킨 등급(앱 src/skins/skins.ts 의 grade, 색은 선물상자 등급과 같다). 높은 등급부터. 출시 전 스킨(심해 전함)은 보낼 수 없다
+    const SKIN_GRADE = { ship_abyss: 'legend', ship_gold: 'epic', ship_silver: 'epic', ship_crimson: 'epic', ship_arena: 'epic', ship_orca: 'rare', ship_magma: 'rare', ship_hunter: 'rare', cap_robot: 'rare', ship_research: 'advanced', ship_rescue: 'advanced', ship_reef: 'advanced', ship_polar: 'advanced', cap_diver: 'advanced', cap_young: 'advanced', ship_training: 'common', ship_supply: 'common', ship_patrol: 'common', ship_scrap: 'common' };
+    const GRADES = { legend: ['전설', '#f59e0b'], epic: ['영웅', '#a855f7'], rare: ['희귀', '#3b82f6'], advanced: ['고급', '#22c55e'], common: ['일반', '#9ca3af'] };
+    const SKIN_UNRELEASED = ['ship_abyss'];
+    const gradeRank = Object.keys(GRADES);
+    for (const k of Object.keys(SKIN_NAMES).sort((a, b) => gradeRank.indexOf(SKIN_GRADE[a]) - gradeRank.indexOf(SKIN_GRADE[b]))) {
       const l = document.createElement('label');
+      const left = document.createElement('span');
+      const tag = document.createElement('span');
+      const [gName, gColor] = GRADES[SKIN_GRADE[k]] ?? ['?', '#9ca3af'];
+      tag.textContent = gName;
+      tag.className = 'grade';
+      tag.style.color = gColor;
+      tag.style.borderColor = gColor;
+      left.append(tag, ' ' + SKIN_NAMES[k] + (SKIN_UNRELEASED.includes(k) ? ' (출시 전)' : ''));
       const i = document.createElement('input');
-      Object.assign(i, { type: 'checkbox' });
+      Object.assign(i, { type: 'checkbox', disabled: SKIN_UNRELEASED.includes(k) });
       i.dataset.skin = k;
       i.addEventListener('change', pickSummary);
-      l.append(name + ' ', i);
+      l.append(left, i);
       $('mSkins').appendChild(l);
     }
     const pickedParts = () => Object.fromEntries([...document.querySelectorAll('#mParts input')].map((i) => [i.dataset.part, Math.floor(Number(i.value)) || 0]).filter(([, v]) => v > 0));
