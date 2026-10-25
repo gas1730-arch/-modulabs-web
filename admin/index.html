@@ -200,7 +200,12 @@
       </div>
       <div class="pane hidden" id="pane-stages">
         <p class="hint">스테이지 = 그 모드의 몇 스테이지(7 = 7스테이지). 실패율이 높은 스테이지가 난이도 조정 후보입니다(주황 줄 = 5판 이상 도전했고 실패율 60% 이상). 나가기는 중간에 그만둔 판.</p>
-        <div class="tablewrap"><table id="stageTable"></table></div>
+        <div class="tablewrap"><table id="stageTable" class="clickable"></table></div>
+        <div id="stageWho" class="hidden">
+          <h3 id="stageWhoTitle"></h3>
+          <p class="hint" id="stageWhoNote"></p>
+          <div class="tablewrap"><table id="stageWhoTable" class="clickable"></table></div>
+        </div>
       </div>
       <div class="pane hidden" id="pane-flow">
         <div class="cols">
@@ -503,6 +508,31 @@
         return [MODE[a.mode] ?? a.mode, a.st, n, a.clear ?? 0, a.fail ?? 0, a.quit ?? 0, pct(a.fail ?? 0, n), n ? fmt((a.sec ?? 0) / n / 60) + '분' : '', n ? fmt((a.lv ?? 0) / n) : '', a.t25n ? fmt(a.t25 / a.t25n / 60) + '분' : '', (a.fail ?? 0) / Math.max(1, n)];
       });
       table('stageTable', ['모드', '스테이지', '도전', '클리어', '실패', '나가기', '실패율', '평균 시간', '평균 도달 레벨', '25레벨까지'], rows.map((x) => x.slice(0, 10)), (x, i) => (rows[i][10] >= 0.6 && rows[i][2] >= 5 ? 'bad' : ''));
+      // 줄을 누르면 그 스테이지에 도전한 사람(형 요청 2026-10-26)
+      const keys = Object.values(agg).sort((a, b) => (a.mode === b.mode ? a.st - b.st : a.mode < b.mode ? 1 : -1));
+      [...$('stageTable').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+        if (!keys[i]) return;
+        tr.addEventListener('click', () => loadStageWho(keys[i].mode, keys[i].st, `${rows[i][0]} ${rows[i][1]}스테이지`));
+      });
+      $('stageWho').classList.add('hidden');
+    }
+    async function loadStageWho(mode, st, label) {
+      $('stageWho').classList.remove('hidden');
+      $('stageWhoTitle').textContent = `${label} 도전자`;
+      $('stageWhoNote').textContent = '찾는 중…';
+      table('stageWhoTable', ['닉네임', '내 ID', '도전', '클리어', '실패', '나가기', '최고 레벨', '마지막 도전'], []);
+      $('stageWho').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try {
+        const r = await call('adminStageRuns', { mode, st, from: $('uhFrom').value, to: $('uhTo').value });
+        table('stageWhoTable', ['닉네임', '내 ID', '도전', '클리어', '실패', '나가기', '최고 레벨', '마지막 도전'], r.list.map((u) => [u.name || '-', u.pid || '-', u.n, u.clear, u.fail, u.quit, u.bestLv, u.last ? new Date(u.last).toLocaleString('ko-KR') : '-']));
+        [...$('stageWhoTable').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+          if (!r.list[i]) return;
+          tr.addEventListener('click', () => { setTab('player'); findPlayer({ uid: r.list[i].uid }); });
+        });
+        $('stageWhoNote').textContent = `${r.from} ~ ${r.to} · ${r.list.length}명 · 실패 많은 순 · 줄을 누르면 플레이어 상세` + (r.capped ? ' · 기록이 많아 일부만 봤습니다(기간을 줄이세요)' : '');
+      } catch (e) {
+        $('stageWhoNote').textContent = '불러오지 못했습니다: ' + errText(e);
+      }
     }
     function drawFlow(r) {
       const ad = sumKeys(r.days, 'ad_');
