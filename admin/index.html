@@ -316,6 +316,40 @@
       </div>
     </section>
 
+    <!-- 오이밭 수호대 대시보드(2026-10-27): 수호대 파이어베이스(cucumberdefense)의 서버 관리자 함수(adminStats)로 읽는다. 위 로그인을 그대로 쓴다 -->
+    <section class="hidden" id="cu">
+      <div class="uh-head">
+        <button id="cuBack">← 앱 목록</button>
+        <h1>오이밭 수호대</h1>
+        <span class="badge on" id="cuWho"></span>
+      </div>
+      <p class="msg" id="cuMsg"></p>
+
+      <div class="range" id="cuRange">
+        <button data-days="7">7일</button>
+        <button data-days="30" class="on">30일</button>
+        <button data-days="90">90일</button>
+        <input type="date" id="cuFrom" /> ~ <input type="date" id="cuTo" />
+        <button class="primary" id="cuLoad">불러오기</button>
+        <span class="hint">하루 = 한국 시간 0시 ~ 24시</span>
+      </div>
+
+      <div class="notice">
+        <b>매출은 추정치입니다.</b> 서버는 스토어가 실제로 받은 금액을 모르므로, 앱 상품표의 예정가(원)로 계산했습니다.
+        나라·세금·애플 가격표가 달라 실제와 다를 수 있습니다. 정확한 매출은 Play Console·App Store Connect를 보세요.
+        앱을 고치지 않고 서버가 구매 검증에 성공할 때만 세므로, <b>이 기능을 켠 시점 이후의 구매</b>만 나옵니다.
+      </div>
+
+      <div class="kpis" id="cuKpis"></div>
+      <div class="cols">
+        <div><h3>날짜별</h3><div class="tablewrap"><table id="cuDayTable"></table></div></div>
+        <div><h3>상품별</h3><div class="tablewrap"><table id="cuProductTable"></table></div></div>
+      </div>
+      <h3>최근 구매</h3>
+      <div class="tablewrap"><table id="cuRecentTable"></table></div>
+      <p class="hint" style="margin-top:14px">스테이지별 클리어율·이용자 수 같은 플레이 통계는 앱이 서버로 기록을 보내도록 고친 뒤(스토어 업데이트)에 이 화면에 추가됩니다.</p>
+    </section>
+
   </main>
 
   <script type="module">
@@ -341,7 +375,7 @@
     // ── 앱 목록 ─────────────────────────────────────────────────────────────────
     // connected: true로 바꾸고 아래 loadStats()에 그 앱의 읽기 코드를 붙이면 숫자가 채워진다.
     const APPS = [
-      { id: 'cucumber', name: '오이밭 수호대', desc: '타워디펜스 · Android / iOS', connected: false, note: '앱이 통계를 보내도록 고친 뒤 연결' },
+      { id: 'cucumber', name: '오이밭 수호대', desc: '구매·추정 매출(서버 기록). 플레이 통계는 앱 업데이트 후', connected: true, open: () => window.__openCucumber() },
       { id: 'underhatch', name: '언더 해치', desc: '이용 기록·매출·공지·우편(Firebase cucumber-defense)', connected: true, open: () => window.__openUnderHatch() },
       { id: 'quote', name: '모두의견적서', desc: '견적서 앱', connected: false, note: '데이터 위치 조사 필요' },
       { id: 'lottocheck', name: '로또체크', desc: '로또 번호 확인 앱', connected: false, note: '데이터 위치 조사 필요' },
@@ -867,6 +901,75 @@
     $('uhBack').addEventListener('click', () => { show('uh', false); show('dashboard', true); });
     window.__openUnderHatch = openUnderHatch;
 
+    // ── 오이밭 수호대(2026-10-27) ──────────────────────────────────────────────
+    // 위에서 로그인한 계정(cucumberdefense)으로 서버 관리자 함수를 부른다. 진짜 차단은 서버(isAdminAuth)가 한다.
+    let cuFns = null; // 로그인 설정이 끝나면 아래에서 채운다
+    const CU_PRODUCTS = {
+      diamond_pack_100: '다이아 100', diamond_pack_550: '다이아 550', diamond_pack_1200: '다이아 1200',
+      diamond_pack_2600: '다이아 2600', diamond_pack_7000: '다이아 7000',
+      pack_starter: '시작 팩', pack_growth_a: '새싹 성장팩(A)', pack_growth_b: '결실 성장팩(B)', pack_growth_c: '풍년 성장팩(C)',
+      pack_weekly_supply: '주간 보급', pass_growth_30d: '30일 성장 패스',
+    };
+    const cuName = (id) => CU_PRODUCTS[id] ?? `${id} (상품표에 없음)`;
+    const PLAT = { android: 'Android', ios: 'iOS' };
+    const kstToday = () => new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+    const cuMsg = (t, bad = false) => { $('cuMsg').textContent = t; $('cuMsg').style.color = bad ? 'var(--warn)' : 'var(--text-2)'; };
+
+    function cuSetDays(n) {
+      $('cuTo').value = kstToday();
+      $('cuFrom').value = addDays(kstToday(), -(n - 1));
+      document.querySelectorAll('#cuRange button[data-days]').forEach((b) => b.classList.toggle('on', Number(b.dataset.days) === n));
+    }
+    document.querySelectorAll('#cuRange button[data-days]').forEach((b) => b.addEventListener('click', () => { cuSetDays(Number(b.dataset.days)); loadCucumber(); }));
+    $('cuLoad').addEventListener('click', () => loadCucumber());
+
+    async function loadCucumber() {
+      if (!cuFns) { cuMsg('로그인 설정이 아직 안 끝났습니다.', true); return; }
+      cuMsg('불러오는 중…');
+      try {
+        const r = (await httpsCallable(cuFns, 'adminStats')({ from: $('cuFrom').value, to: $('cuTo').value })).data;
+        drawCucumber(r);
+        const warn = [];
+        if (r.truncated) warn.push('기록이 너무 많아 일부만 계산했습니다(기간을 줄이세요)');
+        if (r.unknownProducts > 0) warn.push(`상품표에 없는 상품 ${r.unknownProducts}건이 섞여 있습니다(금액 0으로 계산됨 — 서버 가격표를 고쳐야 합니다)`);
+        cuMsg(`${r.from} ~ ${r.to}` + (warn.length ? ' · ' + warn.join(' · ') : ''), warn.length > 0);
+      } catch (e) {
+        const code = e && e.code ? String(e.code) : '';
+        cuMsg(code.includes('not-found')
+          ? '서버에 관리자 함수가 아직 없습니다(서버 배포 전).'
+          : code.includes('permission-denied')
+            ? '이 계정은 볼 수 없습니다.'
+            : '불러오지 못했습니다: ' + errText(e), true);
+      }
+    }
+
+    function drawCucumber(r) {
+      const days = r.perDay.slice().reverse();
+      const maxCount = Math.max(1, ...days.map((d) => d.count));
+      kpis('cuKpis', [
+        ['구매 건수', r.total.count.toLocaleString('ko-KR'), `하루 평균 ${fmt(r.total.count / Math.max(1, r.perDay.length))}건`],
+        ['추정 매출', won(r.total.revenue), `하루 평균 ${won(r.total.revenue / Math.max(1, r.perDay.length))}`],
+        ['Android', `${r.perPlatform.android.count}건`, won(r.perPlatform.android.revenue)],
+        ['iOS', `${r.perPlatform.ios.count}건`, won(r.perPlatform.ios.revenue)],
+        ['건당 평균', r.total.count ? won(r.total.revenue / r.total.count) : '-', ''],
+      ]);
+      table('cuDayTable', ['날짜', '건수', '그래프', '추정 매출'],
+        days.map((d) => [d.day, d.count || '', '█'.repeat(Math.round((d.count / maxCount) * 16)), d.revenue ? won(d.revenue) : '']));
+      table('cuProductTable', ['상품', '건수', '추정 매출', '비중'],
+        r.perProduct.map((p) => [cuName(p.productId), p.count, won(p.revenue), pct(p.revenue, r.total.revenue)]));
+      table('cuRecentTable', ['시각(한국)', '상품', '플랫폼', '추정 금액'],
+        r.recent.map((p) => [new Date(p.purchaseTimeMs + 9 * 3600 * 1000).toISOString().slice(0, 16).replace('T', ' '), cuName(p.productId), PLAT[p.platform] ?? p.platform, won(p.priceKrw)]));
+    }
+
+    function openCucumber() {
+      $('cuWho').textContent = ($('mail').textContent || '');
+      show('dashboard', false); show('cu', true);
+      cuSetDays(30);
+      loadCucumber();
+    }
+    $('cuBack').addEventListener('click', () => { show('cu', false); show('dashboard', true); });
+    window.__openCucumber = openCucumber;
+
     const configured = Object.values(FIREBASE_CONFIG).every((v) => v !== '');
     if (!configured) {
       show('signedOut', false);
@@ -874,6 +977,7 @@
     } else {
       const app = initializeApp(FIREBASE_CONFIG);
       const auth = getAuth(app);
+      cuFns = getFunctions(app, 'asia-northeast3');
 
       $('signInBtn').addEventListener('click', async () => {
         $('authMsg').textContent = '';
@@ -887,7 +991,7 @@
 
       onAuthStateChanged(auth, async (user) => {
         if (!user) {
-          show('who', false); show('dashboard', false); show('uh', false); show('signedOut', true);
+          show('who', false); show('dashboard', false); show('uh', false); show('cu', false); show('signedOut', true);
           signOut(uhAuth).catch(() => {});
           return;
         }
