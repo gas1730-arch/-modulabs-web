@@ -85,7 +85,7 @@
     .hidden { display: none !important; }
 
     /* 언더 해치 대시보드 */
-    #uh .wide, #uh { max-width: 100%; }
+    #uh .wide, #uh, #cu { max-width: 100%; }
     .uh-head { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
     .uh-head h1 { margin: 0; }
     .tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
@@ -316,38 +316,89 @@
       </div>
     </section>
 
-    <!-- 오이밭 수호대 대시보드(2026-10-27): 수호대 파이어베이스(cucumberdefense)의 서버 관리자 함수(adminStats)로 읽는다. 위 로그인을 그대로 쓴다 -->
+    <!-- 오이밭 수호대 대시보드(2026-10-27, 2026-10-29 언더 해치처럼 탭으로): 수호대 파이어베이스(cucumberdefense)의 서버 관리자 함수(admin*)로 읽는다. 위 로그인을 그대로 쓴다.
+         닉네임·공지·우편은 오이밭에 없는 기능이라 넣지 않았다. 사람은 앱이 폰마다 만든 무작위 번호로만 보인다 -->
     <section class="hidden" id="cu">
       <div class="uh-head">
         <button id="cuBack">← 앱 목록</button>
         <h1>오이밭 수호대</h1>
         <span class="badge on" id="cuWho"></span>
       </div>
+      <div class="tabs" id="cuTabs">
+        <button data-tab="overview" class="on">개요</button>
+        <button data-tab="stages">스테이지</button>
+        <button data-tab="ads">광고</button>
+        <button data-tab="sales">매출</button>
+        <button data-tab="raw">원본 기록</button>
+        <button data-tab="player">플레이어</button>
+      </div>
       <p class="msg" id="cuMsg"></p>
 
+      <!-- 기간(개요·스테이지·광고·매출 공용) -->
       <div class="range" id="cuRange">
         <button data-days="7">7일</button>
         <button data-days="30" class="on">30일</button>
         <button data-days="90">90일</button>
         <input type="date" id="cuFrom" /> ~ <input type="date" id="cuTo" />
         <button class="primary" id="cuLoad">불러오기</button>
-        <span class="hint">하루 = 한국 시간 0시 ~ 24시</span>
+        <span class="hint">하루 = 한국 시간 0시 ~ 24시 · 최대 92일</span>
       </div>
 
-      <div class="notice">
-        <b>매출은 추정치입니다.</b> 서버는 스토어가 실제로 받은 금액을 모르므로, 앱 상품표의 예정가(원)로 계산했습니다.
-        나라·세금·애플 가격표가 달라 실제와 다를 수 있습니다. 정확한 매출은 Play Console·App Store Connect를 보세요.
-        앱을 고치지 않고 서버가 구매 검증에 성공할 때만 세므로, <b>이 기능을 켠 시점 이후의 구매</b>만 나옵니다.
+      <div class="pane" id="cupane-overview">
+        <p class="hint">이용 기록(접속자·플레이 시간·판 수)은 앱이 기록을 보내도록 고친 업데이트를 받은 폰부터 나옵니다. 매출은 그 전부터 서버가 셌습니다.</p>
+        <div class="kpis" id="cuKpis"></div>
+        <h3>날짜별</h3>
+        <div class="tablewrap"><table id="cuDayTable"></table></div>
       </div>
-
-      <div class="kpis" id="cuKpis"></div>
-      <div class="cols">
-        <div><h3>날짜별</h3><div class="tablewrap"><table id="cuDayTable"></table></div></div>
-        <div><h3>상품별</h3><div class="tablewrap"><table id="cuProductTable"></table></div></div>
+      <div class="pane hidden" id="cupane-stages">
+        <p class="hint">실패율이 높은 스테이지가 난이도 조정 후보입니다(주황 줄 = 5판 이상 도전했고 실패율 60% 이상). 나가기 = 웨이브를 시작한 뒤 중간에 그만둔 판. 평균 별은 클리어한 판만. 줄을 누르면 도전한 사람이 나옵니다.</p>
+        <div class="tablewrap"><table id="cuStageTable" class="clickable"></table></div>
+        <div id="cuStageWho" class="hidden">
+          <h3 id="cuStageWhoTitle"></h3>
+          <p class="hint" id="cuStageWhoNote"></p>
+          <div class="tablewrap"><table id="cuStageWhoTable" class="clickable"></table></div>
+        </div>
       </div>
-      <h3>최근 구매</h3>
-      <div class="tablewrap"><table id="cuRecentTable"></table></div>
-      <p class="hint" style="margin-top:14px">스테이지별 클리어율·이용자 수 같은 플레이 통계는 앱이 서버로 기록을 보내도록 고친 뒤(스토어 업데이트)에 이 화면에 추가됩니다.</p>
+      <div class="pane hidden" id="cupane-ads">
+        <div class="cols">
+          <div><h3>광고(어디서 · 끝까지 / 중간에 닫음)</h3><div class="tablewrap"><table id="cuAdTable"></table></div></div>
+          <div><h3>그날 처음 접속했을 때 보유 재화(1인 평균)</h3><div class="tablewrap"><table id="cuWalletTable"></table></div></div>
+        </div>
+      </div>
+      <div class="pane hidden" id="cupane-sales">
+        <div class="notice">
+          <b>매출은 추정치입니다.</b> 서버는 스토어가 실제로 받은 금액을 모르므로, 앱 상품표의 예정가(원)로 계산했습니다.
+          나라·세금·애플 가격표가 달라 실제와 다를 수 있습니다. 정확한 매출은 Play Console·App Store Connect를 보세요.
+          누가 샀는지(번호)는 기록을 보내는 업데이트를 받은 폰의 구매부터 나옵니다.
+        </div>
+        <div class="kpis" id="cuSaleKpis"></div>
+        <div class="cols">
+          <div><h3>날짜별</h3><div class="tablewrap"><table id="cuSaleDayTable"></table></div></div>
+          <div><h3>상품별</h3><div class="tablewrap"><table id="cuProductTable"></table></div></div>
+        </div>
+        <h3>최근 구매</h3>
+        <div class="tablewrap"><table id="cuRecentTable" class="clickable"></table></div>
+      </div>
+      <div class="pane hidden" id="cupane-raw">
+        <div class="row">
+          <input type="date" id="cuRawDay" />
+          <button class="primary" id="cuRawLoad">이 날 불러오기</button>
+          <button id="cuRawMore" class="hidden">더 보기</button>
+          <span class="hint">사람마다 그날 기록이 한 줄. 기본은 오늘, 과거 날짜를 골라 불러온다</span>
+        </div>
+        <div class="tablewrap"><table id="cuRawTable"></table></div>
+      </div>
+      <div class="pane hidden" id="cupane-player">
+        <div class="row">
+          <input id="cuPid" placeholder="플레이어 번호(20자)" />
+          <button class="primary" id="cuPidFind">찾기</button>
+          <button id="cuPAll">전체 목록</button>
+          <span class="hint">최근 접속 순. 번호는 폰마다 무작위로 만든 것(이름 없음). 줄을 누르면 아래에 자세히 나옵니다</span>
+        </div>
+        <div class="tablewrap"><table id="cuPlayerList" class="clickable"></table></div>
+        <div class="row" style="margin-top:8px"><button id="cuPMore" class="hidden">더 보기</button></div>
+        <div id="cuPlayerBox"></div>
+      </div>
     </section>
 
   </main>
@@ -375,7 +426,7 @@
     // ── 앱 목록 ─────────────────────────────────────────────────────────────────
     // connected: true로 바꾸고 아래 loadStats()에 그 앱의 읽기 코드를 붙이면 숫자가 채워진다.
     const APPS = [
-      { id: 'cucumber', name: '오이밭 수호대', desc: '구매·추정 매출(서버 기록). 플레이 통계는 앱 업데이트 후', connected: true, open: () => window.__openCucumber() },
+      { id: 'cucumber', name: '오이밭 수호대', desc: '이용 기록·스테이지·광고·추정 매출(Firebase cucumberdefense)', connected: true, open: () => window.__openCucumber() },
       { id: 'underhatch', name: '언더 해치', desc: '이용 기록·매출·공지·우편(Firebase cucumber-defense)', connected: true, open: () => window.__openUnderHatch() },
       { id: 'quote', name: '모두의견적서', desc: '견적서 앱', connected: false, note: '데이터 위치 조사 필요' },
       { id: 'lottocheck', name: '로또체크', desc: '로또 번호 확인 앱', connected: false, note: '데이터 위치 조사 필요' },
@@ -913,8 +964,33 @@
     const cuName = (id) => CU_PRODUCTS[id] ?? `${id} (상품표에 없음)`;
     const PLAT = { android: 'Android', ios: 'iOS' };
     const kstToday = () => new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+    const kstTime = (ms) => new Date(ms + 9 * 3600 * 1000).toISOString().slice(0, 16).replace('T', ' ');
     const cuMsg = (t, bad = false) => { $('cuMsg').textContent = t; $('cuMsg').style.color = bad ? 'var(--warn)' : 'var(--text-2)'; };
+    const cuCall = async (name, data = {}) => (await httpsCallable(cuFns, name)(data)).data;
+    // 서버 오류를 형이 알아볼 말로
+    const cuErr = (e) => {
+      const code = e && e.code ? String(e.code) : '';
+      if (code.includes('not-found') && /function|NOT_FOUND|not found/i.test(errText(e))) return '서버에 이 관리자 함수가 아직 없습니다(서버 배포 전).';
+      if (code.includes('permission-denied')) return '이 계정은 볼 수 없습니다.';
+      return errText(e);
+    };
+    // 광고 자리(앱 src/utils/adUnits.ts 의 AdPlacement)
+    const CU_AD = { revive: '부활', speedBoost: '2배속 충전', resultDouble: '결과 보상 2배', patrolBoost: '순찰 즉시 채우기', lifeRefill: '하트 충전' };
+    const CU_RES = { clear: '클리어', fail: '실패', quit: '나가기' };
 
+    // ── 탭 ──
+    let cuTab = 'overview';
+    function cuSetTab(t) {
+      cuTab = t;
+      document.querySelectorAll('#cuTabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
+      document.querySelectorAll('#cu .pane').forEach((p) => p.classList.toggle('hidden', p.id !== 'cupane-' + t));
+      $('cuRange').classList.toggle('hidden', !['overview', 'stages', 'ads', 'sales'].includes(t));
+      cuMsg('');
+      if (t === 'player' && cuPRows.length === 0) cuLoadPlayers();
+    }
+    document.querySelectorAll('#cuTabs button').forEach((b) => b.addEventListener('click', () => cuSetTab(b.dataset.tab)));
+
+    // ── 기간 ──
     function cuSetDays(n) {
       $('cuTo').value = kstToday();
       $('cuFrom').value = addDays(kstToday(), -(n - 1));
@@ -923,48 +999,259 @@
     document.querySelectorAll('#cuRange button[data-days]').forEach((b) => b.addEventListener('click', () => { cuSetDays(Number(b.dataset.days)); loadCucumber(); }));
     $('cuLoad').addEventListener('click', () => loadCucumber());
 
+    // ── 개요·스테이지·광고·매출(한 번에 받아서 나눠 그림) ──
     async function loadCucumber() {
       if (!cuFns) { cuMsg('로그인 설정이 아직 안 끝났습니다.', true); return; }
       cuMsg('불러오는 중…');
       try {
-        const r = (await httpsCallable(cuFns, 'adminStats')({ from: $('cuFrom').value, to: $('cuTo').value })).data;
-        drawCucumber(r);
+        const r = await cuCall('adminStats', { from: $('cuFrom').value, to: $('cuTo').value });
+        // 이용 기록 칸은 서버를 새로 올린 뒤부터 온다(그 전 서버는 매출 칸만 준다)
+        r.days = r.days ?? []; r.stages = r.stages ?? []; r.purchases = r.purchases ?? [];
+        cuDrawOverview(r); cuDrawStages(r); cuDrawAds(r); cuDrawSales(r);
         const warn = [];
         if (r.truncated) warn.push('기록이 너무 많아 일부만 계산했습니다(기간을 줄이세요)');
         if (r.unknownProducts > 0) warn.push(`상품표에 없는 상품 ${r.unknownProducts}건이 섞여 있습니다(금액 0으로 계산됨 — 서버 가격표를 고쳐야 합니다)`);
-        cuMsg(`${r.from} ~ ${r.to}` + (warn.length ? ' · ' + warn.join(' · ') : ''), warn.length > 0);
+        const empty = r.days.length === 0 && r.stages.length === 0;
+        cuMsg(`${r.from} ~ ${r.to} · ${new Date().toLocaleTimeString('ko-KR')} 기준` + (empty ? ' · 이 기간에 받은 이용 기록이 없습니다' : '') + (warn.length ? ' · ' + warn.join(' · ') : ''), warn.length > 0);
       } catch (e) {
-        const code = e && e.code ? String(e.code) : '';
-        cuMsg(code.includes('not-found')
-          ? '서버에 관리자 함수가 아직 없습니다(서버 배포 전).'
-          : code.includes('permission-denied')
-            ? '이 계정은 볼 수 없습니다.'
-            : '불러오지 못했습니다: ' + errText(e), true);
+        cuMsg('불러오지 못했습니다: ' + cuErr(e), true);
       }
     }
-
-    function drawCucumber(r) {
-      const days = r.perDay.slice().reverse();
-      const maxCount = Math.max(1, ...days.map((d) => d.count));
+    function cuDrawOverview(r) {
+      const byDay = Object.fromEntries(r.days.map((d) => [d.day, d]));
+      const sales = Object.fromEntries(r.perDay.map((d) => [d.day, d]));
+      const list = [];
+      // 기록(이용 기록 또는 구매)이 처음 들어온 날부터만 보인다(그 전 날짜는 빈 줄이라 평균만 깎는다)
+      const first = [...r.days.map((d) => d.day), ...r.perDay.filter((d) => d.count > 0).map((d) => d.day)].sort()[0];
+      if (first) for (let d = r.to; d >= (first > r.from ? first : r.from); d = addDays(d, -1)) list.push(d);
+      const g = (d, k) => (byDay[d]?.[k] ?? 0);
+      const tot = (k) => list.reduce((a, d) => a + g(d, k), 0);
+      const dau = tot('dau'), ses = tot('sessions'), sec = tot('play_sec'), nu = tot('new_users');
+      // 재방문율: 설치일이 기간 안이고, 1일(7·30일) 뒤가 이미 지난 날만 센다
+      const retOf = (n) => {
+        const done = list.filter((d) => addDays(d, n) < kstToday());
+        return pct(done.reduce((a, d) => a + g(d, 'ret' + n), 0), done.reduce((a, d) => a + g(d, 'new_users'), 0));
+      };
+      const runs = tot('runs');
       kpis('cuKpis', [
-        ['구매 건수', r.total.count.toLocaleString('ko-KR'), `하루 평균 ${fmt(r.total.count / Math.max(1, r.perDay.length))}건`],
-        ['추정 매출', won(r.total.revenue), `하루 평균 ${won(r.total.revenue / Math.max(1, r.perDay.length))}`],
+        ['추정 매출', won(r.total.revenue), `${r.total.count}건`],
+        ['하루 평균 접속자', fmt(dau / Math.max(1, list.length)), `연인원 ${dau.toLocaleString('ko-KR')}`],
+        ['1인 하루 평균 접속', dau > 0 ? fmt(ses / dau) + '번' : '-', `총 접속 ${ses.toLocaleString('ko-KR')}`],
+        ['접속 1번 평균', ses > 0 ? fmt(sec / ses / 60) + '분' : '-', `하루 총 ${fmt(sec / 3600 / Math.max(1, list.length))}시간`],
+        ['새 설치', nu.toLocaleString('ko-KR'), `Android ${tot('new_android')} · iOS ${tot('new_ios')}`],
+        ['1일 뒤 재방문', retOf(1), `7일 뒤 ${retOf(7)} · 30일 뒤 ${retOf(30)}`],
+        ['판 수', runs.toLocaleString('ko-KR'), `클리어 ${pct(tot('runs_clear'), runs)}`],
+      ]);
+      const maxDau = Math.max(1, ...list.map((d) => g(d, 'dau')));
+      // 재방문 칸은 그 날짜가 지나야 채운다(아직 안 온 날을 0%로 보이지 않게)
+      const ret = (d, n) => (g(d, 'new_users') && addDays(d, n) < kstToday() ? pct(g(d, 'ret' + n), g(d, 'new_users')) : '');
+      table('cuDayTable', ['날짜', '접속자', '그래프', 'Android', 'iOS', '접속', '플레이(분)', '1인 평균(분)', '새 설치', '1일 뒤', '7일 뒤', '판', '클리어', '실패', '나가기', '추정 매출'], list.map((d) => [
+        d, g(d, 'dau'), '█'.repeat(Math.round((g(d, 'dau') / maxDau) * 20)), g(d, 'dau_android'), g(d, 'dau_ios'), g(d, 'sessions'),
+        fmt(g(d, 'play_sec') / 60), g(d, 'dau') ? fmt(g(d, 'play_sec') / 60 / g(d, 'dau')) : '', g(d, 'new_users'),
+        ret(d, 1), ret(d, 7),
+        g(d, 'runs'), g(d, 'runs_clear'), g(d, 'runs_fail'), g(d, 'runs_quit'), sales[d]?.revenue ? won(sales[d].revenue) : '',
+      ]));
+    }
+    // 스테이지 번호 '3-2' → 정렬용 숫자
+    const cuStageOrder = (st) => { const [w, n] = st.split('-').map(Number); return w * 100 + n; };
+    function cuDrawStages(r) {
+      const agg = {};
+      for (const s of r.stages) for (const [k, v] of Object.entries(s)) {
+        if (k === 'day' || typeof v !== 'number') continue;
+        const m = k.match(/^(\d{1,2}-\d{1,2})_([a-z]+)$/);
+        if (!m) continue;
+        agg[m[1]] = agg[m[1]] ?? { st: m[1] };
+        agg[m[1]][m[2]] = (agg[m[1]][m[2]] ?? 0) + v;
+      }
+      const keys = Object.values(agg).sort((a, b) => cuStageOrder(a.st) - cuStageOrder(b.st));
+      const rows = keys.map((a) => {
+        const n = (a.clear ?? 0) + (a.fail ?? 0) + (a.quit ?? 0);
+        return [a.st, n, a.clear ?? 0, a.fail ?? 0, a.quit ?? 0, pct(a.fail ?? 0, n), n ? fmt((a.sec ?? 0) / n / 60) + '분' : '', a.clear ? fmt((a.stars ?? 0) / a.clear) : '', a.rev ?? 0, (a.fail ?? 0) / Math.max(1, n)];
+      });
+      table('cuStageTable', ['스테이지', '도전', '클리어', '실패', '나가기', '실패율', '평균 시간', '평균 별', '부활 쓴 판'], rows.map((x) => x.slice(0, 9)), (x, i) => (rows[i][9] >= 0.6 && rows[i][1] >= 5 ? 'bad' : ''));
+      // 줄을 누르면 그 스테이지에 도전한 사람
+      [...$('cuStageTable').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+        if (!keys[i]) return;
+        tr.addEventListener('click', () => cuLoadStageWho(keys[i].st));
+      });
+      $('cuStageWho').classList.add('hidden');
+    }
+    async function cuLoadStageWho(st) {
+      const head = ['플레이어 번호', '도전', '클리어', '실패', '나가기', '최고 별', '마지막 도전'];
+      $('cuStageWho').classList.remove('hidden');
+      $('cuStageWhoTitle').textContent = `${st} 스테이지 도전자`;
+      $('cuStageWhoNote').textContent = '찾는 중…';
+      table('cuStageWhoTable', head, []);
+      $('cuStageWho').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      try {
+        const r = await cuCall('adminStageRuns', { st, from: $('cuFrom').value, to: $('cuTo').value });
+        table('cuStageWhoTable', head, r.list.map((u) => [u.uid, u.n, u.clear, u.fail, u.quit, u.bestStars || '', u.last ? kstTime(u.last) : '-']));
+        [...$('cuStageWhoTable').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+          if (!r.list[i]) return;
+          tr.addEventListener('click', () => { cuSetTab('player'); cuFindPlayer(r.list[i].uid); });
+        });
+        $('cuStageWhoNote').textContent = `${r.from} ~ ${r.to} · ${r.list.length}명 · 실패 많은 순 · 줄을 누르면 플레이어 상세` + (r.capped ? ' · 기록이 많아 일부만 봤습니다(기간을 줄이세요)' : '');
+      } catch (e) {
+        $('cuStageWhoNote').textContent = '불러오지 못했습니다: ' + cuErr(e);
+      }
+    }
+    function cuDrawAds(r) {
+      const ad = sumKeys(r.days, 'ad_');
+      const places = {};
+      for (const [k, v] of Object.entries(ad)) {
+        const m = k.match(/^ad_(.+)_(ok|no)$/);
+        if (!m) continue;
+        places[m[1]] = places[m[1]] ?? { ok: 0, no: 0 };
+        places[m[1]][m[2]] += v;
+      }
+      table('cuAdTable', ['어디서', '끝까지', '중간에 닫음', '완료율'], Object.entries(places).sort((a, b) => b[1].ok - a[1].ok).map(([k, v]) => [CU_AD[k] ?? k, v.ok, v.no, pct(v.ok, v.ok + v.no)]));
+      const days = r.days.filter((d) => (d.wallet_n ?? 0) > 0).sort((a, b) => (a.day < b.day ? 1 : -1));
+      table('cuWalletTable', ['날짜', '사람 수', '다이아', '강화 포인트'], days.map((d) => [d.day, d.wallet_n, fmt((d.wallet_dia ?? 0) / d.wallet_n), fmt((d.wallet_pts ?? 0) / d.wallet_n)]));
+    }
+    function cuDrawSales(r) {
+      // 시험 결제(라이선스 테스터·TestFlight — 돈이 안 나감)는 서버가 합계에서 이미 뺐다. 목록에는 '시험'으로 남는다
+      const buyers = new Set(r.purchases.filter((p) => !p.test).map((p) => p.uid).filter(Boolean)).size;
+      kpis('cuSaleKpis', [
+        ['추정 매출(시험 결제 제외)', won(r.total.revenue), `${r.total.count}건 · 하루 평균 ${won(r.total.revenue / Math.max(1, r.perDay.length))}`],
+        ['시험 결제', `${r.testCount ?? 0}건`, '라이선스 테스터·TestFlight'],
+        ['결제한 사람', buyers ? buyers.toLocaleString('ko-KR') : '-', buyers ? '번호가 있는 구매만' : '번호가 있는 구매가 아직 없음'],
         ['Android', `${r.perPlatform.android.count}건`, won(r.perPlatform.android.revenue)],
         ['iOS', `${r.perPlatform.ios.count}건`, won(r.perPlatform.ios.revenue)],
         ['건당 평균', r.total.count ? won(r.total.revenue / r.total.count) : '-', ''],
       ]);
-      table('cuDayTable', ['날짜', '건수', '그래프', '추정 매출'],
+      const days = r.perDay.slice().reverse();
+      const maxCount = Math.max(1, ...days.map((d) => d.count));
+      table('cuSaleDayTable', ['날짜', '건수', '그래프', '추정 매출'],
         days.map((d) => [d.day, d.count || '', '█'.repeat(Math.round((d.count / maxCount) * 16)), d.revenue ? won(d.revenue) : '']));
       table('cuProductTable', ['상품', '건수', '추정 매출', '비중'],
         r.perProduct.map((p) => [cuName(p.productId), p.count, won(p.revenue), pct(p.revenue, r.total.revenue)]));
-      table('cuRecentTable', ['시각(한국)', '상품', '플랫폼', '추정 금액'],
-        r.recent.map((p) => [new Date(p.purchaseTimeMs + 9 * 3600 * 1000).toISOString().slice(0, 16).replace('T', ' '), cuName(p.productId), PLAT[p.platform] ?? p.platform, won(p.priceKrw)]));
+      // 새 서버는 구매 목록(누가 샀는지 포함)을 주고, 옛 서버는 최근 30건 요약만 준다
+      const recent = r.purchases.length
+        ? [...r.purchases].sort((a, b) => b.time - a.time).slice(0, 100)
+        : r.recent.map((p) => ({ time: p.purchaseTimeMs, productId: p.productId, platform: p.platform, krw: p.priceKrw, uid: '', test: p.test === true }));
+      table('cuRecentTable', ['시각(한국)', '상품', '플랫폼', '추정 금액', '시험', '플레이어 번호'],
+        recent.map((p) => [kstTime(p.time), cuName(p.productId), PLAT[p.platform] ?? p.platform, won(p.krw), p.test ? '시험' : '', p.uid || '-']));
+      [...$('cuRecentTable').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+        if (!recent[i] || !recent[i].uid) return;
+        tr.addEventListener('click', () => { cuSetTab('player'); cuFindPlayer(recent[i].uid); });
+      });
     }
+
+    // ── 원본 기록(하루씩, 50명씩) ──
+    let cuRawAfter = '';
+    async function cuLoadRaw(more = false) {
+      if (!more) { cuRawAfter = ''; table('cuRawTable', ['플레이어 번호', '버전', '폰', '언어', '기록 수', '기록'], []); }
+      cuMsg('불러오는 중…');
+      try {
+        const r = await cuCall('adminRaw', { day: $('cuRawDay').value || kstToday(), limit: 50, after: cuRawAfter });
+        const t = $('cuRawTable');
+        // 첫 불러오기면 '기록이 없습니다' 줄을 지운다
+        if (!more && r.list.length > 0) t.querySelectorAll('td.empty').forEach((td) => td.parentElement.remove());
+        for (const x of r.list) {
+          const row = document.createElement('tr');
+          const ev = (x.ev ?? []).slice().sort((a, b) => a.t - b.t).map((e) => kstTime(e.t).slice(11) + ' ' + e.k + ' ' + Object.entries(e).filter(([k]) => k !== 'k' && k !== 't').map(([k, v]) => k + '=' + v).join(' ')).join('\n');
+          for (const c of [x.uid ?? '', x.v, x.os, x.lang, (x.ev ?? []).length, ev]) { const td = document.createElement('td'); td.textContent = String(c ?? ''); row.appendChild(td); }
+          row.lastChild.className = 'pre';
+          t.appendChild(row);
+        }
+        cuRawAfter = r.list.length ? r.list[r.list.length - 1].id : cuRawAfter;
+        $('cuRawMore').classList.toggle('hidden', !r.more);
+        cuMsg(`${r.day} · ${r.list.length}명`);
+      } catch (e) {
+        cuMsg('불러오지 못했습니다: ' + cuErr(e), true);
+      }
+    }
+    $('cuRawLoad').addEventListener('click', () => cuLoadRaw(false));
+    $('cuRawMore').addEventListener('click', () => cuLoadRaw(true));
+
+    // ── 플레이어 ──
+    async function cuFindPlayer(uid) {
+      cuMsg('찾는 중…');
+      const box = $('cuPlayerBox');
+      box.innerHTML = '';
+      try {
+        const r = await cuCall('adminLookup', { uid });
+        const lines = [
+          ['플레이어 번호', r.uid],
+          ['앱 버전', r.user?.v || '-'],
+          ['처음 설치한 날', r.user?.inst ?? '-'],
+          ['마지막 접속', r.user?.last ? kstTime(r.user.last) : '-'],
+          ['폰', r.user?.os ?? '-'],
+          ['기록이 있는 날 수', r.activeDays],
+          ['구매(시험 결제 제외 금액)', `${r.purchases.length}건 · ${won(r.purchases.filter((p) => !p.test).reduce((a, p) => a + p.krw, 0))}`],
+        ];
+        const dl = document.createElement('table');
+        dl.className = 'kv';
+        for (const [k, v] of lines) { const tr = document.createElement('tr'); const a = document.createElement('th'); a.textContent = k; const b = document.createElement('td'); b.textContent = String(v); tr.append(a, b); dl.appendChild(tr); }
+        box.appendChild(dl);
+        const buys = document.createElement('table');
+        box.appendChild(buys);
+        buys.id = 'cuPBuys';
+        table('cuPBuys', ['시각(한국)', '상품', '플랫폼', '추정 금액', '시험'], r.purchases.sort((a, b) => b.time - a.time).map((p) => [kstTime(p.time), cuName(p.productId), PLAT[p.platform] ?? p.platform, won(p.krw), p.test ? '시험' : '']));
+        const days = document.createElement('table');
+        box.appendChild(days);
+        days.id = 'cuPDays';
+        table('cuPDays', ['최근 날짜', '버전', '폰', '기록 수'], r.recentDays.map((d) => [d.day, d.v, d.os, d.n]));
+        const act = document.createElement('div');
+        act.className = 'row';
+        const b = document.createElement('button');
+        b.textContent = '이용 기록 삭제(요청 처리)';
+        b.className = 'danger';
+        b.addEventListener('click', async () => {
+          if (!confirm('이 사람의 이용 기록 원본을 모두 지웁니다(구매 기록의 번호도 지움). 되돌릴 수 없습니다. 지울까요?')) return;
+          try { const x = await cuCall('adminDeleteStats', { uid: r.uid }); cuMsg(`지웠습니다: ${x.deleted}일치 · 구매 ${x.purchasesUnlinked}건에서 번호 지움`); } catch (e) { cuMsg('실패: ' + cuErr(e), true); }
+        });
+        act.appendChild(b);
+        box.appendChild(act);
+        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        cuMsg('');
+      } catch (e) {
+        cuMsg('찾지 못했습니다: ' + cuErr(e), true);
+      }
+    }
+
+    // 사람 목록(최근 접속 순, 50명씩) 또는 번호로 찾기. 줄을 누르면 자세히
+    let cuPAfter = '';
+    let cuPRows = [];
+    function cuDrawPlayers() {
+      const ago = (t) => {
+        if (!t) return '-';
+        const m = Math.floor((Date.now() - t) / 60000);
+        return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
+      };
+      table('cuPlayerList', ['플레이어 번호', '폰', '버전', '설치일', '마지막 접속', '추정 결제'], cuPRows.map((x) => [x.uid, x.os || '-', x.v || '-', x.inst || '-', ago(x.last), x.krw ? won(x.krw) : '']));
+      [...$('cuPlayerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
+        if (!cuPRows[i]) return;
+        tr.addEventListener('click', () => cuFindPlayer(cuPRows[i].uid));
+      });
+    }
+    async function cuLoadPlayers(opt = {}) {
+      const q = opt.q ?? '';
+      if (!opt.more) { cuPRows = []; cuPAfter = ''; }
+      cuMsg(q ? '찾는 중…' : '불러오는 중…');
+      try {
+        const r = await cuCall('adminPlayers', { q, limit: 50, ...(opt.more && cuPAfter ? { after: cuPAfter } : {}) });
+        cuPRows = [...cuPRows, ...r.list];
+        const lastRow = r.list[r.list.length - 1];
+        cuPAfter = lastRow ? lastRow.uid : cuPAfter;
+        $('cuPMore').classList.toggle('hidden', !r.more);
+        cuDrawPlayers();
+        cuMsg(q ? `찾기: ${q} · ${r.list.length}명` : `최근 접속 순 · ${cuPRows.length}명`);
+        if (q && r.list.length === 1) cuFindPlayer(r.list[0].uid);
+      } catch (e) {
+        cuMsg('불러오지 못했습니다: ' + cuErr(e), true);
+      }
+    }
+    $('cuPidFind').addEventListener('click', () => { const q = $('cuPid').value.trim(); if (q) cuLoadPlayers({ q }); else cuLoadPlayers(); });
+    $('cuPid').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('cuPidFind').click(); });
+    $('cuPAll').addEventListener('click', () => { $('cuPid').value = ''; cuLoadPlayers(); });
+    $('cuPMore').addEventListener('click', () => cuLoadPlayers({ more: true }));
 
     function openCucumber() {
       $('cuWho').textContent = ($('mail').textContent || '');
       show('dashboard', false); show('cu', true);
-      cuSetDays(30);
+      cuSetDays(30); $('cuRawDay').value = kstToday();
+      cuSetTab('overview');
       loadCucumber();
     }
     $('cuBack').addEventListener('click', () => { show('cu', false); show('dashboard', true); });
