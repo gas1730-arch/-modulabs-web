@@ -240,6 +240,7 @@
           <input type="date" id="pNewFrom" /> ~ <input type="date" id="pNewTo" />
           <span class="hint">전체 목록은 최근 접속 순, 신규 가입은 고른 기간에 처음 설치한 사람(설치일 최신 순). 같은 내 ID는 한 줄로 묶고 '계정' 칸에 개수를 적습니다. 줄을 누르면 아래에 자세히 나옵니다(1.0.9부터 게임한 사람)</span>
         </div>
+        <h3 id="pTotal"></h3>
         <div class="tablewrap"><table id="playerList" class="clickable"></table></div>
         <div class="row" style="margin-top:8px"><button id="pMore" class="hidden">더 보기</button></div>
         <div id="playerBox"></div>
@@ -792,6 +793,8 @@
         const have = new Set(pRows.map((x) => x.pid).filter(Boolean));
         pRows = [...pRows, ...r.list.filter((x) => !x.pid || !have.has(x.pid))];
         pAfter = r.after ? { uid: r.after } : pAfter;
+        // 전체 인원(첫 쪽에서만 온다). 찾기 결과는 숫자를 지운다
+        if (!opt.more) $('pTotal').textContent = r.total ? `${pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value}` : '전체 플레이어'} ${r.total.people.toLocaleString()}명` + (r.total.accounts > r.total.people ? ` (계정 ${r.total.accounts.toLocaleString()}개, 같은 내 ID는 한 명)` : '') : '';
         $('pMore').classList.toggle('hidden', !r.more);
         drawPlayers();
         uhMsg(q ? `찾기: ${q} · ${r.list.length}명` : pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value} · ${pRows.length}명${r.more ? '(더 있음)' : ''}` : `최근 접속 순 · ${pRows.length}명`);
