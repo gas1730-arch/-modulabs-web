@@ -236,7 +236,9 @@
           <input id="pid" placeholder="내 ID 또는 닉네임(정확히)" />
           <button class="primary" id="pidFind">찾기</button>
           <button id="pAll">전체 목록</button>
-          <span class="hint">최근 접속 순. 줄을 누르면 아래에 자세히 나옵니다(1.0.9부터 게임한 사람)</span>
+          <button id="pNew">신규 가입</button>
+          <input type="date" id="pNewFrom" /> ~ <input type="date" id="pNewTo" />
+          <span class="hint">전체 목록은 최근 접속 순, 신규 가입은 고른 기간에 처음 설치한 사람(설치일 최신 순). 같은 내 ID는 한 줄로 묶고 '계정' 칸에 개수를 적습니다. 줄을 누르면 아래에 자세히 나옵니다(1.0.9부터 게임한 사람)</span>
         </div>
         <div class="tablewrap"><table id="playerList" class="clickable"></table></div>
         <div class="row" style="margin-top:8px"><button id="pMore" class="hidden">더 보기</button></div>
@@ -766,13 +768,14 @@
     // 사람 목록(최근 접속 순, 50명씩) 또는 찾기 결과. 줄을 누르면 자세히
     let pAfter = null;
     let pRows = [];
+    let pSort = ''; // '' = 최근 접속 순, 'new' = 신규 가입(설치일 순)
     function drawPlayers() {
       const ago = (t) => {
         if (!t) return '-';
         const m = Math.floor((Date.now() - t) / 60000);
         return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
       };
-      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제'], pRows.map((x) => [x.name || '-', x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '']));
+      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정'], pRows.map((x) => [x.name || '-', x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
         tr.addEventListener('click', () => findPlayer({ uid: pRows[i].uid }));
@@ -780,16 +783,18 @@
     }
     async function loadPlayers(opt = {}) {
       const q = opt.q ?? '';
-      if (!opt.more) { pRows = []; pAfter = null; }
+      if (!opt.more) { pRows = []; pAfter = null; pSort = opt.sort ?? ''; }
       uhMsg(q ? '찾는 중…' : '불러오는 중…');
       try {
-        const r = await call('adminPlayers', { q, limit: 50, ...(opt.more && pAfter ? { after: pAfter } : {}) });
-        pRows = [...pRows, ...r.list];
-        const lastRow = r.list[r.list.length - 1];
-        pAfter = lastRow ? { last: lastRow.last, uid: lastRow.uid } : pAfter;
+        const range = pSort === 'new' ? { sort: 'new', from: $('pNewFrom').value, to: $('pNewTo').value } : {};
+        const r = await call('adminPlayers', { q, limit: 50, ...range, ...(opt.more && pAfter ? { after: pAfter } : {}) });
+        // 같은 내 ID가 앞 페이지에 이미 있으면 빼고 붙인다(서버가 그 ID 의 모든 계정을 묶어 보내므로 앞 줄과 같은 사람)
+        const have = new Set(pRows.map((x) => x.pid).filter(Boolean));
+        pRows = [...pRows, ...r.list.filter((x) => !x.pid || !have.has(x.pid))];
+        pAfter = r.after ? { uid: r.after } : pAfter;
         $('pMore').classList.toggle('hidden', !r.more);
         drawPlayers();
-        uhMsg(q ? `찾기: ${q} · ${r.list.length}명` : `최근 접속 순 · ${pRows.length}명`);
+        uhMsg(q ? `찾기: ${q} · ${r.list.length}명` : pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value} · ${pRows.length}명${r.more ? '(더 있음)' : ''}` : `최근 접속 순 · ${pRows.length}명`);
         if (q && r.list.length === 1) findPlayer({ uid: r.list[0].uid });
       } catch (e) {
         uhMsg('불러오지 못했습니다: ' + errText(e), true);
@@ -798,6 +803,9 @@
     $('pidFind').addEventListener('click', () => { const q = $('pid').value.trim(); if (q) loadPlayers({ q }); else loadPlayers(); });
     $('pid').addEventListener('keydown', (e) => { if (e.key === 'Enter') $('pidFind').click(); });
     $('pAll').addEventListener('click', () => { $('pid').value = ''; loadPlayers(); });
+    $('pNewTo').value = today();
+    $('pNewFrom').value = addDays(today(), -6);
+    $('pNew').addEventListener('click', () => { $('pid').value = ''; loadPlayers({ sort: 'new' }); });
     $('pMore').addEventListener('click', () => loadPlayers({ more: true }));
 
     // ── 공지·우편 ──
