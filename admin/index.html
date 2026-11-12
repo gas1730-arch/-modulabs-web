@@ -973,7 +973,7 @@
       let found = [];
       try { found = (await call('adminPlayers', { q, limit: 20 })).list ?? []; } catch (e) { box.textContent = ''; return uhMsg('실패: ' + errText(e), true); }
       box.innerHTML = '';
-      if (found.length === 0) { box.textContent = `'${q}' 인 플레이어가 없습니다(ID 또는 닉네임이 정확히 같아야 합니다)`; return; }
+      if (found.length === 0) { box.textContent = `'${q}' 인 플레이어가 없습니다(ID 또는 닉네임의 앞부분으로 찾습니다)`; return; }
       if (found.length === 1) return setMTarget(found[0]);
       const head = document.createElement('div');
       head.textContent = `${found.length}명 찾음 · 보낼 사람을 눌러 고르세요`;
@@ -1004,7 +1004,7 @@
       if (!target && to) {
         let found = [];
         try { found = (await call('adminPlayers', { q: to, limit: 20 })).list ?? []; } catch (e) { return uhMsg('받는 사람을 찾지 못했습니다: ' + errText(e), true); }
-        if (found.length === 0) return uhMsg(`'${to}' 인 플레이어를 찾지 못했습니다(ID 또는 닉네임이 정확히 같아야 합니다)`, true);
+        if (found.length === 0) return uhMsg(`'${to}' 인 플레이어를 찾지 못했습니다(ID 또는 닉네임의 앞부분으로 찾습니다)`, true);
         const line = (x, i) => `${i + 1}) ${x.name || '(이름 없음)'} · ID ${x.pid || '-'} · 마지막 접속 ${x.last ? new Date(x.last).toLocaleDateString('ko-KR') : '-'}${x.os ? ' · ' + x.os : ''}`;
         if (found.length === 1) target = found[0];
         else {
