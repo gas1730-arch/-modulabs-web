@@ -272,7 +272,11 @@
           </div>
           <div class="form">
             <h3>우편 보내기</h3>
-            <input id="mTo" placeholder="받는 사람 플레이어 ID 또는 닉네임(비우면 전체)" />
+            <div class="row" style="margin-bottom:6px;gap:6px;flex-wrap:nowrap">
+              <input id="mTo" placeholder="받는 사람 플레이어 ID 또는 닉네임(비우면 전체)" style="flex:1;margin:0" />
+              <button id="mFind" type="button" style="white-space:nowrap">찾기</button>
+            </div>
+            <div id="mToList" class="hint" style="margin-bottom:8px"></div>
             <div class="row" style="margin-bottom:0">
               <label>보낸 사람
                 <select id="mFromSel">
@@ -749,7 +753,7 @@
         const act = document.createElement('div');
         act.className = 'row';
         const mk = (label, fn, cls) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
-        mk('이 사람에게 우편', () => { setTab('post'); $('mTo').value = pid; $('mTitle').focus(); });
+        mk('이 사람에게 우편', () => { setTab('post'); $('mTo').value = pid; findMTo(); $('mTitle').focus(); });
         mk('닉네임을 기본 이름으로', async () => {
           if (!confirm('순위표·경기장에 남은 이 사람 이름을 기본 이름(함장+숫자)으로 바꿀까요?')) return;
           try { const x = await call('adminRename', who);uhMsg(`바꿨습니다: ${x.name} (${x.changed}곳)`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
@@ -942,6 +946,50 @@
     function clearI18n(prefix) {
       for (const [id] of I18N_KEYS) { $(`${prefix}T_${id}`).value = ''; $(`${prefix}B_${id}`).value = ''; }
     }
+    // 받는 사람 찾기(형 요청 2026-11-13): 칸 옆 [찾기](또는 엔터)로 ID·닉네임 검색 → 아래 목록에서 눌러 고른다. 고른 사람은 '받는 사람:' 줄로 보인다
+    let mTarget = null;
+    const mToLine = (x) => `${x.name || '(이름 없음)'} · ID ${x.pid || '-'} · 마지막 접속 ${x.last ? new Date(x.last).toLocaleDateString('ko-KR') : '-'}${x.os ? ' · ' + x.os : ''}`;
+    function setMTarget(x) {
+      mTarget = x;
+      const box = $('mToList');
+      box.innerHTML = '';
+      if (!x) return;
+      const d = document.createElement('div');
+      d.style.cssText = 'color:#3ff3e0;font-weight:700';
+      d.textContent = '받는 사람: ' + mToLine(x) + '  ';
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = '취소';
+      b.addEventListener('click', () => setMTarget(null));
+      d.append(b);
+      box.append(d);
+    }
+    async function findMTo() {
+      const q = $('mTo').value.trim();
+      setMTarget(null);
+      if (!q) return uhMsg('찾을 ID 또는 닉네임을 넣어 주세요', true);
+      const box = $('mToList');
+      box.textContent = '찾는 중…';
+      let found = [];
+      try { found = (await call('adminPlayers', { q, limit: 20 })).list ?? []; } catch (e) { box.textContent = ''; return uhMsg('실패: ' + errText(e), true); }
+      box.innerHTML = '';
+      if (found.length === 0) { box.textContent = `'${q}' 인 플레이어가 없습니다(ID 또는 닉네임이 정확히 같아야 합니다)`; return; }
+      if (found.length === 1) return setMTarget(found[0]);
+      const head = document.createElement('div');
+      head.textContent = `${found.length}명 찾음 · 보낼 사람을 눌러 고르세요`;
+      box.append(head);
+      for (const x of found) {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.style.cssText = 'display:block;width:100%;text-align:left;margin:4px 0';
+        b.textContent = mToLine(x);
+        b.addEventListener('click', () => setMTarget(x));
+        box.append(b);
+      }
+    }
+    $('mFind').addEventListener('click', findMTo);
+    $('mTo').addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); findMTo(); } });
+    $('mTo').addEventListener('input', () => { if (mTarget) setMTarget(null); }); // 칸을 고치면 고른 사람을 푼다
     $('mSend').addEventListener('click', async () => {
       const title = $('mTitle').value.trim(), body = $('mBody').value;
       if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
@@ -952,8 +1000,8 @@
       if ($('mFromSel').value === '*' && !from) return uhMsg('보낸 사람 이름을 넣어 주세요', true);
       // 받는 사람(형 요청 2026-11-13): ID 또는 닉네임으로 플레이어 목록 검색(adminPlayers)을 먼저 해서 한 사람을 정하고, 그 사람의 계정(uid)으로 보낸다.
       // 닉네임이 같은 사람이 여럿이면 번호로 고른다. 못 찾으면 보내지 않는다
-      let target = null;
-      if (to) {
+      let target = mTarget; // [찾기]로 고른 사람이 있으면 그 사람
+      if (!target && to) {
         let found = [];
         try { found = (await call('adminPlayers', { q: to, limit: 20 })).list ?? []; } catch (e) { return uhMsg('받는 사람을 찾지 못했습니다: ' + errText(e), true); }
         if (found.length === 0) return uhMsg(`'${to}' 인 플레이어를 찾지 못했습니다(ID 또는 닉네임이 정확히 같아야 합니다)`, true);
@@ -968,7 +1016,7 @@
       }
       const toText = target ? `플레이어 ${target.name || '(이름 없음)'} (ID ${target.pid || '-'})` : '모든 플레이어';
       if (!confirm(`${toText}에게 보냅니다.\n보낸 사람: ${from || '운영팀'}\n선물: ${what}\n보낼까요?`)) return;
-      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(target ? { uid: target.uid } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(target ? { uid: target.uid } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); setMTarget(null); $('mTo').value = ''; $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
 
     // ── 열기·닫기 ──
