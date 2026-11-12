@@ -272,7 +272,7 @@
           </div>
           <div class="form">
             <h3>우편 보내기</h3>
-            <input id="mTo" placeholder="받는 사람 플레이어 ID(비우면 전체)" />
+            <input id="mTo" placeholder="받는 사람 플레이어 ID 또는 닉네임(비우면 전체)" />
             <div class="row" style="margin-bottom:0">
               <label>보낸 사람
                 <select id="mFromSel">
@@ -852,7 +852,7 @@
     });
     // 우편 아이템(형 요청 2026-10-25): 앱(src/ui/turretInfo.ts·src/skins/skins.ts)과 서버(functions/index.js 의 MAIL_PART_KEYS·MAIL_SKIN_IDS)와 같은 목록
     const PART_NAMES = { uni: '공용 부품', sub: '함선 본체', gun: '딥 캐논', pierce: '관통 작살', torpedo: '어뢰', eel_coil: '전기 충격포', water_cannon: '수압 캐논', sonar: '소나', bubble: '기포 포획기', mine: '기뢰', acid: '산성 먹물', lure: '미끼', drone: '드론', cryo: '냉각포' };
-    const SKIN_NAMES = { ship_research: '심해 연구선', ship_orca: '범고래', ship_gold: '금장 의장함', ship_abyss: '심해 전함', ship_silver: '백은 지휘함', ship_crimson: '진홍 근위함', ship_arena: '투사함', ship_training: '훈련함', ship_supply: '보급함', ship_patrol: '순찰함', ship_scrap: '고철함', ship_rescue: '구조함', ship_reef: '암초 정찰함', ship_polar: '극지 정찰함', ship_magma: '마그마 순양함', ship_hunter: '심연 사냥함', cap_diver: '함장: 심해 베테랑', cap_young: '함장: 젊은 함장', cap_robot: '함장: 로봇 함장' };
+    const SKIN_NAMES = { ship_research: '심해 연구선', ship_orca: '범고래', ship_gold: '금장 의장함', ship_abyss: '심해 전함', ship_silver: '백은 지휘함', ship_crimson: '진홍 근위함', ship_arena: '투사함', ship_training: '훈련함', ship_supply: '보급함', ship_patrol: '순찰함', ship_scrap: '고철함', ship_rescue: '구조함', ship_reef: '암초 정찰함', ship_polar: '극지 정찰함', ship_magma: '마그마 순양함', ship_hunter: '심연 사냥함', cap_diver: '함장: 심해 베테랑', cap_young: '함장: 젊은 함장', cap_robot: '함장: 로봇 함장', ship_bluebell: '블루벨 호', cap_noa: '함장: 최연소 함장 노아', ship_lemon: '레몬 잠수정', cap_momo: '함장: 줍기 대장 모모', ship_pearl: '펄스타호', cap_stella: '함장: 진주의 별 스텔라', ship_crystal: '크리스탈 실험함', cap_bomi: '함장: 유리 연구원 보미' };
     const REWARD_NAMES = { diamond: '다이아', coin: '코인', steel: '강철판', energy: '에너지' };
     for (const [k, name] of Object.entries(PART_NAMES)) {
       const l = document.createElement('label');
@@ -865,14 +865,19 @@
       $('mParts').appendChild(l);
     }
     // 스킨 등급(앱 src/skins/skins.ts 의 grade, 색은 선물상자 등급과 같다). 높은 등급부터. 출시 전 스킨(심해 전함)은 보낼 수 없다
-    const SKIN_GRADE = { ship_abyss: 'legend', ship_gold: 'epic', ship_silver: 'epic', ship_crimson: 'epic', ship_arena: 'epic', ship_orca: 'rare', ship_magma: 'rare', ship_hunter: 'rare', cap_robot: 'rare', ship_research: 'advanced', ship_rescue: 'advanced', ship_reef: 'advanced', ship_polar: 'advanced', cap_diver: 'advanced', cap_young: 'advanced', ship_training: 'common', ship_supply: 'common', ship_patrol: 'common', ship_scrap: 'common' };
+    const SKIN_GRADE = { ship_abyss: 'legend', ship_gold: 'epic', ship_silver: 'epic', ship_crimson: 'epic', ship_arena: 'epic', ship_orca: 'rare', ship_magma: 'rare', ship_hunter: 'rare', cap_robot: 'rare', ship_research: 'advanced', ship_rescue: 'advanced', ship_reef: 'advanced', ship_polar: 'advanced', cap_diver: 'advanced', cap_young: 'advanced', ship_training: 'common', ship_supply: 'common', ship_patrol: 'common', ship_scrap: 'common', ship_pearl: 'epic', cap_stella: 'epic', ship_crystal: 'epic', cap_bomi: 'epic', ship_bluebell: 'rare', cap_noa: 'rare', ship_lemon: 'rare', cap_momo: 'rare' };
     const GRADES = { legend: ['전설', '#f59e0b'], epic: ['영웅', '#a855f7'], rare: ['희귀', '#3b82f6'], advanced: ['고급', '#22c55e'], common: ['일반', '#9ca3af'] };
     const SKIN_UNRELEASED = ['ship_abyss'];
     // 얻는 곳(앱 skins.ts 의 krw·diamond·fragOnly·arenaOnly 기준)
     const SKIN_FROM = {
-      ship_research: '상점 ₩3,300 · 다이아 210', ship_orca: '상점 ₩7,700 · 다이아 480', ship_gold: '상점 ₩33,000 · 다이아 2,060', ship_abyss: '상점 ₩55,000 · 다이아 3,440',
+      ship_research: '상점 ₩3,300 · 다이아 210', ship_orca: '상점 ₩7,700 · 다이아 480', ship_gold: '상점 ₩33,000 · 다이아 2,060', ship_abyss: '상점 ₩110,000 · 다이아 6,880',
       cap_diver: '상점 ₩3,300 · 다이아 210', cap_young: '상점 ₩3,300 · 다이아 210', cap_robot: '상점 ₩7,700 · 다이아 480',
       ship_arena: '경기장 상점(경기장 포인트)',
+      // 말랑 함대(세트, 형 요청 2026-11-13 우편 목록 추가). 스토리 스테이지를 깨야 앱에 보인다(노아·블루벨 7, 모모·레몬 12, 스텔라·펄스타 17, 보미·크리스탈 22)
+      ship_bluebell: '상점 ₩11,000 · 다이아 690 (7스테이지)', cap_noa: '상점 ₩11,000 · 다이아 690 (7스테이지)',
+      ship_pearl: '상점 ₩44,000 · 다이아 2,750 (17스테이지)', cap_stella: '상점 ₩44,000 · 다이아 2,750 (17스테이지)',
+      ship_lemon: '조각 120개(판 드랍, 12스테이지)', cap_momo: '조각 120개(협동전 쉬움~중간·판 드랍, 12스테이지)',
+      ship_crystal: '조각 120개(판 드랍, 22스테이지)', cap_bomi: '조각 120개(협동전 어려움 이상·판 드랍, 22스테이지)',
     };
     const skinFrom = (k) => SKIN_FROM[k] ?? '스킨 조각(스테이지·랭킹전 보상)';
     const gradeRank = Object.keys(GRADES);
@@ -945,8 +950,25 @@
       const what = rewardText(reward) || '선물 없음';
       const from = fromValue();
       if ($('mFromSel').value === '*' && !from) return uhMsg('보낸 사람 이름을 넣어 주세요', true);
-      if (!confirm(`${to ? '플레이어 ' + to : '모든 플레이어'}에게 보냅니다.\n보낸 사람: ${from || '운영팀'}\n선물: ${what}\n보낼까요?`)) return;
-      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(to ? { pid: to } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      // 받는 사람(형 요청 2026-11-13): ID 또는 닉네임으로 플레이어 목록 검색(adminPlayers)을 먼저 해서 한 사람을 정하고, 그 사람의 계정(uid)으로 보낸다.
+      // 닉네임이 같은 사람이 여럿이면 번호로 고른다. 못 찾으면 보내지 않는다
+      let target = null;
+      if (to) {
+        let found = [];
+        try { found = (await call('adminPlayers', { q: to, limit: 20 })).list ?? []; } catch (e) { return uhMsg('받는 사람을 찾지 못했습니다: ' + errText(e), true); }
+        if (found.length === 0) return uhMsg(`'${to}' 인 플레이어를 찾지 못했습니다(ID 또는 닉네임이 정확히 같아야 합니다)`, true);
+        const line = (x, i) => `${i + 1}) ${x.name || '(이름 없음)'} · ID ${x.pid || '-'} · 마지막 접속 ${x.last ? new Date(x.last).toLocaleDateString('ko-KR') : '-'}${x.os ? ' · ' + x.os : ''}`;
+        if (found.length === 1) target = found[0];
+        else {
+          const pick = prompt(`'${to}' 에 맞는 플레이어가 ${found.length}명입니다. 보낼 사람의 번호를 넣어 주세요.\n\n${found.map(line).join('\n')}`);
+          const n = Math.floor(Number(pick));
+          if (!pick || !(n >= 1 && n <= found.length)) return uhMsg('보내지 않았습니다(받는 사람을 고르지 않음)', true);
+          target = found[n - 1];
+        }
+      }
+      const toText = target ? `플레이어 ${target.name || '(이름 없음)'} (ID ${target.pid || '-'})` : '모든 플레이어';
+      if (!confirm(`${toText}에게 보냅니다.\n보낸 사람: ${from || '운영팀'}\n선물: ${what}\n보낼까요?`)) return;
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(target ? { uid: target.uid } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
 
     // ── 열기·닫기 ──
