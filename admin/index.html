@@ -754,6 +754,19 @@
         act.className = 'row';
         const mk = (label, fn, cls) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
         mk('이 사람에게 우편', () => { setTab('post'); $('mTo').value = pid; findMTo(); $('mTitle').focus(); });
+        // 다른 내 ID에 합치기(2026-11-14): 다시 깔 때 생긴 임시 함장을 원래 사람에 합친다(사람 수에서 빠지고, 이름·순위 기록이 지워진다)
+        mk('다른 내 ID에 합치기', async () => {
+          const into = (prompt(`'${r.user?.name || pid}' (${pid})를 합칠 원래 내 ID (DS-로 시작)`) || '').trim().toUpperCase();
+          if (!into) return;
+          if (!confirm(`${pid} → ${into} 로 합칠까요?\n임시 함장의 이름과 순위·경기장 기록은 지워지고 되돌릴 수 없습니다.`)) return;
+          try {
+            const res = await call('adminMergeTemp', { pid, uid: r.uid, into });
+            uhMsg(`합쳤습니다 (계정 ${res.n}개)`);
+            loadPlayers();
+          } catch (e) {
+            uhMsg('합치지 못했습니다: ' + (e.message || e));
+          }
+        });
         mk('닉네임을 기본 이름으로', async () => {
           if (!confirm('순위표·경기장에 남은 이 사람 이름을 기본 이름(함장+숫자)으로 바꿀까요?')) return;
           try { const x = await call('adminRename', who);uhMsg(`바꿨습니다: ${x.name} (${x.changed}곳)`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
@@ -780,7 +793,7 @@
         const m = Math.floor((Date.now() - t) / 60000);
         return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
       };
-      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정'], pRows.map((x) => [x.name || '-', x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '']));
+      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정'], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
         tr.addEventListener('click', () => findPlayer({ uid: pRows[i].uid }));
@@ -798,7 +811,7 @@
         pRows = [...pRows, ...r.list.filter((x) => !x.pid || !have.has(x.pid))];
         pAfter = r.after ? { uid: r.after } : pAfter;
         // 전체 인원(첫 쪽에서만 온다). 찾기 결과는 숫자를 지운다
-        if (!opt.more) $('pTotal').textContent = r.total ? `${pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value}` : '전체 플레이어'} ${r.total.people.toLocaleString()}명` + (r.total.accounts > r.total.people ? ` (계정 ${r.total.accounts.toLocaleString()}개, 같은 내 ID는 한 명)` : '') : '';
+        if (!opt.more) $('pTotal').textContent = r.total ? `${pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value}` : '전체 플레이어'} ${r.total.people.toLocaleString()}명` + (r.total.accounts > r.total.people ? ` (계정 ${r.total.accounts.toLocaleString()}개, 같은 내 ID는 한 명)` : '') + (r.total.empty ? ` · 기록 없는 설치 ${r.total.empty.toLocaleString()}개 따로` : '') : '';
         $('pMore').classList.toggle('hidden', !r.more);
         drawPlayers();
         uhMsg(q ? `찾기: ${q} · ${r.list.length}명` : pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value} · ${pRows.length}명${r.more ? '(더 있음)' : ''}` : `최근 접속 순 · ${pRows.length}명`);
