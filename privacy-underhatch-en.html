@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Under Hatch Privacy Policy | ModooLabs</title>
-  <meta name="description" content="Privacy Policy for the Under Hatch app — effective November 8, 2026" />
+  <meta name="description" content="Privacy Policy for the Under Hatch app — effective November 14, 2026" />
   <meta name="robots" content="index, follow" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -583,14 +583,14 @@
       <div class="meta-item">Platform<b>Android (Google Play) · iOS (App Store)</b></div>
       <div class="meta-item">Package name / Bundle ID<b>com.modoolabs.underhatch</b></div>
       <div class="meta-item">Developer<b>ModooLabs</b></div>
-      <div class="meta-item">Effective date<b>November 8, 2026</b></div>
+      <div class="meta-item">Effective date<b>November 14, 2026</b></div>
       <div class="meta-item">Contact<b>modoolabs1730@gmail.com</b></div>
     </div>
 
     <!-- 1 -->
     <h2><span class="num">01</span>Information We Collect and Process</h2>
     <p>
-      Under Hatch can be used without creating a separate account. However, the following information may be processed to provide leaderboard and battle server records, advertising, in-app purchase, app update and time check, and inquiry features.
+      Under Hatch can be used without creating a separate account. However, the following information may be processed to provide leaderboard and battle server records, Co-op Battle, cloud save, advertising, in-app purchase, app update and time check, and inquiry features.
     </p>
 
     <h3>1) Google AdMob Advertising</h3>
@@ -662,7 +662,17 @@
       <li>Patrol reward and daily gift claim records</li>
       <li>Game settings</li>
     </ul>
-    <p>Game progress data is stored in local storage on your device. There is currently no account linking or cloud backup feature, so if you change devices or delete the app or its data, your records may not be recoverable. Only some records used for the leaderboard and battle features are stored on the server described in 4) below.</p>
+    <p>Game progress data is, by default, stored in local storage on your device. Some records used for the leaderboard and battle features are stored on the server described in 4) below, and some information needed to run Co-op Battle is stored and processed on the Co-op Battle game server described in 8) below.</p>
+    <p><b>Cloud save (from November 10, 2026)</b> — Only while you are signed in to Google Play Games (Android) or an Apple account (iPhone), the app bundles the game data stored on your device and uploads it to the following cloud storage.</p>
+    <ul>
+      <li>Android: Google Play Games "Saved Games" (snapshots)</li>
+      <li>iPhone: Apple iCloud key-value storage</li>
+      <li>What is uploaded: all of the game progress data above (currency, progress, captain name, purchase delivery records (purchase ledger), etc.), and the server sign-in key (Firebase anonymous account refresh token) that lets your ranking records continue after a reinstall</li>
+      <li>What is not uploaded: device-only values such as the usage record send queue and the server time offset</li>
+      <li>If cloud-saved records exist after you reinstall the app or change devices, the app asks whether to load them, and you choose.</li>
+      <li>Records are not transferred between Android and iPhone. If you are not signed in or cloud save is unavailable, your records exist only on the device and may not be recoverable if you change devices or delete the app or its data.</li>
+      <li>The cloud storage is operated and managed by Google (Play Games) or Apple (iCloud) and is subject to that provider's privacy policy. The developer does not view the contents of this storage or load it with admin tools.</li>
+    </ul>
 
     <p>The captain name is a nickname used within the game and is stored on your device. However, if you use the leaderboard or battle features, it is also stored on the server described in 4) below and shown to other users. A name that does not meet our operating standards may be changed automatically, or changed or reset by the developer. We recommend that you do not enter personal information, such as your real name or contact details, as your captain name.</p>
 
@@ -679,6 +689,10 @@
       <li>Battle reports (battle results for the most recent 30 battles, such as win/loss, trophy changes, and the captain names, combat power, and damage of you and your opponent)</li>
       <li>Mail claim records, arena shop purchase records, and Ranked and Endless round start records</li>
       <li>Last access time</li>
+      <li>Co-op Battle records (kept only for the most recent 30 battles and 30 days, including the captain names, faces, and damage information of the Users you played with), co-op reward delivery records, and early-exit records</li>
+      <li>Captain name uniqueness records (the pairing of a captain name with an anonymous account number)</li>
+      <li>Information from merging a temporary record created when the app was reinstalled into the original record (temporary game ID). After merging, the temporary account's name and ranking records are deleted.</li>
+      <li>Personal mail (reward) records. Mail is displayed for 30 days from the date received.</li>
       <li>Purchase verification records (see the purchase verification server item under 2) In-App Purchases above)</li>
       <li>Communication records sent with server requests, such as your IP address (processed by Google; the developer does not use them to identify users)</li>
     </ul>
@@ -694,7 +708,8 @@
       <li>Sessions: the time you open the game and how long you play</li>
       <li>Battles: mode and stage, whether you cleared, failed, or quit midway, time taken, level reached, and weapons used</li>
       <li>Ads: where you watched an ad and whether you watched it to the end</li>
-      <li>Progress: whether you watched the opening and tutorial, and the number of times you could not start because you were out of energy</li>
+      <li>Co-op Battle: Co-op Battle results (joined, completed, left early, etc.)</li>
+      <li>Progress: whether you watched the opening, tutorial, and help pages, and the number of times you could not start because you were out of energy</li>
       <li>A once-a-day record of the currencies you hold (diamonds and coins)</li>
       <li>Device information: operating system (Android/iOS), app version, game language, and the date the app was first installed</li>
       <li>Identifiers: the anonymous account number created automatically by the game, your in-game player ID, and your Captain name (the nickname you choose yourself)</li>
@@ -719,13 +734,24 @@
     <h3>7) Google Play Games Sign-in (Android)</h3>
     <p>If you are signed in to Google Play Games on an Android device, the app reads the <b>player ID and gamer name</b> of that account from Google Play Games.</p>
     <ul>
-      <li>They are used only on your device, to compare against a list of developer accounts and decide whether to unlock development and testing features.</li>
+      <li>They are used on your device to compare against a list of developer accounts and decide whether to unlock development and testing features.</li>
       <li>Your name and ID are shown to you in the "My info" section of the Settings screen.</li>
-      <li>The values read are not sent to the developer's servers or stored on the device. The app does not use cloud saves, leaderboards, or achievements.</li>
+      <li><b>Linking reward</b> — To grant the Google Play Games linking reward (100 diamonds, once per account) and prevent duplicate grants, the player ID is sent to the developer's server (Firebase in 4) above). The server stores the "pairing of the Play Games player ID and the anonymous account number" for as long as the service is operated. The gamer name is not sent to the server.</li>
+      <li><b>Cloud save</b> — Google Play Games "Saved Games" is used for the cloud save described in 3) above. Leaderboards and achievements are not used.</li>
       <li>Google Play Games sign-in and the information processed during it are handled by Google under the <a href="https://policies.google.com/privacy" style="color: var(--cyan); text-decoration: none;">Google Privacy Policy</a>.</li>
     </ul>
 
-    <h3>8) How Information Is Collected</h3>
+    <h3>8) Co-op Battle Game Server (Real-Time Battle Relay)</h3>
+    <p>Co-op Battle is a feature in which several users fight together in real time, and the developer operates a relay server that connects the users' apps.</p>
+    <ul>
+      <li>Operation: Amazon Web Services (AWS) Lightsail Seoul region, at game.modooscoin.com (secure WebSocket)</li>
+      <li>Information received: captain name, game ID (DS-...), captain face, ship skin, starting weapon, and upgrade information (for ship calculations), highest stage, anonymous account number (for signing the reward result slip), and connecting IP address (passed along during communication)</li>
+      <li>Retention: kept only in the server's memory while a battle is in progress and disappears when it ends. Room numbers and captain names may remain in operating logs. Co-op Battle records (most recent 30 battles) are stored on the Firebase server described in 4) above.</li>
+      <li>What other users can see: in the Co-op Battle lobby, rooms, and battles, your captain name, captain face, ship skin and weapons, and damage ranking are shown. The game ID is also passed to the apps of participants in the same room but is not shown on screen. In the lobby, the captain names and faces of up to 10 users are visible to others choosing a room.</li>
+      <li>Chat: only preset phrases and emoticons (macros) can be sent; there is no free-text chat.</li>
+    </ul>
+
+    <h3>9) How Information Is Collected</h3>
     <p>Personal and usage information may be collected and processed in the following ways:</p>
     <ul>
       <li>When you launch and play the game</li>
@@ -735,7 +761,9 @@
       <li>When Google AdMob ads are requested, displayed, clicked, or viewed</li>
       <li>Through the iOS tracking request and the ad consent process for users in the EEA, the UK, and Switzerland</li>
       <li>When the app checks for updates, checks for new store versions, and checks the server time at launch</li>
-      <li>When the app checks Google Play Games sign-in information on Android (processed only on the device)</li>
+      <li>When the app checks Google Play Games sign-in information on Android and during the linking reward process</li>
+      <li>When saving to and loading from Google Play Games Saved Games or iCloud cloud save</li>
+      <li>When connecting to and playing on the Co-op Battle game server</li>
       <li>Through automatic communication between the app and Google and Apple services</li>
       <li>When you contact us with inquiries, error reports, or refund requests</li>
     </ul>
@@ -745,7 +773,9 @@
     <h2><span class="num">02</span>How We Use Information</h2>
     <p>The developer and the third-party services used in the app process the collected information for the following purposes:</p>
     <ul>
-      <li>Saving and using game progress data</li>
+      <li>Saving and using game progress data, and cloud saving and loading</li>
+      <li>Connecting Co-op Battle rooms and relaying real-time play, granting co-op rewards, preventing duplicate captain names, and sending mail</li>
+      <li>Granting the Google Play Games linking reward and preventing duplicate grants</li>
       <li>Compiling and displaying Ranked, Endless, and Battle rankings, matching battle opponents, and granting weekly rewards</li>
       <li>Preventing record manipulation and identifying abnormal use</li>
       <li>Analyzing usage statistics and balancing the game</li>
@@ -774,6 +804,9 @@
           <tr><th>Game progress data stored on the device</th><td>Until the app is deleted or app data is cleared</td></tr>
           <tr><th>Leaderboard and battle server records (captain name, ranking and battle records, battle reports, number of skin fragments owned, anonymous account number, etc.)</th><td>Kept for as long as the service is operated, and deleted upon your deletion request (past records of the weekly leaderboard are preserved; battle reports are kept only for the most recent 30 battles per user)</td></tr>
           <tr><th>Game usage records (sessions, battles, ads, progress, currencies held, device information, anonymous account number, Captain name, etc.)</th><td>Kept for as long as the service is operated and destroyed without delay when the service ends; deleted upon your deletion request (statistics aggregated by date so that individuals cannot be identified may be kept separately)</td></tr>
+          <tr><th>Co-op Battle records, co-op reward delivery records, early-exit records, captain name uniqueness records, Play Games link records (player ID to anonymous account number), personal mail records</th><td>Kept for as long as the service is operated, and deleted upon your deletion request (Co-op Battle records are kept only for the most recent 30 battles and 30 days; mail is displayed for 30 days from the date received)</td></tr>
+          <tr><th>In-progress information on the Co-op Battle game server (captain name, game ID, ship information, etc.)</th><td>Kept only in server memory while a battle is in progress and deleted when it ends (room numbers and captain names left in operating logs are kept for the operating log retention period)</td></tr>
+          <tr><th>Cloud save data (Google Play Games Saved Games, iCloud)</th><td>Kept by Google or Apple until you delete it (the developer has no authority to delete it; you delete it yourself)</td></tr>
           <tr><th>Purchase tokens and Apple-signed transaction information (original) sent to the verification server</th><td>Not stored (discarded immediately after verification)</td></tr>
           <tr><th>Purchase records on the server (purchase identifier hash value, anonymous account number, product ID, purchase time, test purchase flag, time of recording)</th><td>Kept for as long as the service is operated (to prevent duplicate delivery and to confirm disputes). Deleted upon your deletion request, to the extent no legal retention obligation applies</td></tr>
           <tr><th>On-device item delivery record (purchase ledger)</th><td>Until the app is deleted or app data is cleared</td></tr>
@@ -796,6 +829,9 @@
           <tr><th>Apple Inc.</th><td>App Store in-app purchases, App Tracking Transparency (iOS)</td><td>Product ID, transaction ID, purchase date and time, purchase/refund status, and tracking permission status</td><td>Payment processing, purchase verification, item delivery, purchase restoration, refunds, and tracking permission management</td><td>As determined by Apple's policies and applicable law</td></tr>
           <tr><th>Google LLC (Google Cloud, Firebase)</th><td>Leaderboard and battle server (Firebase Anonymous Authentication, Cloud Firestore, Cloud Functions, Seoul region)</td><td>Anonymous account number, game ID, captain name, ranking and battle records, trophies, combat power, fleet setup, titles, ranks, profile borders, number of skin fragments owned, battle reports, mail and shop usage records, game usage records (sessions, battles, ads, progress, currencies held, device information), communication records (IP address, etc.)</td><td>Providing leaderboard and battle features, keeping records, granting weekly rewards, preventing abnormal use, analyzing usage statistics and balancing the game</td><td>For as long as the service is operated, or until you request deletion (Google's communication records are subject to Google's policies)</td></tr>
           <tr><th>Google LLC (Google Cloud)</th><td>Purchase verification server hosting (Cloud Functions, Seoul region)</td><td>Purchase token or Apple-signed transaction information, product ID, product type, package name, platform (information stored: purchase identifier hash value, anonymous account number, product ID, purchase time, test purchase flag, time of recording)</td><td>Verifying that a purchase is valid (Google Play Developer API lookup, Apple receipt signature verification) and preventing duplicate delivery</td><td>The original purchase token and receipt are not stored. Purchase records are kept for as long as the service is operated</td></tr>
+          <tr><th>Google LLC</th><td>Google Play Games (player ID verification, Saved Games) — Android</td><td>Player ID, gamer name, cloud save data (all game progress data and the server sign-in key)</td><td>Sign-in verification, linking reward, cloud saving and loading</td><td>For the period set by Google's policies (until you delete it yourself)</td></tr>
+          <tr><th>Apple Inc.</th><td>iCloud key-value storage — iPhone</td><td>Cloud save data (all game progress data and the server sign-in key)</td><td>Cloud saving and loading</td><td>For the period set by Apple's policies (until you delete it yourself)</td></tr>
+          <tr><th>Amazon Web Services, Inc. (AWS)</th><td>Co-op Battle game server hosting (Lightsail Seoul region, game.modooscoin.com)</td><td>Captain name, game ID, captain face, ship skin, starting weapon, upgrade information, highest stage, anonymous account number, connecting IP address, operating logs (room number, captain name)</td><td>Relaying real-time Co-op Battle play and signing co-op reward results</td><td>Kept in server memory only while a battle is in progress; operating logs for as long as operationally necessary</td></tr>
           <tr><th>650 Industries, Inc. (Expo)</th><td>App update server</td><td>IP address, platform, app version, update identifier</td><td>Checking for and delivering app updates</td><td>As determined by Expo's policies</td></tr>
           <tr><th>Google LLC</th><td>Server time check (www.google.com)</td><td>IP address</td><td>Operating features based on server time (energy, challenge count, weekly rewards, etc.)</td><td>As determined by Google's policies</td></tr>
           <tr><th>Google LLC, Apple Inc.</th><td>Checking for new store versions (Google Play, Apple App Store)</td><td>App version, package name / bundle ID, IP address (on iPhone, including the country code of the device's region)</td><td>Notifying you of new versions</td><td>As determined by each provider's policies</td></tr>
@@ -812,13 +848,14 @@
     </ul>
 
     <h3>3) International Processing and Transfer</h3>
-    <p>Google AdMob, Google Play Billing, Google Firebase (leaderboard and battle server), Google server time check, the Apple App Store, and Expo's update servers may be provided through servers located outside the Republic of Korea. As a result, personal information may be processed and stored outside Korea. The server functions operated by the developer (leaderboard and battle, purchase verification) are located in the Seoul region of the Republic of Korea, but because of the nature of Google's infrastructure, some information may be processed outside Korea.</p>
+    <p>Google AdMob, Google Play Billing, Google Firebase (leaderboard and battle server), Google Play Games, Google server time check, the Apple App Store, Apple iCloud, AWS (Co-op Battle game server), and Expo's update servers may be provided through servers located outside the Republic of Korea. As a result, personal information may be processed and stored outside Korea. The server functions operated by the developer (leaderboard and battle, purchase verification) are located in the Seoul region of the Republic of Korea, but because of the nature of Google's infrastructure, some information may be processed outside Korea. The Co-op Battle game server is in the AWS Seoul region, but it is operated by a U.S. entity (Amazon Web Services, Inc.), and cloud saves through Google Play Games and Apple iCloud may also pass through servers outside Korea.</p>
     <div class="data-table-wrap">
       <table class="data-table">
         <thead><tr><th>Recipient</th><th>Destination country</th><th>Information transferred</th><th>Purpose</th><th>Timing and method</th></tr></thead>
         <tbody>
-          <tr><th>Google LLC and its affiliates</th><td>United States and other countries where Google data centers are located</td><td>Advertising ID, IP address, device information, ad usage information, product ID, transaction ID, purchase token, purchase status, anonymous account number, captain name, ranking and battle records, battle reports, number of skin fragments owned, and game usage records</td><td>Providing advertising, payment, security, leaderboard and battle services, and server time checks, and analyzing usage statistics</td><td>Transmitted over encrypted networks when the related features are used</td></tr>
-          <tr><th>Apple Inc.</th><td>United States and other countries where Apple data centers are located</td><td>Product ID, transaction ID, purchase date and time, purchase status, and tracking permission status (iOS)</td><td>Processing in-app purchases and managing tracking permission</td><td>Transmitted over encrypted networks when the related features are used</td></tr>
+          <tr><th>Google LLC and its affiliates</th><td>United States and other countries where Google data centers are located</td><td>Advertising ID, IP address, device information, ad usage information, product ID, transaction ID, purchase token, purchase status, anonymous account number, captain name, ranking and battle records, battle reports, number of skin fragments owned, game usage records, Co-op Battle records, Play Games player ID, and cloud save data (all game progress data)</td><td>Providing advertising, payment, security, leaderboard and battle services, Co-op Battle records, the linking reward, cloud save, and server time checks, and analyzing usage statistics</td><td>Transmitted over encrypted networks when the related features are used</td></tr>
+          <tr><th>Apple Inc.</th><td>United States and other countries where Apple data centers are located</td><td>Product ID, transaction ID, purchase date and time, purchase status, tracking permission status (iOS), and iCloud cloud save data (all game progress data)</td><td>Processing in-app purchases, managing tracking permission, and cloud saving and loading</td><td>Transmitted over encrypted networks when the related features are used</td></tr>
+          <tr><th>Amazon Web Services, Inc. (AWS)</th><td>United States (the server is in the Seoul region, Republic of Korea)</td><td>Captain name, game ID, ship information, highest stage, anonymous account number, connecting IP address</td><td>Relaying real-time Co-op Battle play</td><td>Transmitted over an encrypted secure WebSocket when Co-op Battle is used</td></tr>
           <tr><th>650 Industries, Inc. (Expo)</th><td>United States</td><td>IP address, platform, app version, update identifier</td><td>Checking for and delivering app updates</td><td>Transmitted over encrypted networks when the app is launched</td></tr>
         </tbody>
       </table>
@@ -835,6 +872,7 @@
       <li>Request suspension of processing</li>
       <li>Request access to, correction of, or deletion of the captain name and records stored on the leaderboard and battle server (please tell us your captain name or game ID, and we will process the request after verification)</li>
       <li>Request deletion of your game usage records (tell us the "My ID" shown in the game's settings through [Contact] at the bottom of the settings screen, and we will delete your usage records)</li>
+      <li>Request deletion of records stored on the server, such as Co-op Battle records, mail, and Play Games link records (see 6) Account and Data Deletion Requests below)</li>
       <li>Opt out of ads personalization</li>
       <li>Reset or delete your advertising ID</li>
       <li>Withdraw iOS tracking permission (iPhone Settings → Privacy &amp; Security → Tracking)</li>
@@ -850,6 +888,15 @@
     <p>The developer destroys personal information without delay once the retention period expires or the purpose of processing has been achieved.</p>
     <p>Electronic files are deleted in a way that cannot be recovered or reproduced. Information that must be retained under applicable law is stored separately from other information and is not used for any purpose other than the legally required retention.</p>
     <p>You can delete game progress data stored on your device yourself by deleting the app or clearing its app data.</p>
+
+    <h3 id="delete">6) Account and Data Deletion Requests</h3>
+    <p>Under Hatch has no account registration, so there is no separate account; the server stores records linked to the anonymous account number and game ID that the app creates automatically. You can request deletion of these records as follows.</p>
+    <ul>
+      <li><b>How to request</b> — Through [Contact] at the bottom of the game settings, or by email to modoolabs1730@gmail.com, tell us the "My ID" shown in the settings window and request deletion.</li>
+      <li><b>What is deleted</b> — On the server: game usage records, ranking, Endless, and Arena records, battle reports, skin fragments, Co-op Battle records, mail, captain name registration, and Google Play Games link records. Purchase records are kept only to the extent needed for legal retention obligations and dispute handling, and the rest are deleted.</li>
+      <li><b>Processing time</b> — After verifying your identity, we process the request and notify you of the result within 10 days of receipt. If it is unavoidably delayed, we will first tell you the reason and the expected date.</li>
+      <li><b>Data you delete yourself</b> — You can delete game data on your device by deleting the app or clearing its app data, and cloud save data by deleting the Saved Games in Google Play Games on Android or by using Manage iCloud Storage in Settings on iPhone. The developer cannot delete this cloud storage.</li>
+    </ul>
 
     <!-- 4 -->
     <h2><span class="num">04</span>Children's Privacy</h2>
@@ -881,9 +928,9 @@
       If advertising networks, in-app payments, analytics tools, cloud storage, updates, or account features are added or changed, we will update this policy to reflect the information actually processed and the purposes of processing.
     </p>
     <div class="callout">
-      Announced: November 8, 2026<br>
-      Effective: November 8, 2026<br>
-      Changes: Added a section on reading Google Play Games sign-in information (player ID and gamer name) on Android, processed only on the device (previous revisions: October 27, 2026 / October 25, 2026 / October 22, 2026 / October 18, 2026 / initial version effective October 10, 2026)
+      Announced: November 14, 2026<br>
+      Effective: November 14, 2026<br>
+      Changes: (1) Added cloud save (Android Google Play Games Saved Games, iPhone iCloud); (2) revised the Google Play Games section so that the player ID is sent to the server for the linking reward; (3) added the Co-op Battle game server (AWS Seoul region); (4) added Co-op Battle records, captain name uniqueness records, temporary record merge information, and mail records to the items stored on the Firebase server; (5) added Co-op Battle results and help page views to game usage records; (6) added an "Account and Data Deletion Requests" section; (7) reflected Google Play Games, iCloud, and AWS in the retention, third-party sharing, and international transfer tables (previous revisions: November 8, 2026 / October 27, 2026 / October 25, 2026 / October 22, 2026 / October 18, 2026 / initial version effective October 10, 2026)
     </div>
 
     <!-- 6 -->
@@ -941,7 +988,7 @@
     </p>
 
     <p style="margin-top: 60px; padding-top: 24px; border-top: 1px solid var(--border); color: var(--muted); font-family: var(--font-mono); font-size: 12px; text-align: right;">
-      Last updated: 2026-11-08
+      Last updated: 2026-11-14
     </p>
 
   </main>
