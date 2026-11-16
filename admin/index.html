@@ -112,6 +112,13 @@
     .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
     .form { display: flex; flex-direction: column; gap: 8px; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
+    .item.has { flex-wrap: wrap; cursor: pointer; }
+    .item.has:hover > div:first-child { color: var(--accent, #04e0d0); }
+    .item .detail { flex-basis: 100%; cursor: auto; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 10px 12px; margin: 4px 0 6px; }
+    .item .detail b { display: block; color: var(--text-2); font-size: 12px; margin: 10px 0 2px; }
+    .item .detail b:first-child { margin-top: 0; }
+    .item .detail .dt { font-weight: 600; margin-bottom: 4px; }
+    .item .detail .db { white-space: pre-wrap; word-break: break-word; line-height: 1.5; }
     button.danger { border-color: var(--warn); color: var(--warn); }
     table.clickable tr:not(:first-child) { cursor: pointer; }
     table.clickable tr:not(:first-child):hover td { background: var(--bg-2); }
@@ -838,7 +845,31 @@
         const t = document.createElement('div');
         t.textContent = `${new Date(it.at).toLocaleString('ko-KR')} · ${it.title}${rewardText(it) ? ' — ' + rewardText(it) : ''}${it.to ? ' (한 명에게)' : ''}${it.by ? ` · 보낸 사람 ${it.from || '운영팀'} (${it.by})` : ''}${it.builtIn ? ' (코드에 들어 있는 기본)' : ''}`;
         row.appendChild(t);
-        if (!it.builtIn) { const b = document.createElement('button'); b.textContent = '지우기'; b.className = 'danger'; b.addEventListener('click', () => onDelete(it.id)); row.appendChild(b); }
+        let delBtn = null;
+        if (!it.builtIn) { delBtn = document.createElement('button'); delBtn.textContent = '지우기'; delBtn.className = 'danger'; delBtn.addEventListener('click', (e) => { e.stopPropagation(); onDelete(it.id); }); row.appendChild(delBtn); }
+        if (delBtn && it.body) delBtn.style.display = 'none'; // 실수로 지우지 않게, 내용을 펼쳤을 때만 보인다
+        // 줄을 누르면 보낸 내용(한국어 + 다른 언어)을 아래에 펼친다. 코드에 들어 있는 기본 공지는 본문이 없어서 펼칠 게 없다
+        if (it.body) {
+          row.classList.add('has');
+          row.title = '눌러서 내용 보기';
+          let box = null;
+          row.addEventListener('click', () => {
+            if (box) { box.remove(); box = null; if (delBtn) delBtn.style.display = 'none'; return; }
+            if (delBtn) delBtn.style.display = '';
+            box = document.createElement('div');
+            box.className = 'detail';
+            const part = (label, title, body) => {
+              const h = document.createElement('b'); h.textContent = label; box.appendChild(h);
+              if (title) { const d = document.createElement('div'); d.className = 'dt'; d.textContent = title; box.appendChild(d); }
+              const d = document.createElement('div'); d.className = 'db'; d.textContent = body || ''; box.appendChild(d);
+            };
+            part('한국어', it.title, it.body);
+            const L = { en: 'English', ja: '日本語', zhTW: '繁體中文' };
+            for (const [k, name] of Object.entries(L)) { const x = it.i18n && it.i18n[k]; if (x && (x.title || x.body)) part(name, x.title, x.body); }
+            box.addEventListener('click', (e) => e.stopPropagation());
+            row.appendChild(box);
+          });
+        }
         el.appendChild(row);
       }
       if (items.length === 0) el.textContent = '없습니다';
