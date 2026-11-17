@@ -800,10 +800,18 @@
         const m = Math.floor((Date.now() - t) / 60000);
         return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
       };
-      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정'], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '']));
+      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
         tr.addEventListener('click', () => findPlayer({ uid: pRows[i].uid }));
+        // 줄 끝 [우편] 버튼(형 요청 2026-11-17): 상세를 거치지 않고 바로 우편 탭에 받는 사람을 채운다. 줄 클릭(상세)과는 겹치지 않게 stopPropagation
+        const to = pRows[i].pid || pRows[i].name;
+        if (!to) return;
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = '우편';
+        b.addEventListener('click', (e) => { e.stopPropagation(); setTab('post'); $('mTo').value = to; findMTo(); $('mTitle').focus(); });
+        tr.lastElementChild.appendChild(b);
       });
     }
     async function loadPlayers(opt = {}) {
