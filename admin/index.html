@@ -826,6 +826,7 @@
         const b = document.createElement('button');
         b.type = 'button';
         b.textContent = '우편';
+        b.style.cssText = 'padding:2px 12px;margin:0;font-size:13px;line-height:1.3'; // 줄 높이가 늘지 않게 위아래 여백을 줄인다
         b.addEventListener('click', (e) => { e.stopPropagation(); setTab('post'); $('mTo').value = to; findMTo(); $('mTitle').focus(); });
         tr.lastElementChild.appendChild(b);
       });
