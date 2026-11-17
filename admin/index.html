@@ -109,6 +109,8 @@
     tr.bad td { color: var(--warn); }
     table.kv th { width: 160px; }
     #playerBox table { margin-bottom: 14px; }
+    tr.pdetail > td { padding: 10px 6px; cursor: default; }
+    tr.pdetail table { margin-bottom: 14px; }
     .cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
     .form { display: flex; flex-direction: column; gap: 8px; }
     .item { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); font-size: 13px; }
@@ -520,7 +522,7 @@
 
     // 표 그리기(글자는 전부 textContent 로: 플레이어 이름 등이 화면을 망가뜨리지 않게)
     function table(id, head, rows, rowClass) {
-      const t = $(id);
+      const t = typeof id === 'string' ? $(id) : id; // id 글자 또는 표 요소(줄 아래에 펼친 상세는 같은 id 가 겹치지 않게 요소로 넘긴다)
       t.innerHTML = '';
       const tr = document.createElement('tr');
       for (const h of head) { const th = document.createElement('th'); th.textContent = h; tr.appendChild(th); }
@@ -721,9 +723,10 @@
 
     // ── 플레이어 ──
     // 한 사람 자세히(key = { uid } 또는 { pid })
-    async function findPlayer(key) {
+    // target 을 주면 그 칸에 그린다(목록 줄 아래 펼침). 없으면 플레이어 탭 위쪽 칸(playerBox)에 그리고 그쪽으로 스크롤
+    async function findPlayer(key, target) {
       uhMsg('찾는 중…');
-      const box = $('playerBox');
+      const box = target || $('playerBox');
       box.innerHTML = '';
       try {
         const r = await call('adminLookup', key);
@@ -751,12 +754,10 @@
         box.appendChild(dl);
         const buys = document.createElement('table');
         box.appendChild(buys);
-        buys.id = 'pBuys';
-        table('pBuys', ['시각', '상품', '금액', '시험'], r.purchases.sort((a, b) => b.time - a.time).map((p) => [new Date(p.time).toLocaleString('ko-KR'), p.storeId, won(p.krw), p.test ? '시험' : '']));
+        table(buys, ['시각', '상품', '금액', '시험'], r.purchases.sort((a, b) => b.time - a.time).map((p) => [new Date(p.time).toLocaleString('ko-KR'), p.storeId, won(p.krw), p.test ? '시험' : '']));
         const days = document.createElement('table');
         box.appendChild(days);
-        days.id = 'pDays';
-        table('pDays', ['최근 날짜', '버전', '폰', '기록 수'], r.recentDays.map((d) => [d.day, d.v, d.os, d.n]));
+        table(days, ['최근 날짜', '버전', '폰', '기록 수'], r.recentDays.map((d) => [d.day, d.v, d.os, d.n]));
         const act = document.createElement('div');
         act.className = 'row';
         const mk = (label, fn, cls) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
@@ -783,9 +784,10 @@
           try { const x = await call('adminDeleteStats', who);uhMsg(`지웠습니다: ${x.deleted}일치`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
         }, 'danger');
         box.appendChild(act);
-        box.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        if (!target) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
         uhMsg('');
       } catch (e) {
+        box.textContent = '찾지 못했습니다: ' + errText(e);
         uhMsg('찾지 못했습니다: ' + errText(e), true);
       }
     }
@@ -803,7 +805,21 @@
       table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
-        tr.addEventListener('click', () => findPlayer({ uid: pRows[i].uid }));
+        // 줄을 누르면 그 줄 바로 아래에 상세를 펼친다(형 요청 2026-11-17). 같은 줄을 다시 누르면 접고, 다른 줄을 누르면 앞에 열린 것은 닫는다
+        tr.addEventListener('click', () => {
+          const open = tr.nextElementSibling?.classList.contains('pdetail') ? tr.nextElementSibling : null;
+          $('playerList').querySelectorAll('tr.pdetail').forEach((d) => d.remove());
+          if (open) return;
+          const dr = document.createElement('tr');
+          dr.className = 'pdetail';
+          const td = document.createElement('td');
+          td.colSpan = 9;
+          const inner = document.createElement('div');
+          td.appendChild(inner);
+          dr.appendChild(td);
+          tr.after(dr);
+          findPlayer({ uid: pRows[i].uid }, inner);
+        });
         // 줄 끝 [우편] 버튼(형 요청 2026-11-17): 상세를 거치지 않고 바로 우편 탭에 받는 사람을 채운다. 줄 클릭(상세)과는 겹치지 않게 stopPropagation
         const to = pRows[i].pid || pRows[i].name;
         if (!to) return;
