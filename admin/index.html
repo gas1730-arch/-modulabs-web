@@ -802,7 +802,7 @@
         const m = Math.floor((Date.now() - t) / 60000);
         return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
       };
-      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
+      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : x.stage ? ` · ${x.stage}스테이지` + (x.hell ? ` · 지옥 ${x.hell}` : '') : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
         // 줄을 누르면 그 줄 바로 아래에 상세를 펼친다(형 요청 2026-11-17). 같은 줄을 다시 누르면 접고, 다른 줄을 누르면 앞에 열린 것은 닫는다
