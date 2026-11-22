@@ -551,8 +551,14 @@
 
     // ── 탭 ──
     let tab = 'overview';
+    // 지금 보는 자리를 주소 끝(#uh/플레이어 등)에 적어 둔다(형 요청 2026-11-22: 새로 고치면 처음으로 돌아갔다)
+    function saveSpot(s) {
+      try { history.replaceState(null, '', s ? '#' + s : location.pathname + location.search); } catch {}
+    }
     function setTab(t) {
+      if (!document.querySelector(`#uhTabs button[data-tab="${t}"]`)) t = 'overview';
       tab = t;
+      saveSpot('uh/' + t);
       document.querySelectorAll('#uhTabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
       document.querySelectorAll('#uh .pane').forEach((p) => p.classList.toggle('hidden', p.id !== 'pane-' + t));
       $('uhRange').classList.toggle('hidden', !['overview', 'stages', 'flow', 'sales'].includes(t));
@@ -1095,17 +1101,22 @@
     });
 
     // ── 열기·닫기 ──
-    async function openUnderHatch() {
+    // startTab = 처음 열 탭, restoring = 새로 고침 뒤 자리 되살리기(이때는 로그인 창을 저절로 띄우지 않는다: 브라우저가 막는다)
+    async function openUnderHatch(startTab = 'overview', restoring = false) {
+      if (typeof startTab !== 'string') startTab = 'overview'; // 버튼 클릭은 이벤트가 넘어온다
+      if (uhAuth.authStateReady) await uhAuth.authStateReady().catch(() => {}); // 새로 고친 직후엔 로그인 상태를 되살리는 중
       if (!uhAuth.currentUser) {
-        try { await signInWithPopup(uhAuth, new GoogleAuthProvider()); } catch (e) { alert('언더 해치 로그인을 하지 못했습니다. 팝업이 막혔는지 확인하세요.'); return; }
+        if (restoring) return false;
+        try { await signInWithPopup(uhAuth, new GoogleAuthProvider()); } catch (e) { alert('언더 해치 로그인을 하지 못했습니다. 팝업이 막혔는지 확인하세요.'); return false; }
       }
       $('uhWho').textContent = uhAuth.currentUser?.email ?? '';
       show('dashboard', false); show('uh', true);
       setDays(30); $('rawDay').value = today();
-      setTab('overview');
+      setTab(startTab);
       loadUhStats();
+      return true;
     }
-    $('uhBack').addEventListener('click', () => { show('uh', false); show('dashboard', true); });
+    $('uhBack').addEventListener('click', () => { show('uh', false); show('dashboard', true); saveSpot(''); });
     window.__openUnderHatch = openUnderHatch;
 
     // ── 오이밭 수호대(2026-10-27) ──────────────────────────────────────────────
@@ -1137,7 +1148,9 @@
     // ── 탭 ──
     let cuTab = 'overview';
     function cuSetTab(t) {
+      if (!document.querySelector(`#cuTabs button[data-tab="${t}"]`)) t = 'overview';
       cuTab = t;
+      saveSpot('cu/' + t);
       document.querySelectorAll('#cuTabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
       document.querySelectorAll('#cu .pane').forEach((p) => p.classList.toggle('hidden', p.id !== 'cupane-' + t));
       $('cuRange').classList.toggle('hidden', !['overview', 'stages', 'ads', 'sales'].includes(t));
@@ -1403,14 +1416,15 @@
     $('cuPAll').addEventListener('click', () => { $('cuPid').value = ''; cuLoadPlayers(); });
     $('cuPMore').addEventListener('click', () => cuLoadPlayers({ more: true }));
 
-    function openCucumber() {
+    function openCucumber(startTab = 'overview') {
+      if (typeof startTab !== 'string') startTab = 'overview'; // 버튼 클릭은 이벤트가 넘어온다
       $('cuWho').textContent = ($('mail').textContent || '');
       show('dashboard', false); show('cu', true);
       cuSetDays(30); $('cuRawDay').value = kstToday();
-      cuSetTab('overview');
+      cuSetTab(startTab);
       loadCucumber();
     }
-    $('cuBack').addEventListener('click', () => { show('cu', false); show('dashboard', true); });
+    $('cuBack').addEventListener('click', () => { show('cu', false); show('dashboard', true); saveSpot(''); });
     window.__openCucumber = openCucumber;
 
     const configured = Object.values(FIREBASE_CONFIG).every((v) => v !== '');
@@ -1448,6 +1462,10 @@
         show('who', true); show('signedOut', false); show('dashboard', true);
         renderApps();
         loadStats(user).catch(() => {});
+        // 새로 고치기 전에 보던 자리로(#uh/탭, #cu/탭). 언더 해치 로그인이 풀려 있으면 앱 목록에 머문다
+        const spot = /^#(uh|cu)\/([a-z]+)$/.exec(location.hash);
+        if (spot && spot[1] === 'uh') openUnderHatch(spot[2], true).then((ok) => { if (!ok) saveSpot(''); });
+        else if (spot && spot[1] === 'cu') openCucumber(spot[2]);
       });
     }
   </script>
