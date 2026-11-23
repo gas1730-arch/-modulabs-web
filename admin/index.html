@@ -811,6 +811,13 @@
       table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : x.stage ? ` · ${x.stage}스테이지` + (x.hell ? ` · 지옥 ${x.hell}` : '') : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
+        // 재방문한 사람(형 요청 2026-11-23): 설치일보다 뒤인 날에 들어온 적이 있으면 닉네임을 청록색, 서버가 센 날 수(rdays)가 있으면 '· 재방문 N일'
+        const p = pRows[i];
+        const lastDay = p.last ? new Date(p.last + 9 * 3600000).toISOString().slice(0, 10) : '';
+        if (!p.arenaOnly && !p.empty && (p.rdays > 0 || (p.inst && lastDay > p.inst)) && tr.children[0]) {
+          if (p.rdays > 0) tr.children[0].textContent += ` · 재방문 ${p.rdays}일`;
+          tr.children[0].style.color = 'var(--cyan)';
+        }
         // 지금 켜 둔 사람(형 요청 2026-11-22): 앱이 3분마다 신호를 보내므로 마지막 접속이 4분 안이면 '● 접속 중'(초록). 옛 앱은 신호가 없어 예전처럼 '○분 전'
         if (!pRows[i].arenaOnly && pRows[i].last && Date.now() - pRows[i].last < 4 * 60000 && tr.children[5]) {
           tr.children[5].textContent = '● 접속 중';
