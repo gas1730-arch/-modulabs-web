@@ -132,6 +132,22 @@
     .pickgrid input[type=number] { width: 80px; }
     .grade { display: inline-block; font-size: 11px; font-weight: 700; border: 1px solid; border-radius: 4px; padding: 0 4px; margin-right: 2px; }
     .pickgrid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
+    /* 설치 탭 달력(형 요청 2026-11-23) */
+    .calhead { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+    .calhead h3 { margin: 0; min-width: 120px; text-align: center; }
+    .calhead button { padding: 4px 12px; margin: 0; }
+    .calsum { font-size: 12px; color: var(--text-2); margin-left: 8px; }
+    .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+    .cal .wd { font-size: 12px; color: var(--muted); text-align: center; padding: 2px 0; }
+    .cal .wd.sun { color: var(--warn); }
+    .cal .day { background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; padding: 6px 8px; min-height: 92px; font-size: 11px; color: var(--text-2); line-height: 1.5; }
+    .cal .day.blank { background: transparent; border-color: transparent; }
+    .cal .day.zero { opacity: 0.45; }
+    .cal .day.future { opacity: 0.25; }
+    .cal .day.today { border-color: var(--cyan); }
+    .cal .day .d { font-size: 12px; color: var(--muted); }
+    .cal .day .n { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text); }
+    .cal .day .ret { color: var(--cyan); }
   </style>
 </head>
 <body>
@@ -213,8 +229,15 @@
         <p class="hint">새 설치 = 그날 앱을 처음 켠 사람(설치 하나를 한 건, 다시 깔아 원래 함장에 합친 임시 계정은 뺌). 스토어 설치 수보다 조금 적습니다(깔고 한 번도 안 켠 사람은 모름).
           '아직 게임 안 함' = 자동 이름 그대로이고 전투를 한 번도 시작하지 않은 사람. 열 때마다 새로 세서, 나중에 첫 판을 하면 '게임한 사람'으로 옮겨 갑니다.</p>
         <div class="kpis" id="instKpis"></div>
-        <h3>날짜별</h3>
-        <div class="tablewrap"><table id="instTable"></table></div>
+        <!-- 날짜별은 달력(형 요청 2026-11-23): 위 기간과 따로, ‹ › 로 한 달씩 넘긴다 -->
+        <div class="calhead">
+          <button type="button" id="calPrev">‹</button>
+          <h3 id="calTitle"></h3>
+          <button type="button" id="calNext">›</button>
+          <button type="button" id="calThis">이번 달</button>
+          <span class="calsum" id="calSum"></span>
+        </div>
+        <div class="cal" id="instCal"></div>
       </div>
       <div class="pane hidden" id="pane-stages">
         <p class="hint">스테이지 = 그 모드의 몇 스테이지(7 = 7스테이지). 실패율이 높은 스테이지가 난이도 조정 후보입니다(주황 줄 = 5판 이상 도전했고 실패율 60% 이상). 나가기는 중간에 그만둔 판.</p>
@@ -559,6 +582,8 @@
 
     // ── 탭 ──
     let tab = 'overview';
+    let calLoaded = false; // 설치 탭 달력: 처음 열 때 한 번 불러온다
+    let calMonth = ''; // 'YYYY-MM'(한국 날짜 기준), 비면 이번 달
     // 지금 보는 자리를 주소 끝(#uh/플레이어 등)에 적어 둔다(형 요청 2026-11-22: 새로 고치면 처음으로 돌아갔다)
     function saveSpot(s) {
       try { history.replaceState(null, '', s ? '#' + s : location.pathname + location.search); } catch {}
@@ -573,6 +598,7 @@
       uhMsg('');
       if (t === 'post') { loadNotices(); loadMails(); }
       if (t === 'player' && pRows.length === 0) loadPlayers();
+      if (t === 'installs' && !calLoaded) loadCal();
     }
     document.querySelectorAll('#uhTabs button').forEach((b) => b.addEventListener('click', () => setTab(b.dataset.tab)));
 
@@ -601,7 +627,6 @@
     }
     // ── 설치 탭(형 요청 2026-11-23): 설치일별 새 설치·안드/아이폰·게임한 사람/아직 게임 안 함·누적·1일 뒤 재방문 ──
     async function loadInstalls() {
-      table('instTable', ['날짜'], []);
       $('instKpis').innerHTML = '';
       try {
         drawInstalls(await call('adminInstalls', { from: $('uhFrom').value, to: $('uhTo').value }));
@@ -629,11 +654,56 @@
         ['아직 게임 안 함', tot('notyet').toLocaleString('ko-KR'), '나중에 하면 줄어듭니다'],
         ['지금까지 누적', cum.toLocaleString('ko-KR'), `기간 앞 ${r.before.toLocaleString('ko-KR')}`],
       ]);
-      const ret1 = (d) => (stat[d]?.new_users && addDays(d, 1) < today() ? pct(stat[d].ret1 ?? 0, stat[d].new_users) : '');
-      table('instTable', ['날짜', '새 설치', '안드로이드', '아이폰', '게임한 사람', '아직 게임 안 함', '게임한 비율', '누적', '1일 뒤 재방문'], [...asc].reverse().map((d) => [
-        d, g(d, 'n'), g(d, 'android'), g(d, 'ios'), g(d, 'played'), g(d, 'notyet'), g(d, 'n') ? pct(g(d, 'played'), g(d, 'n')) : '', cumOf[d].toLocaleString('ko-KR'), ret1(d),
-      ]));
     }
+    // 설치 달력(형 요청 2026-11-23): 한 달을 일~토 칸으로, 칸마다 새 설치·안드/아이폰·게임한 사람/아직·1일 뒤 재방문. ‹ › 로 한 달씩
+    const shiftMonth = (m, n) => { const [y, mo] = m.split('-').map(Number); return new Date(Date.UTC(y, mo - 1 + n, 1)).toISOString().slice(0, 7); };
+    const monthEnd = (m) => { const [y, mo] = m.split('-').map(Number); return new Date(Date.UTC(y, mo, 0)).toISOString().slice(0, 10); };
+    async function loadCal() {
+      calLoaded = true;
+      if (!calMonth) calMonth = today().slice(0, 7);
+      const from = calMonth + '-01', to = monthEnd(calMonth);
+      const [y, mo] = calMonth.split('-').map(Number);
+      $('calTitle').textContent = `${y}년 ${mo}월`;
+      $('calNext').disabled = calMonth >= today().slice(0, 7);
+      $('calSum').textContent = '불러오는 중…';
+      $('instCal').innerHTML = '';
+      try {
+        const [ins, st] = await Promise.all([call('adminInstalls', { from, to }), call('adminStats', { from, to })]);
+        if (calMonth !== `${y}-${String(mo).padStart(2, '0')}`) return; // 그사이 다른 달로 넘겼다
+        drawCal(from, to, ins, st);
+      } catch (e) {
+        $('calSum').textContent = '불러오지 못했습니다: ' + errText(e);
+      }
+    }
+    function drawCal(from, to, ins, st) {
+      const byDay = Object.fromEntries(ins.days.map((d) => [d.day, d]));
+      const stat = Object.fromEntries((st.days ?? []).map((d) => [d.day, d]));
+      const el = $('instCal');
+      el.innerHTML = '';
+      const add = (cls, parent = el) => { const x = document.createElement('div'); x.className = cls; parent.appendChild(x); return x; };
+      ['일', '월', '화', '수', '목', '금', '토'].forEach((w, i) => { add('wd' + (i === 0 ? ' sun' : '')).textContent = w; });
+      const lead = new Date(from + 'T00:00:00Z').getUTCDay();
+      for (let i = 0; i < lead; i++) add('day blank');
+      const now = today();
+      let n = 0, played = 0, cum = ins.before;
+      for (let d = from; d <= to; d = addDays(d, 1)) {
+        const r = byDay[d];
+        const cell = add('day' + (d > now ? ' future' : !r ? ' zero' : '') + (d === now ? ' today' : ''));
+        add('d', cell).textContent = String(Number(d.slice(8)));
+        if (d > now) continue;
+        add('n', cell).textContent = String(r?.n ?? 0);
+        if (!r) continue;
+        n += r.n; played += r.played; cum += r.n;
+        add('', cell).textContent = `안드 ${r.android} · 아이폰 ${r.ios}`;
+        add('', cell).textContent = `게임 ${r.played} · 아직 ${r.notyet}`;
+        const s = stat[d];
+        if (s?.new_users && addDays(d, 1) < now) add('ret', cell).textContent = `1일 뒤 ${pct(s.ret1 ?? 0, s.new_users)}`;
+      }
+      $('calSum').textContent = `이달 새 설치 ${n.toLocaleString('ko-KR')} · 게임한 사람 ${played.toLocaleString('ko-KR')}(${pct(played, n)}) · 이달 끝 누적 ${cum.toLocaleString('ko-KR')}`;
+    }
+    $('calPrev').addEventListener('click', () => { calMonth = shiftMonth(calMonth || today().slice(0, 7), -1); loadCal(); });
+    $('calNext').addEventListener('click', () => { if (calMonth < today().slice(0, 7)) { calMonth = shiftMonth(calMonth, 1); loadCal(); } });
+    $('calThis').addEventListener('click', () => { calMonth = today().slice(0, 7); loadCal(); });
     const sumKeys = (days, pre) => {
       const out = {};
       for (const d of days) for (const [k, v] of Object.entries(d)) if (k.startsWith(pre) && typeof v === 'number') out[k] = (out[k] ?? 0) + v;
