@@ -184,6 +184,7 @@
       </div>
       <div class="tabs" id="uhTabs">
         <button data-tab="overview" class="on">개요</button>
+        <button data-tab="installs">설치</button>
         <button data-tab="stages">스테이지</button>
         <button data-tab="flow">광고·흐름</button>
         <button data-tab="sales">매출</button>
@@ -207,6 +208,13 @@
         <div class="kpis" id="kpis"></div>
         <h3>날짜별</h3>
         <div class="tablewrap"><table id="dayTable"></table></div>
+      </div>
+      <div class="pane hidden" id="pane-installs">
+        <p class="hint">새 설치 = 그날 앱을 처음 켠 사람(설치 하나를 한 건, 다시 깔아 원래 함장에 합친 임시 계정은 뺌). 스토어 설치 수보다 조금 적습니다(깔고 한 번도 안 켠 사람은 모름).
+          '아직 게임 안 함' = 자동 이름 그대로이고 전투를 한 번도 시작하지 않은 사람. 열 때마다 새로 세서, 나중에 첫 판을 하면 '게임한 사람'으로 옮겨 갑니다.</p>
+        <div class="kpis" id="instKpis"></div>
+        <h3>날짜별</h3>
+        <div class="tablewrap"><table id="instTable"></table></div>
       </div>
       <div class="pane hidden" id="pane-stages">
         <p class="hint">스테이지 = 그 모드의 몇 스테이지(7 = 7스테이지). 실패율이 높은 스테이지가 난이도 조정 후보입니다(주황 줄 = 5판 이상 도전했고 실패율 60% 이상). 나가기는 중간에 그만둔 판.</p>
@@ -561,7 +569,7 @@
       saveSpot('uh/' + t);
       document.querySelectorAll('#uhTabs button').forEach((b) => b.classList.toggle('on', b.dataset.tab === t));
       document.querySelectorAll('#uh .pane').forEach((p) => p.classList.toggle('hidden', p.id !== 'pane-' + t));
-      $('uhRange').classList.toggle('hidden', !['overview', 'stages', 'flow', 'sales'].includes(t));
+      $('uhRange').classList.toggle('hidden', !['overview', 'installs', 'stages', 'flow', 'sales'].includes(t));
       uhMsg('');
       if (t === 'post') { loadNotices(); loadMails(); }
       if (t === 'player' && pRows.length === 0) loadPlayers();
@@ -589,6 +597,42 @@
       } catch (e) {
         uhMsg('불러오지 못했습니다: ' + errText(e), true);
       }
+      loadInstalls();
+    }
+    // ── 설치 탭(형 요청 2026-11-23): 설치일별 새 설치·안드/아이폰·게임한 사람/아직 게임 안 함·누적·1일 뒤 재방문 ──
+    async function loadInstalls() {
+      table('instTable', ['날짜'], []);
+      $('instKpis').innerHTML = '';
+      try {
+        drawInstalls(await call('adminInstalls', { from: $('uhFrom').value, to: $('uhTo').value }));
+      } catch (e) {
+        if (tab === 'installs') uhMsg('설치 집계를 불러오지 못했습니다: ' + errText(e), true);
+      }
+    }
+    function drawInstalls(r) {
+      const byDay = Object.fromEntries(r.days.map((d) => [d.day, d]));
+      const stat = Object.fromEntries((last?.days ?? []).map((d) => [d.day, d])); // 1일 뒤 재방문은 개요와 같은 집계(stats_day)
+      const g = (d, k) => (byDay[d]?.[k] ?? 0);
+      // 설치가 처음 있는 날부터 보인다(그 전 빈 날은 평균만 깎는다)
+      const first = r.days.map((d) => d.day).sort()[0];
+      const asc = [];
+      if (first) for (let d = first > r.from ? first : r.from; d <= r.to; d = addDays(d, 1)) asc.push(d);
+      let cum = r.before;
+      const cumOf = {};
+      for (const d of asc) { cum += g(d, 'n'); cumOf[d] = cum; }
+      const tot = (k) => asc.reduce((a, d) => a + g(d, k), 0);
+      const n = tot('n'), played = tot('played');
+      kpis('instKpis', [
+        ['기간 새 설치', n.toLocaleString('ko-KR'), `하루 평균 ${fmt(n / Math.max(1, asc.length))}`],
+        ['안드로이드 · 아이폰', `${tot('android').toLocaleString('ko-KR')} · ${tot('ios').toLocaleString('ko-KR')}`, tot('other') ? `기타 ${tot('other')}` : ''],
+        ['게임한 사람', played.toLocaleString('ko-KR'), `새 설치의 ${pct(played, n)}`],
+        ['아직 게임 안 함', tot('notyet').toLocaleString('ko-KR'), '나중에 하면 줄어듭니다'],
+        ['지금까지 누적', cum.toLocaleString('ko-KR'), `기간 앞 ${r.before.toLocaleString('ko-KR')}`],
+      ]);
+      const ret1 = (d) => (stat[d]?.new_users && addDays(d, 1) < today() ? pct(stat[d].ret1 ?? 0, stat[d].new_users) : '');
+      table('instTable', ['날짜', '새 설치', '안드로이드', '아이폰', '게임한 사람', '아직 게임 안 함', '게임한 비율', '누적', '1일 뒤 재방문'], [...asc].reverse().map((d) => [
+        d, g(d, 'n'), g(d, 'android'), g(d, 'ios'), g(d, 'played'), g(d, 'notyet'), g(d, 'n') ? pct(g(d, 'played'), g(d, 'n')) : '', cumOf[d].toLocaleString('ko-KR'), ret1(d),
+      ]));
     }
     const sumKeys = (days, pre) => {
       const out = {};
