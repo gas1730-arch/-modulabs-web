@@ -249,7 +249,7 @@
           <input type="date" id="pNewFrom" /> ~ <input type="date" id="pNewTo" />
           <span class="hint">전체 목록은 최근 접속 순, 신규 가입은 고른 기간에 처음 설치한 사람(설치일 최신 순). 같은 내 ID는 한 줄로 묶고 '계정' 칸에 개수를 적습니다. 줄을 누르면 아래에 자세히 나옵니다(1.0.9부터 게임한 사람)</span>
         </div>
-        <h3 id="pTotal"></h3>
+        <h3><span id="pTotal"></span><span id="pRet" style="color: var(--cyan); margin-left: 16px;"></span></h3>
         <div class="tablewrap"><table id="playerList" class="clickable"></table></div>
         <div class="row" style="margin-top:8px"><button id="pMore" class="hidden">더 보기</button></div>
         <div id="playerBox"></div>
@@ -843,6 +843,26 @@
         tr.lastElementChild.appendChild(b);
       });
     }
+    // 플레이어 탭 재방문율(형 요청 2026-11-23): 위 날짜 칸 기간에 설치한 사람의 1·7·30일 뒤 재방문. 개요 탭과 같은 서버 집계(stats_day ret1·ret7·ret30), 아직 안 온 날은 뺀다
+    async function loadPlayerRet() {
+      $('pRet').textContent = '';
+      const from = $('pNewFrom').value, to = $('pNewTo').value;
+      if (!from || !to) return;
+      try {
+        const r = await call('adminStats', { from, to });
+        const byDay = Object.fromEntries((r.days ?? []).map((d) => [d.day, d]));
+        const days = [];
+        for (let d = to; d >= from; d = addDays(d, -1)) days.push(d);
+        const g = (d, k) => (byDay[d]?.[k] ?? 0);
+        const retOf = (n) => {
+          const done = days.filter((d) => addDays(d, n) < today());
+          return pct(done.reduce((a, d) => a + g(d, 'ret' + n), 0), done.reduce((a, d) => a + g(d, 'new_users'), 0));
+        };
+        $('pRet').textContent = `재방문 1일 뒤 ${retOf(1)} · 7일 뒤 ${retOf(7)} · 30일 뒤 ${retOf(30)}`;
+      } catch (e) {
+        $('pRet').textContent = '';
+      }
+    }
     async function loadPlayers(opt = {}) {
       const q = opt.q ?? '';
       if (!opt.more) { pRows = []; pAfter = null; pSort = opt.sort ?? ''; }
@@ -858,6 +878,7 @@
         if (!opt.more) $('pTotal').textContent = r.total ? `${pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value}` : '전체 플레이어'} ${r.total.people.toLocaleString()}명` + (r.total.accounts > r.total.people ? ` (계정 ${r.total.accounts.toLocaleString()}개, 같은 내 ID는 한 명)` : '') + (r.total.empty ? ` · 기록 없는 설치 ${r.total.empty.toLocaleString()}개 따로` : '') : '';
         $('pMore').classList.toggle('hidden', !r.more);
         drawPlayers();
+        if (!opt.more) loadPlayerRet();
         uhMsg(q ? `찾기: ${q} · ${r.list.length}명` : pSort === 'new' ? `신규 가입 ${$('pNewFrom').value} ~ ${$('pNewTo').value} · ${pRows.length}명${r.more ? '(더 있음)' : ''}` : `최근 접속 순 · ${pRows.length}명`);
         if (q && r.list.length === 1) findPlayer({ uid: r.list[0].uid });
       } catch (e) {
