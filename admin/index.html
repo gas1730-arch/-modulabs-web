@@ -59,6 +59,8 @@
     button.primary { background: var(--cyan); color: #04141A; border-color: var(--cyan); font-weight: 700; }
 
     main { padding: 28px 0 60px; }
+    /* 아래 여유(형 요청 2026-11-23): main 의 아래 여백이 .wrap 의 padding 에 덮여 0 이었다. 모든 페이지 맨 아래에 여유를 둔다(위·옆은 그대로) */
+    main.wrap { padding-bottom: 120px; }
     h1 { font-family: var(--font-display); font-size: 24px; margin-bottom: 4px; }
     .sub { color: var(--text-2); font-size: 14px; margin-bottom: 24px; }
 
@@ -148,6 +150,14 @@
     .cal .day .d { font-size: 12px; color: var(--muted); }
     .cal .day .n { font-family: var(--font-display); font-size: 20px; font-weight: 700; color: var(--text); }
     .cal .day .ret { color: var(--cyan); }
+    .cal .day.click { cursor: pointer; }
+    .cal .day.click:hover { border-color: var(--border-strong); }
+    /* 날짜 상세 팝업(형 요청 2026-11-23) */
+    .pop { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 16px; }
+    .pop .box { background: var(--surface); border: 1px solid var(--border-strong); border-radius: 12px; padding: 18px; width: 100%; max-width: 380px; }
+    .pop .box h3 { margin: 0 0 10px; color: var(--text); }
+    .pop .box table td:last-child { text-align: right; font-weight: 700; }
+    .pop .box .close { margin-top: 12px; width: 100%; }
   </style>
 </head>
 <body>
@@ -692,14 +702,60 @@
         add('d', cell).textContent = String(Number(d.slice(8)));
         if (d > now) continue;
         add('n', cell).textContent = String(r?.n ?? 0);
+        if (r) { n += r.n; played += r.played; cum += r.n; }
+        // 칸을 누르면 그날 상세 팝업
+        const cumAt = cum;
+        cell.classList.add('click');
+        cell.addEventListener('click', () => openDayPop(d, r, stat[d], cumAt));
         if (!r) continue;
-        n += r.n; played += r.played; cum += r.n;
         add('', cell).textContent = `안드 ${r.android} · 아이폰 ${r.ios}`;
         add('', cell).textContent = `게임 ${r.played} · 아직 ${r.notyet}`;
         const s = stat[d];
         if (s?.new_users && addDays(d, 1) < now) add('ret', cell).textContent = `1일 뒤 ${pct(s.ret1 ?? 0, s.new_users)}`;
       }
       $('calSum').textContent = `이달 새 설치 ${n.toLocaleString('ko-KR')} · 게임한 사람 ${played.toLocaleString('ko-KR')}(${pct(played, n)}) · 이달 끝 누적 ${cum.toLocaleString('ko-KR')}`;
+    }
+    // 날짜 상세 팝업: 그날 숫자를 표로(설치 탭 예전 날짜별 표의 칸 + 7·30일 뒤 재방문). 바깥·닫기·Esc 로 닫는다
+    function openDayPop(d, r, s, cumAt) {
+      document.querySelectorAll('.pop').forEach((p) => p.remove());
+      const g = (k) => r?.[k] ?? 0;
+      const ret = (k) => (!s?.new_users ? '-' : addDays(d, k) < today() ? pct(s['ret' + k] ?? 0, s.new_users) : '아직');
+      const wd = ['일', '월', '화', '수', '목', '금', '토'][new Date(d + 'T00:00:00Z').getUTCDay()];
+      const pop = document.createElement('div');
+      pop.className = 'pop';
+      const box = document.createElement('div');
+      box.className = 'box';
+      const h = document.createElement('h3');
+      h.textContent = `${Number(d.slice(0, 4))}년 ${Number(d.slice(5, 7))}월 ${Number(d.slice(8))}일 (${wd})`;
+      const wrap = document.createElement('div');
+      wrap.className = 'tablewrap';
+      const t = document.createElement('table');
+      wrap.appendChild(t);
+      table(t, ['항목', '값'], [
+        ['새 설치', g('n')],
+        ['안드로이드', g('android')],
+        ['아이폰', g('ios')],
+        ...(g('other') ? [['기타', g('other')]] : []),
+        ['게임한 사람', g('played')],
+        ['아직 게임 안 함', g('notyet')],
+        ['게임한 비율', g('n') ? pct(g('played'), g('n')) : '-'],
+        ['그날까지 누적', cumAt.toLocaleString('ko-KR')],
+        ['1일 뒤 재방문', ret(1)],
+        ['7일 뒤 재방문', ret(7)],
+        ['30일 뒤 재방문', ret(30)],
+      ]);
+      const close = document.createElement('button');
+      close.type = 'button';
+      close.className = 'close';
+      close.textContent = '닫기';
+      const shut = () => { pop.remove(); document.removeEventListener('keydown', onKey); };
+      const onKey = (e) => { if (e.key === 'Escape') shut(); };
+      close.addEventListener('click', shut);
+      pop.addEventListener('click', (e) => { if (e.target === pop) shut(); });
+      document.addEventListener('keydown', onKey);
+      box.append(h, wrap, close);
+      pop.appendChild(box);
+      document.body.appendChild(pop);
     }
     $('calPrev').addEventListener('click', () => { calMonth = shiftMonth(calMonth || today().slice(0, 7), -1); loadCal(); });
     $('calNext').addEventListener('click', () => { if (calMonth < today().slice(0, 7)) { calMonth = shiftMonth(calMonth, 1); loadCal(); } });
