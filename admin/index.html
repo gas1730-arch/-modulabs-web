@@ -38,7 +38,7 @@
       min-height: 100vh;
     }
 
-    .wrap { max-width: 980px; margin: 0 auto; padding: 0 16px; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 16px; }
 
     header {
       border-bottom: 1px solid var(--border);
@@ -915,6 +915,7 @@
           ['계정 번호', r.uid],
           ['처음 설치한 날', r.user?.inst ?? '-'],
           ['마지막 접속', r.user?.last ? new Date(r.user.last).toLocaleString('ko-KR') : '-'],
+          ['게임 시간', r.user?.playSec ? `${Math.floor(r.user.playSec / 3600)}시간 ${Math.floor((r.user.playSec % 3600) / 60)}분` : '-'], // 이 계정만(목록 칸은 같은 내 ID 계정 합)
           ['폰', r.user?.os ?? '-'],
           ['기록이 있는 날 수', r.activeDays],
           ['이름(경기장)', r.profile?.name ?? '-'],
@@ -978,7 +979,12 @@
         const m = Math.floor((Date.now() - t) / 60000);
         return m < 60 ? `${m}분 전` : m < 1440 ? `${Math.floor(m / 60)}시간 전` : `${Math.floor(m / 1440)}일 전`;
       };
-      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : x.stage ? ` · ${x.stage}스테이지` + (x.hell ? ` · 지옥 ${x.hell}` : '') : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
+      // 총 게임 시간(형 요청 2026-11-25): 앱 화면에 떠 있던 시간 합(같은 내 ID 계정 합), 10-25부터 기록
+      const playT = (sec) => {
+        const m = Math.floor((Number(sec) || 0) / 60);
+        return m <= 0 ? '' : m < 60 ? `${m}분` : `${Math.floor(m / 60)}시간 ${m % 60}분`;
+      };
+      table('playerList', ['닉네임', '내 ID', '폰', '버전', '설치일', '마지막 접속', '게임 시간', '결제', '계정', ''], pRows.map((x) => [(x.name || '-') + (x.empty ? ' · 기록 없음' : x.stage ? ` · ${x.stage}스테이지` + (x.hell ? ` · 지옥 ${x.hell}` : '') : ''), x.pid || '-', x.os || '-', x.v || '-', x.inst || '-', x.arenaOnly ? '(이용 기록 없음)' : ago(x.last), playT(x.playSec), x.krw ? won(x.krw) : '', x.accounts > 1 ? `${x.accounts}개` : '', '']));
       [...$('playerList').querySelectorAll('tr')].slice(1).forEach((tr, i) => {
         if (!pRows[i]) return;
         // 재방문한 사람(형 요청 2026-11-23): 설치일보다 뒤인 날에 들어온 적이 있으면 닉네임을 청록색, 서버가 센 날 수(rdays)가 있으면 '· 재방문 N일'
@@ -1002,7 +1008,7 @@
           const dr = document.createElement('tr');
           dr.className = 'pdetail';
           const td = document.createElement('td');
-          td.colSpan = 9;
+          td.colSpan = 10;
           const inner = document.createElement('div');
           td.appendChild(inner);
           dr.appendChild(td);
