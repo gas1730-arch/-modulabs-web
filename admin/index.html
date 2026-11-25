@@ -924,6 +924,9 @@
           ['지옥 최고 기록', r.hell ? `스테이지 ${r.hell.stage ?? '-'}` : '-'],
           ['구매', `${r.purchases.length}건 · ${won(r.purchases.filter((p) => !p.test).reduce((a, p) => a + p.krw, 0))}`],
           ['받은 우편', Object.keys(r.player?.mailClaimed ?? {}).join(', ') || '-'],
+          // 계정 옮기기(2026-11-26): 서버 백업(연결 코드·복구 코드가 옮기는 기록)과 마지막으로 옮겨 온 때
+          ['서버 백업', r.backup ? `${new Date(r.backup.at).toLocaleString('ko-KR')} · ${Math.round((r.backup.size || 0) / 1024)}KB · 앱 ${r.backup.v || '-'}` : '없음'],
+          ['마지막으로 옮겨 온 때', r.player?.lastTransferAt ? new Date(r.player.lastTransferAt).toLocaleString('ko-KR') : '-'],
         ];
         const dl = document.createElement('table');
         dl.className = 'kv';
@@ -935,6 +938,10 @@
         const days = document.createElement('table');
         box.appendChild(days);
         table(days, ['최근 날짜', '버전', '폰', '기록 수'], r.recentDays.map((d) => [d.day, d.v, d.os, d.n]));
+        const XFER_KIND = { user: '연결 코드로 옮김', admin: '복구 코드로 옮김', admin_issue: '복구 코드 발급' };
+        const xfers = document.createElement('table');
+        box.appendChild(xfers);
+        table(xfers, ['옮기기 기록(최근 5)', '종류', '옮긴 백업 시각', '받은 폰', '비고'], (r.transfers ?? []).map((x) => [new Date(x.at).toLocaleString('ko-KR'), XFER_KIND[x.kind] || x.kind, x.backupAt ? new Date(x.backupAt).toLocaleString('ko-KR') : '', x.toOs ? `${x.toOs} ${x.toV}` : '', x.by || (x.fromV ? `백업 앱 ${x.fromV}` : '')]));
         const act = document.createElement('div');
         act.className = 'row';
         const mk = (label, fn, cls) => { const b = document.createElement('button'); b.textContent = label; if (cls) b.className = cls; b.addEventListener('click', fn); act.appendChild(b); };
@@ -952,6 +959,29 @@
             uhMsg('합치지 못했습니다: ' + (e.message || e));
           }
         });
+        // 복구 코드(2026-11-26): 폰을 잃어버린 사람 등. 새 폰의 설정 → 계정 옮기기 → 연결 코드 입력에 넣으면 서버 백업으로 옮겨진다(24시간·한 번만)
+        const codeBox = document.createElement('div');
+        mk('복구 코드 발급', async () => {
+          if (!r.backup) return uhMsg('이 사람은 서버 백업이 없어 복구 코드를 만들 수 없습니다', true);
+          if (!confirm(`'${r.user?.name || pid}' (${pid}) 의 복구 코드를 만듭니다.
+
+본인 확인을 했습니까?
+ - 내 ID + 구매 영수증, 또는 닉네임·도달 스테이지가 맞는지
+
+코드를 받은 사람은 이 계정을 가져갑니다. 이 사람의 이전 코드는 못 쓰게 됩니다.`)) return;
+          try {
+            const x = await call('adminTransferCode', who);
+            codeBox.innerHTML = '';
+            const big = document.createElement('div');
+            big.textContent = x.code;
+            big.style.cssText = 'font-size:26px;font-weight:900;letter-spacing:2px;margin:10px 0 4px;user-select:all';
+            const info = document.createElement('div');
+            info.textContent = `${new Date(x.expiresAt).toLocaleString('ko-KR')} 까지(24시간)·한 번만 · 옮겨질 백업: ${new Date(x.backupAt).toLocaleString('ko-KR')} · ${Math.round((x.backupSize || 0) / 1024)}KB · 앱 ${x.backupV || '-'}`;
+            info.style.cssText = 'color:var(--text-2)';
+            codeBox.append(big, info);
+            uhMsg('복구 코드를 만들었습니다. 본인에게만 알려 주세요');
+          } catch (e) { uhMsg('실패: ' + errText(e), true); }
+        });
         mk('닉네임을 기본 이름으로', async () => {
           if (!confirm('순위표·경기장에 남은 이 사람 이름을 기본 이름(함장+숫자)으로 바꿀까요?')) return;
           try { const x = await call('adminRename', who);uhMsg(`바꿨습니다: ${x.name} (${x.changed}곳)`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
@@ -961,6 +991,7 @@
           try { const x = await call('adminDeleteStats', who);uhMsg(`지웠습니다: ${x.deleted}일치`); } catch (e) { uhMsg('실패: ' + errText(e), true); }
         }, 'danger');
         box.appendChild(act);
+        box.appendChild(codeBox);
         if (!target) box.scrollIntoView({ behavior: 'smooth', block: 'start' });
         uhMsg('');
       } catch (e) {
