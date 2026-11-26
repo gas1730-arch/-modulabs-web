@@ -360,6 +360,8 @@
               <label>코인 <input id="mCoin" type="number" min="0" value="0" /></label>
               <label>강철판 <input id="mSteel" type="number" min="0" value="0" /></label>
               <label>에너지 <input id="mEnergy" type="number" min="0" value="0" /></label>
+              <label>프리미엄 패스 <select id="mPerk"><option value="">없음</option><option value="life">평생</option><option value="days">일수</option></select> <input id="mPerkDays" type="number" min="1" value="30" style="width:70px" title="일수(일수를 골랐을 때)" /></label>
+              <label>이름 바꾸기권 <input id="mRename" type="number" min="0" value="0" /></label>
               <label>기한(일) <input id="mDays" type="number" min="1" max="365" value="30" /></label>
             </div>
             <details class="pick"><summary>부품 넣기 <span class="hint" id="mPartsSum"></span></summary><div class="pickgrid" id="mParts"></div></details>
@@ -1233,6 +1235,8 @@
       const out = Object.entries(REWARD_NAMES).filter(([k]) => (r[k] ?? 0) > 0).map(([k, n]) => `${n} ${r[k]}`);
       for (const [k, v] of Object.entries(r.parts ?? {})) if (v > 0) out.push(`${PART_NAMES[k] ?? k} 부품 ${v}`);
       for (const k of r.skins ?? []) out.push(`${SKIN_NAMES[k] ?? k} 스킨`);
+      if (r.perk) out.push(r.perk.life ? '프리미엄 패스 평생' : `프리미엄 패스 ${r.perk.days}일`);
+      if (r.items?.rename) out.push(`이름 바꾸기권 ${r.items.rename}장`);
       return out.join(', ');
     }
     // 보낸 사람(형 요청 2026-10-25): 고르거나 직접 입력. 마지막 선택은 이 브라우저에 기억한다. 실제로 보낸 계정은 서버가 따로 남긴다
@@ -1309,7 +1313,9 @@
     $('mSend').addEventListener('click', async () => {
       const title = $('mTitle').value.trim(), body = $('mBody').value;
       if (!title || !body.trim()) return uhMsg('제목과 내용을 넣어 주세요', true);
-      const reward = { diamond: Number($('mDia').value) || 0, coin: Number($('mCoin').value) || 0, steel: Number($('mSteel').value) || 0, energy: Number($('mEnergy').value) || 0, parts: pickedParts(), skins: pickedSkins() };
+      const perkSel = $('mPerk').value, perkDays = Number($('mPerkDays').value) || 0, renameN = Number($('mRename').value) || 0;
+      // 프리미엄 패스권(2026-11-26, 앱 OTA 받은 폰만 보인다): 평생 또는 n일. 프리미엄은 모든 광고를 건너뛴다
+      const reward = { diamond: Number($('mDia').value) || 0, coin: Number($('mCoin').value) || 0, steel: Number($('mSteel').value) || 0, energy: Number($('mEnergy').value) || 0, parts: pickedParts(), skins: pickedSkins(), ...(perkSel === 'life' ? { perk: { life: true } } : perkSel === 'days' && perkDays > 0 ? { perk: { days: perkDays } } : {}), ...(renameN > 0 ? { items: { rename: renameN } } : {}) };
       const to = $('mTo').value.trim();
       const what = rewardText(reward) || '선물 없음';
       const from = fromValue();
@@ -1332,7 +1338,7 @@
       }
       const toText = target ? `플레이어 ${target.name || '(이름 없음)'} (ID ${target.pid || '-'})` : '모든 플레이어';
       if (!confirm(`${toText}에게 보냅니다.\n보낸 사람: ${from || '운영팀'}\n선물: ${what}\n보낼까요?`)) return;
-      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(target ? { uid: target.uid } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); setMTarget(null); $('mTo').value = ''; $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+      try { const x = await call('adminMail', { action: 'send', title, body, reward, from, i18n: i18nOf('m'), days: Number($('mDays').value) || 30, ...(target ? { uid: target.uid } : {}) }); uhMsg('보냈습니다' + (x.to ? ' (한 명)' : ' (전체)')); clearI18n('m'); setMTarget(null); $('mTo').value = ''; $('mTitle').value = ''; $('mBody').value = ''; document.querySelectorAll('#mParts input').forEach((i) => (i.value = 0)); document.querySelectorAll('#mSkins input').forEach((i) => (i.checked = false)); $('mPerk').value = ''; $('mRename').value = 0; pickSummary(); loadMails(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
     });
 
     // ── 열기·닫기 ──
