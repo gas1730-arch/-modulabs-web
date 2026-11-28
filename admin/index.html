@@ -132,6 +132,12 @@
     .pickgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 6px 10px; margin-top: 8px; }
     .pickgrid label { justify-content: space-between; }
     .pickgrid input[type=number] { width: 80px; }
+    .ask { border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; margin-bottom: 10px; display: flex; flex-direction: column; gap: 6px; }
+    .ask.open { border-color: var(--warn); }
+    .ask .who { font-size: 12px; color: var(--text-2); }
+    .ask .q { white-space: pre-wrap; word-break: break-word; line-height: 1.5; font-size: 14px; }
+    .ask .done { font-size: 12px; color: var(--muted); }
+    .ask .btns { display: flex; gap: 6px; flex-wrap: wrap; }
     .grade { display: inline-block; font-size: 11px; font-weight: 700; border: 1px solid; border-radius: 4px; padding: 0 4px; margin-right: 2px; }
     .pickgrid { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); }
     /* 설치 탭 달력(형 요청 2026-11-23) */
@@ -217,6 +223,7 @@
         <button data-tab="raw">원본 기록</button>
         <button data-tab="player">플레이어</button>
         <button data-tab="post">공지·우편</button>
+        <button data-tab="ask">문의·질문 <span id="askOpenN" class="hint"></span></button>
       </div>
       <p class="msg" id="uhMsg"></p>
 
@@ -370,6 +377,45 @@
             <button class="primary" id="mSend">우편 보내기</button>
             <h3>보낸 우편</h3>
             <div id="mailList"></div>
+          </div>
+        </div>
+      </div>
+      <div class="pane hidden" id="pane-ask">
+        <!-- 문의·자주 묻는 질문(형 요청 2026-11-28): 앱 편지함 '문의' 탭. 답은 쓴 사람만 앱에서 본다(서버 adminInquiry·adminFaq) -->
+        <div class="cols">
+          <div class="form">
+            <h3>들어온 문의</h3>
+            <div class="row" style="margin-bottom:4px">
+              <label><input type="checkbox" id="askOnlyOpen" checked /> 답 안 단 것만</label>
+              <button id="askReload" type="button">새로 고침</button>
+            </div>
+            <p class="hint">답을 달면 그 사람 앱의 편지함 [문의] 탭에 보이고 빨간 점이 뜹니다(다음에 편지함을 열거나 앱을 켤 때). 고칠 때도 같은 칸에서 다시 누릅니다.</p>
+            <div id="askList"></div>
+          </div>
+          <div class="form">
+            <h3>자주 묻는 질문 쓰기</h3>
+            <input id="fId" placeholder="문서 ID(비우면 자동, 같은 ID면 고치기 — 기본 질문 ID로 쓰면 그 질문을 고친 것)" />
+            <input id="fOrder" type="number" placeholder="순서(작을수록 위, 기본 질문은 10~100)" style="width:auto" />
+            <input id="fTitle" placeholder="질문" maxlength="80" />
+            <textarea id="fBody" rows="6" placeholder="답(줄바꿈 가능)"></textarea>
+            <details class="pick"><summary>다른 언어 <span class="hint">비워 두면 그 언어 폰에도 한국어로 보입니다</span></summary>
+              <div class="langbox"><b>English</b>
+                <input id="fT_en" placeholder="질문(English)" maxlength="80" />
+                <textarea id="fB_en" rows="3" placeholder="답(English)"></textarea>
+              </div>
+              <div class="langbox"><b>日本語</b>
+                <input id="fT_ja" placeholder="질문(日本語)" maxlength="80" />
+                <textarea id="fB_ja" rows="3" placeholder="답(日本語)"></textarea>
+              </div>
+              <div class="langbox"><b>繁體中文</b>
+                <input id="fT_zhTW" placeholder="질문(繁體中文)" maxlength="80" />
+                <textarea id="fB_zhTW" rows="3" placeholder="답(繁體中文)"></textarea>
+              </div>
+            </details>
+            <div class="row"><button class="primary" id="fSave">질문 올리기</button><button id="fClear" type="button">칸 비우기</button></div>
+            <h3>지금 앱에 보이는 질문</h3>
+            <p class="hint">[고치기]를 누르면 위 칸에 채워집니다. 기본 질문(코드)은 지울 수 없어서 [숨기기]로 가리고, [되돌리기]로 원래대로 돌립니다. 줄을 누르면 4개 언어 내용이 펼쳐집니다.</p>
+            <div id="faqList"></div>
           </div>
         </div>
       </div>
@@ -609,6 +655,7 @@
       $('uhRange').classList.toggle('hidden', !['overview', 'installs', 'stages', 'flow', 'sales'].includes(t));
       uhMsg('');
       if (t === 'post') { loadNotices(); loadMails(); }
+      if (t === 'ask') { loadAsks(); loadFaqs(); }
       if (t === 'player' && pRows.length === 0) loadPlayers();
       if (t === 'installs' && !calLoaded) loadCal();
     }
@@ -1108,6 +1155,114 @@
     $('pNewFrom').value = addDays(today(), -6);
     $('pNew').addEventListener('click', () => { $('pid').value = ''; loadPlayers({ sort: 'new' }); });
     $('pMore').addEventListener('click', () => loadPlayers({ more: true }));
+
+    // ── 문의·자주 묻는 질문(형 요청 2026-11-28) ── 유저가 쓴 글은 textContent 로만 넣는다(HTML 로 해석하지 않게)
+    const mk = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text !== undefined) e.textContent = text; return e; };
+    const LANG_NAME = { ko: '한국어', en: 'English', ja: '日本語', 'zh-TW': '繁體中文' };
+    async function loadAsks() {
+      const box = $('askList');
+      box.textContent = '불러오는 중…';
+      try {
+        const r = await call('adminInquiry', $('askOnlyOpen').checked ? { status: 'open' } : {});
+        box.innerHTML = '';
+        const openN = r.list.filter((x) => x.status !== 'done').length;
+        $('askOpenN').textContent = openN > 0 ? `(${openN})` : '';
+        if (r.list.length === 0) { box.textContent = '없습니다'; return; }
+        for (const x of r.list) {
+          const card = mk('div', 'ask' + (x.status !== 'done' ? ' open' : ''));
+          card.appendChild(mk('div', 'who', `${new Date(x.at).toLocaleString('ko-KR')} · ${x.name || '(이름 없음)'} · ID ${x.pid || '-'} · ${x.ver || '-'} · ${x.os || '-'} · ${LANG_NAME[x.lang] || x.lang || '-'}${x.status === 'done' ? ' · 답변 완료' : ' · 답 대기'}`));
+          card.appendChild(mk('div', 'q', x.body || ''));
+          if (x.replyAt) card.appendChild(mk('div', 'done', `답 단 시각 ${new Date(x.replyAt).toLocaleString('ko-KR')}${x.replyBy ? ' (' + x.replyBy + ')' : ''}`));
+          const ta = mk('textarea');
+          ta.rows = 3; ta.maxLength = 2000; ta.placeholder = '답(이 사람만 앱에서 봅니다)'; ta.value = x.reply || '';
+          card.appendChild(ta);
+          const btns = mk('div', 'btns');
+          const send = mk('button', 'primary', x.reply ? '답 고치기' : '답 달기');
+          send.addEventListener('click', async () => {
+            const reply = ta.value.trim();
+            if (!reply) return uhMsg('답을 적어 주세요', true);
+            if (!confirm('이 답을 보낼까요? 그 사람 앱에 바로 보입니다.')) return;
+            try { await call('adminInquiry', { action: 'reply', id: x.id, reply }); uhMsg('답을 달았습니다'); loadAsks(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+          });
+          btns.appendChild(send);
+          if (x.pid) {
+            const who = mk('button', '', '플레이어 보기');
+            who.addEventListener('click', async () => { $('pid').value = x.pid; await loadPlayers({ q: x.pid }); setTab('player'); }); // 먼저 찾고 탭을 넘긴다(탭이 전체 목록을 따로 불러 결과를 덮지 않게)
+            btns.appendChild(who);
+          }
+          const del = mk('button', 'danger', '지우기');
+          del.addEventListener('click', async () => {
+            if (!confirm('이 문의를 지울까요? 그 사람 앱의 내 문의 목록에서도 사라집니다.')) return;
+            try { await call('adminInquiry', { action: 'delete', id: x.id }); loadAsks(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+          });
+          btns.appendChild(del);
+          card.appendChild(btns);
+          box.appendChild(card);
+        }
+      } catch (e) { box.textContent = ''; uhMsg('문의를 불러오지 못했습니다: ' + errText(e), true); }
+    }
+    $('askReload').addEventListener('click', () => loadAsks());
+    $('askOnlyOpen').addEventListener('change', () => loadAsks());
+
+    function fillFaq(f) {
+      $('fId').value = f.id || ''; $('fOrder').value = f.order ?? ''; $('fTitle').value = f.title || ''; $('fBody').value = f.body || '';
+      for (const [id, lang] of I18N_KEYS) { const x = f.i18n && f.i18n[lang]; $(`fT_${id}`).value = (x && x.title) || ''; $(`fB_${id}`).value = (x && x.body) || ''; }
+      $('fTitle').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function clearFaq() { $('fId').value = ''; $('fOrder').value = ''; $('fTitle').value = ''; $('fBody').value = ''; clearI18n('f'); }
+    async function loadFaqs() {
+      const box = $('faqList');
+      box.textContent = '불러오는 중…';
+      try {
+        const r = await call('adminFaq', {});
+        const docs = new Map(r.list.map((d) => [d.id, d]));
+        const rows = [];
+        for (const b of r.builtIn) {
+          const d = docs.get(b.id);
+          rows.push({ ...(d && !d.hidden ? d : b), builtIn: true, edited: !!(d && !d.hidden), hidden: !!(d && d.hidden) });
+          docs.delete(b.id);
+        }
+        for (const d of docs.values()) if (!d.hidden) rows.push({ ...d, builtIn: false });
+        rows.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+        box.innerHTML = '';
+        if (rows.length === 0) { box.textContent = '없습니다'; return; }
+        for (const f of rows) {
+          const row = mk('div', 'item has');
+          row.appendChild(mk('div', '', `${f.order ?? 0} · ${f.title}${f.builtIn ? (f.hidden ? ' (기본 · 숨김)' : f.edited ? ' (기본 · 고침)' : ' (기본)') : ''}`));
+          const btns = mk('div');
+          btns.style.display = 'flex'; btns.style.gap = '6px';
+          const edit = mk('button', '', '고치기');
+          edit.addEventListener('click', (e) => { e.stopPropagation(); fillFaq(f); });
+          btns.appendChild(edit);
+          const act = async (action, msg) => {
+            if (!confirm(msg)) return;
+            try { await call('adminFaq', { action, id: f.id }); loadFaqs(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+          };
+          if (f.builtIn && !f.hidden) { const h = mk('button', 'danger', '숨기기'); h.addEventListener('click', (e) => { e.stopPropagation(); act('hide', '이 기본 질문을 앱에서 숨길까요?'); }); btns.appendChild(h); }
+          if (f.builtIn && (f.hidden || f.edited)) { const u = mk('button', '', '되돌리기'); u.addEventListener('click', (e) => { e.stopPropagation(); act('delete', '코드에 든 원래 질문으로 되돌릴까요?'); }); btns.appendChild(u); }
+          if (!f.builtIn) { const d = mk('button', 'danger', '지우기'); d.addEventListener('click', (e) => { e.stopPropagation(); act('delete', '이 질문을 지울까요?'); }); btns.appendChild(d); }
+          row.appendChild(btns);
+          let detail = null;
+          row.addEventListener('click', () => {
+            if (detail) { detail.remove(); detail = null; return; }
+            detail = mk('div', 'detail');
+            detail.addEventListener('click', (e) => e.stopPropagation());
+            const part = (label, x) => { if (!x || !(x.title || x.body)) return; detail.appendChild(mk('b', '', label)); detail.appendChild(mk('div', 'dt', x.title || '')); detail.appendChild(mk('div', 'db', x.body || '')); };
+            part('한국어', f);
+            for (const [, lang] of I18N_KEYS) part(LANG_NAME[lang], f.i18n && f.i18n[lang]);
+            row.appendChild(detail);
+          });
+          box.appendChild(row);
+        }
+      } catch (e) { box.textContent = ''; uhMsg('질문을 불러오지 못했습니다: ' + errText(e), true); }
+    }
+    $('fClear').addEventListener('click', clearFaq);
+    $('fSave').addEventListener('click', async () => {
+      const title = $('fTitle').value.trim(), body = $('fBody').value;
+      if (!title || !body.trim()) return uhMsg('질문과 답을 넣어 주세요', true);
+      if (!confirm('이 질문을 올리면 앱에 바로 보입니다. 올릴까요?')) return;
+      try { await call('adminFaq', { action: 'add', id: $('fId').value.trim(), order: Number($('fOrder').value) || 0, title, body, i18n: i18nOf('f') }); uhMsg('질문을 올렸습니다'); clearFaq(); loadFaqs(); } catch (e) { uhMsg('실패: ' + errText(e), true); }
+    });
 
     // ── 공지·우편 ──
     function listInto(id, items, onDelete) {
